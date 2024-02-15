@@ -20,6 +20,8 @@ type CanvasContextProps = {
   canvasRef: MutableRefObject<HTMLCanvasElement | null>;
   ctx: CanvasRenderingContext2D | null;
   setPreview: Dispatch<SetStateAction<string>>;
+  setImageRadius: Dispatch<SetStateAction<number>>;
+  setFrameRadius: Dispatch<SetStateAction<number>>;
 };
 
 const canvasContext = createContext<CanvasContextProps>({
@@ -27,12 +29,20 @@ const canvasContext = createContext<CanvasContextProps>({
   canvasRef: { current: null },
   ctx: null,
   setPreview: () => {},
+  setImageRadius: () => {},
+  setFrameRadius: () => {},
 });
 
 const CanvasProvider = ({ children }: { children: ReactNode }) => {
   const [image, setImage] = useState<HTMLImageElement>();
-  const { preview, canvasRef, ctx, setPreview } =
-    useCanvasImageRendering(image);
+  const {
+    preview,
+    canvasRef,
+    ctx,
+    setPreview,
+    setImageRadius,
+    setFrameRadius,
+  } = useCanvasImageRendering(image);
 
   useEffect(() => {
     const handlePaste = async (event: ClipboardEvent) => {
@@ -48,7 +58,16 @@ const CanvasProvider = ({ children }: { children: ReactNode }) => {
     return () => document.body.removeEventListener("paste", handlePaste);
   }, []);
   return (
-    <canvasContext.Provider value={{ preview, canvasRef, ctx, setPreview }}>
+    <canvasContext.Provider
+      value={{
+        preview,
+        canvasRef,
+        ctx,
+        setPreview,
+        setImageRadius,
+        setFrameRadius,
+      }}
+    >
       {children}
     </canvasContext.Provider>
   );

@@ -1,13 +1,12 @@
 "use client";
 
 import { useCanvasContext } from "@/providers/CanvasProvider";
-import { Check, Copy } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
-import ThemeSwitcher from "./ThemeSwitcher";
-import { Button } from "./ui/button";
+import FrameSettings from "./FrameSettings";
+import { Separator } from "./ui/separator";
 
-const ActionBar = () => {
+const Sidebar = () => {
   const [success, setSuccess] = useState(false);
   const { preview, canvasRef, ctx, setPreview } = useCanvasContext();
   const copyToClipboard = () => {
@@ -36,31 +35,13 @@ const ActionBar = () => {
   };
   return (
     <div
-      className={`flex justify-between items-center w-full max-w-screen-md `}
+      className={`bg-popover p-4 space-y-2  self-stretch w-[20rem] rounded-xl border border-neutral-800 `}
     >
-      <ThemeSwitcher />
-      <div className="flex gap-2 ">
-        <Button
-          className={`gap-2 `}
-          variant={success ? "success" : "default"}
-          onClick={copyToClipboard}
-        >
-          {success ? (
-            <>
-              Copied <Check className="w-4" />
-            </>
-          ) : (
-            <>
-              Copy <Copy className="w-4" />
-            </>
-          )}
-        </Button>
-        <Button onClick={clearCanvas} variant={"secondary"}>
-          Clear
-        </Button>
-      </div>
+      <h1 className="text-muted-foreground">Editing Panel</h1>
+      <Separator />
+      <FrameSettings />
     </div>
   );
 };
 
-export default ActionBar;
+export default Sidebar;
