@@ -1,15 +1,22 @@
+import { usePreviewContext } from "@/providers/PreviewProvider";
+
 const Preview = ({ preview }: { preview: string }) => {
+  const { fill } = usePreviewContext();
   return (
     <div className="flex-1 flex justify-center items-center">
       {preview ? (
-        <div className="mx-auto border rounded-3xl preview  relative aspect-auto max-w-screen-lg">
+        <div className="mx-auto  rounded-3xl preview  relative aspect-auto max-w-screen-lg">
           <img
             width={1200}
             height={800}
-            className="w-full"
+            className="w-full relative z-10"
             src={preview}
             alt="Preview Image"
           />
+          <div
+            className="w-full h-full absolute top-0"
+            style={{ backgroundColor: fill }}
+          ></div>
         </div>
       ) : (
         <div className="mx-auto border text-muted-foreground flex justify-center items-center border-dashed rounded-xl preview  relative h-60 w-96">

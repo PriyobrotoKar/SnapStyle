@@ -17,7 +17,7 @@ const Control = ({ property, value, onChange }: ControlProps) => {
         <Image src={property} alt="" width={10} height={10} />
       )}
       <input
-        className="text-sm bg-transparent border-none outline-none appearance-none w-14"
+        className="text-sm bg-transparent border-none outline-none  w-14"
         type="number"
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}

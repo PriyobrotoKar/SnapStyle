@@ -1,9 +1,10 @@
 import { Toaster } from "@/components/ui/sonner";
+import CanvasProvider from "@/providers/CanvasProvider";
+import PreviewProvider from "@/providers/PreviewProvider";
 import { ThemeProvider } from "@/providers/theme-provider";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import CanvasProvider from "@/providers/CanvasProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,7 +22,9 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.className} h-screen`}>
         <ThemeProvider attribute="class" defaultTheme="system">
-          <CanvasProvider>{children}</CanvasProvider>
+          <CanvasProvider>
+            <PreviewProvider>{children}</PreviewProvider>
+          </CanvasProvider>
           <Toaster position="bottom-center" />
         </ThemeProvider>
       </body>

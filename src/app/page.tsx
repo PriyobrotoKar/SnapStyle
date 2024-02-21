@@ -10,7 +10,7 @@ export default function Home() {
   return (
     <div className="h-full p-10 flex gap-10 justify-center items-center">
       <Preview preview={preview} />
-      <canvas className="hidden" ref={canvasRef}></canvas>
+      {/* <canvas className="hidden" ref={canvasRef}></canvas> */}
       <Sidebar />
     </div>
   );
