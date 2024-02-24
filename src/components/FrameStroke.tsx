@@ -3,12 +3,12 @@ import FillControl from "./FillControl";
 import WidthControl from "./WidthControl";
 
 const FrameStroke = () => {
-  const { setStrokeFill } = useCanvasContext();
+  const { setStrokeFill, setStrokeWidth } = useCanvasContext();
   return (
     <div>
       <h3 className="text-sm text-muted-foreground">Stroke</h3>
       <FillControl setFill={setStrokeFill} defaultFill="#aaaaaa" />
-      <WidthControl />
+      <WidthControl setStroke={setStrokeWidth} defaultWidth={20} />
     </div>
   );
 };

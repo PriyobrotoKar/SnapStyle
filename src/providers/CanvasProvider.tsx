@@ -25,6 +25,7 @@ type CanvasContextProps = {
   setBgFill: Dispatch<SetStateAction<string>>;
   setStrokeWidth: Dispatch<SetStateAction<number>>;
   setStrokeFill: Dispatch<SetStateAction<string>>;
+  setImageStrokeWidth: Dispatch<SetStateAction<number>>;
 };
 
 const canvasContext = createContext<CanvasContextProps>({
@@ -37,6 +38,7 @@ const canvasContext = createContext<CanvasContextProps>({
   setBgFill: () => {},
   setStrokeWidth: () => {},
   setStrokeFill: () => {},
+  setImageStrokeWidth: () => {},
 });
 
 const CanvasProvider = ({ children }: { children: ReactNode }) => {
@@ -51,6 +53,7 @@ const CanvasProvider = ({ children }: { children: ReactNode }) => {
     setBgFill,
     setStrokeWidth,
     setStrokeFill,
+    setImageStrokeWidth,
   } = useCanvasImageRendering(image);
 
   useEffect(() => {
@@ -78,6 +81,7 @@ const CanvasProvider = ({ children }: { children: ReactNode }) => {
         setBgFill,
         setStrokeWidth,
         setStrokeFill,
+        setImageStrokeWidth,
       }}
     >
       {children}

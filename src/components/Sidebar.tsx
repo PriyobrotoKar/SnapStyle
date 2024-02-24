@@ -4,6 +4,7 @@ import { useCanvasContext } from "@/providers/CanvasProvider";
 import { useState } from "react";
 import { toast } from "sonner";
 import FrameSettings from "./FrameSettings";
+import ImageSettings from "./ImageSettings";
 import { Separator } from "./ui/separator";
 
 const Sidebar = () => {
@@ -35,11 +36,12 @@ const Sidebar = () => {
   };
   return (
     <div
-      className={`bg-popover p-4 space-y-2  self-stretch w-[20rem] rounded-xl border border-neutral-800 `}
+      className={`bg-popover/50 p-4 space-y-2  self-stretch w-[20rem] rounded-xl border border-neutral-800 `}
     >
       <h1 className="text-muted-foreground">Editing Panel</h1>
       <Separator />
       <FrameSettings />
+      <ImageSettings />
     </div>
   );
 };

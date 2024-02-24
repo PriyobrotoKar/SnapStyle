@@ -1,18 +1,19 @@
-import { useCanvasContext } from "@/providers/CanvasProvider";
-import { ChangeEvent, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import Control from "./Control";
 
-const WidthControl = () => {
-  const [width, setwidth] = useState(50);
-  const handleWidth = (e: ChangeEvent<HTMLInputElement>) => {
-    setwidth(Number(e.target.value));
-  };
-  const { setStrokeWidth } = useCanvasContext();
+const WidthControl = ({
+  setStroke,
+  defaultWidth,
+}: {
+  setStroke: Dispatch<SetStateAction<number>>;
+  defaultWidth: number;
+}) => {
+  const [width, setWidth] = useState(defaultWidth);
 
   useEffect(() => {
-    setStrokeWidth(width);
-  }, [width, setStrokeWidth]);
-  return <Control property={"Width"} value={width} onChange={setwidth} />;
+    setStroke(width);
+  }, [width, setStroke]);
+  return <Control property={"Width"} value={width} onChange={setWidth} />;
 };
 
 export default WidthControl;

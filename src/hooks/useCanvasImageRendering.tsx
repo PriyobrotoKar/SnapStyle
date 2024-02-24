@@ -11,6 +11,7 @@ export const useCanvasImageRendering = (
   const [bgFill, setBgFill] = useState("");
   const [strokeFill, setStrokeFill] = useState("");
   const [strokeWidth, setStrokeWidth] = useState(20);
+  const [imageStrokeWidth, setImageStrokeWidth] = useState(10);
   let context = useRef<CanvasRenderingContext2D | null>(null);
   // useEffect(() => {
   //   if (canvasRef && canvasRef.current) {
@@ -113,6 +114,32 @@ export const useCanvasImageRendering = (
 
         // Draw rounded rectangle
         ctx.beginPath();
+        ctx.filter = "blur(15px)";
+        ctx.fillStyle = "#000000A0";
+        ctx.roundRect(
+          x - imageStrokeWidth,
+          y - imageStrokeWidth + 15,
+          scaledWidth + imageStrokeWidth * 2,
+          scaledHeight + imageStrokeWidth * 2 + 10,
+          imageRadius
+        );
+        ctx.fill();
+        ctx.filter = "blur(0px)";
+        ctx.closePath();
+
+        ctx.beginPath();
+        ctx.fillStyle = "#aaffff";
+        ctx.roundRect(
+          x - imageStrokeWidth,
+          y - imageStrokeWidth,
+          scaledWidth + imageStrokeWidth * 2,
+          scaledHeight + imageStrokeWidth * 2,
+          imageRadius + imageStrokeWidth
+        );
+        ctx.fill();
+        ctx.closePath();
+
+        ctx.beginPath();
         ctx.moveTo(x + imageRadius, y);
         ctx.arcTo(
           x + scaledWidth,
@@ -132,9 +159,6 @@ export const useCanvasImageRendering = (
         ctx.arcTo(x, y, x + scaledWidth, y, imageRadius);
         ctx.closePath();
 
-        ctx.filter = "blur(15px)";
-        ctx.fillStyle = "#000000A0";
-        ctx.fillRect(x, y + 15, scaledWidth, scaledHeight + 10);
         // Clip the rounded rectangle
         ctx.clip();
 
@@ -153,6 +177,7 @@ export const useCanvasImageRendering = (
     bgFill,
     strokeFill,
     strokeWidth,
+    imageStrokeWidth,
   ]);
 
   return {
@@ -165,5 +190,6 @@ export const useCanvasImageRendering = (
     setBgFill,
     setStrokeFill,
     setStrokeWidth,
+    setImageStrokeWidth,
   };
 };

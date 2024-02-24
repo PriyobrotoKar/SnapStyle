@@ -12,7 +12,7 @@ const Control = ({ property, value, onChange }: ControlProps) => {
   return (
     <div className="flex gap-4 border border-transparent transition-all hover:border-border focus-within:border-border w-fit py-1 px-2 rounded">
       {typeof property === "string" ? (
-        <span>{property}</span>
+        <span className="text-sm text-muted-foreground">{property}</span>
       ) : (
         <Image src={property} alt="" width={10} height={10} />
       )}

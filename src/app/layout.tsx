@@ -20,7 +20,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.className} h-screen`}>
+      <body
+        className={`${inter.className} h-screen bg-gradient-to-t from-background to-secondary/40 from-40%`}
+      >
         <ThemeProvider attribute="class" defaultTheme="system">
           <CanvasProvider>
             <PreviewProvider>{children}</PreviewProvider>
