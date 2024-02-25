@@ -5,13 +5,17 @@ export const useCanvasImageRendering = (
 ) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const previewCanvasRef = useRef<HTMLCanvasElement | null>(null);
+  const [frameWidth, setFrameWidth] = useState(0);
+  const [frameHeight, setFrameHeight] = useState(0);
   const [preview, setPreview] = useState("");
   const [imageRadius, setImageRadius] = useState(20);
   const [frameRadius, setFrameRadius] = useState(20);
   const [bgFill, setBgFill] = useState("");
   const [strokeFill, setStrokeFill] = useState("");
+  const [imageStrokeFill, setImageStrokeFill] = useState("");
   const [strokeWidth, setStrokeWidth] = useState(20);
   const [imageStrokeWidth, setImageStrokeWidth] = useState(10);
+  const [imageScale, setImageScale] = useState(100);
   let context = useRef<CanvasRenderingContext2D | null>(null);
   // useEffect(() => {
   //   if (canvasRef && canvasRef.current) {
@@ -68,13 +72,23 @@ export const useCanvasImageRendering = (
       const ctx = previewCanvasRef.current.getContext("2d");
 
       if (ctx && image) {
+        let width = frameWidth;
+        let height = frameHeight;
         console.log(image);
-        const scaleFactor = Math.min(1, 1000 / image.width, 800 / image.height);
+        const scaleFactor =
+          Math.min(1, 1000 / image.width, 800 / image.height) *
+          (imageScale / 100);
         // const scaleFactor = 1;
         const scaledWidth = image.width * scaleFactor;
         const scaledHeight = image.height * scaleFactor;
-        const width = Math.min(image.width + 150, scaledWidth + 150);
-        const height = Math.min(image.height + 150, scaledHeight + 150);
+        if (!width && !height) {
+          width = Math.min(image.width + 150, scaledWidth + 150);
+          height = Math.min(image.height + 150, scaledHeight + 150);
+          setFrameWidth(width);
+          setFrameHeight(height);
+        }
+        // width = Math.min(image.width + 150, scaledWidth + 150);
+        // height = Math.min(image.height + 150, scaledHeight + 150);
         const x = (width - scaledWidth) / 2;
         const y = (height - scaledHeight) / 2;
         previewCanvasRef.current.width = width;
@@ -128,7 +142,7 @@ export const useCanvasImageRendering = (
         ctx.closePath();
 
         ctx.beginPath();
-        ctx.fillStyle = "#aaffff";
+        ctx.fillStyle = imageStrokeFill;
         ctx.roundRect(
           x - imageStrokeWidth,
           y - imageStrokeWidth,
@@ -178,6 +192,8 @@ export const useCanvasImageRendering = (
     strokeFill,
     strokeWidth,
     imageStrokeWidth,
+    imageStrokeFill,
+    imageScale,
   ]);
 
   return {
@@ -191,5 +207,7 @@ export const useCanvasImageRendering = (
     setStrokeFill,
     setStrokeWidth,
     setImageStrokeWidth,
+    setImageStrokeFill,
+    setImageScale,
   };
 };
