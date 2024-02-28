@@ -16,6 +16,7 @@ export const useCanvasImageRendering = (
   const [strokeWidth, setStrokeWidth] = useState(20);
   const [imageStrokeWidth, setImageStrokeWidth] = useState(10);
   const [imageScale, setImageScale] = useState(100);
+  const [imageRotation, setImageRotation] = useState(0);
   let context = useRef<CanvasRenderingContext2D | null>(null);
   // useEffect(() => {
   //   if (canvasRef && canvasRef.current) {
@@ -128,11 +129,13 @@ export const useCanvasImageRendering = (
 
         // Draw rounded rectangle
         ctx.beginPath();
+        ctx.translate(x + scaledWidth / 2, y + scaledHeight / 2);
+        ctx.rotate((imageRotation * Math.PI) / 180);
         ctx.filter = "blur(15px)";
         ctx.fillStyle = "#000000A0";
         ctx.roundRect(
-          x - imageStrokeWidth,
-          y - imageStrokeWidth + 15,
+          -scaledWidth / 2 - imageStrokeWidth,
+          -scaledHeight / 2 - imageStrokeWidth + 15,
           scaledWidth + imageStrokeWidth * 2,
           scaledHeight + imageStrokeWidth * 2 + 10,
           imageRadius
@@ -144,8 +147,8 @@ export const useCanvasImageRendering = (
         ctx.beginPath();
         ctx.fillStyle = imageStrokeFill;
         ctx.roundRect(
-          x - imageStrokeWidth,
-          y - imageStrokeWidth,
+          -scaledWidth / 2 - imageStrokeWidth,
+          -scaledHeight / 2 - imageStrokeWidth,
           scaledWidth + imageStrokeWidth * 2,
           scaledHeight + imageStrokeWidth * 2,
           imageRadius + imageStrokeWidth
@@ -154,23 +157,35 @@ export const useCanvasImageRendering = (
         ctx.closePath();
 
         ctx.beginPath();
-        ctx.moveTo(x + imageRadius, y);
+        ctx.moveTo(-scaledWidth / 2 + imageRadius, -scaledHeight / 2);
         ctx.arcTo(
-          x + scaledWidth,
-          y,
-          x + scaledWidth,
-          y + scaledHeight,
+          -scaledWidth / 2 + scaledWidth,
+          -scaledHeight / 2,
+          -scaledWidth / 2 + scaledWidth,
+          -scaledHeight / 2 + scaledHeight,
           imageRadius
         );
         ctx.arcTo(
-          x + scaledWidth,
-          y + scaledHeight,
-          x,
-          y + scaledHeight,
+          -scaledWidth / 2 + scaledWidth,
+          -scaledHeight / 2 + scaledHeight,
+          -scaledWidth / 2,
+          -scaledHeight / 2 + scaledHeight,
           imageRadius
         );
-        ctx.arcTo(x, y + scaledHeight, x, y, imageRadius);
-        ctx.arcTo(x, y, x + scaledWidth, y, imageRadius);
+        ctx.arcTo(
+          -scaledWidth / 2,
+          -scaledHeight / 2 + scaledHeight,
+          -scaledWidth / 2,
+          -scaledHeight / 2,
+          imageRadius
+        );
+        ctx.arcTo(
+          -scaledWidth / 2,
+          -scaledHeight / 2,
+          -scaledWidth / 2 + scaledWidth,
+          -scaledHeight / 2,
+          imageRadius
+        );
         ctx.closePath();
 
         // Clip the rounded rectangle
@@ -178,7 +193,14 @@ export const useCanvasImageRendering = (
 
         ctx.filter = "blur(0px)";
 
-        ctx.drawImage(image, x, y, scaledWidth, scaledHeight);
+        ctx.drawImage(
+          image,
+          -scaledWidth / 2,
+          -scaledHeight / 2,
+          scaledWidth,
+          scaledHeight
+        );
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
 
         setPreview(previewCanvasRef.current.toDataURL("image/png"));
       }
@@ -194,6 +216,9 @@ export const useCanvasImageRendering = (
     imageStrokeWidth,
     imageStrokeFill,
     imageScale,
+    imageRotation,
+    frameWidth,
+    frameHeight,
   ]);
 
   return {
@@ -209,5 +234,6 @@ export const useCanvasImageRendering = (
     setImageStrokeWidth,
     setImageStrokeFill,
     setImageScale,
+    setImageRotation,
   };
 };
