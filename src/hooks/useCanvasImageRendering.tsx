@@ -7,6 +7,10 @@ export const useCanvasImageRendering = (
   const previewCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const [frameWidth, setFrameWidth] = useState(0);
   const [frameHeight, setFrameHeight] = useState(0);
+  const [imagePosition, setImagePosition] = useState<{
+    x: number;
+    y: number;
+  } | null>(null);
   const [preview, setPreview] = useState("");
   const [imageRadius, setImageRadius] = useState(20);
   const [frameRadius, setFrameRadius] = useState(20);
@@ -17,6 +21,8 @@ export const useCanvasImageRendering = (
   const [imageStrokeWidth, setImageStrokeWidth] = useState(10);
   const [imageScale, setImageScale] = useState(100);
   const [imageRotation, setImageRotation] = useState(0);
+  const centerX = useRef<number>();
+  const centerY = useRef<number>();
   let context = useRef<CanvasRenderingContext2D | null>(null);
   // useEffect(() => {
   //   if (canvasRef && canvasRef.current) {
@@ -68,6 +74,25 @@ export const useCanvasImageRendering = (
   // }, [canvasRef, image, imageRadius, frameRadius, bgFill]);
 
   useEffect(() => {
+    if (!image || !imagePosition || !centerX.current || !centerY.current) {
+      return;
+    }
+    const scaleFactor =
+      Math.min(1, 1000 / image.width, 800 / image.height) * (imageScale / 100);
+    // const scaleFactor = 1;
+
+    const scaledWidth = image.width * scaleFactor;
+    const scaledHeight = image.height * scaleFactor;
+    setImagePosition({
+      x: imagePosition.x - (scaledWidth - centerX.current) / 2,
+      y: imagePosition.y - (scaledHeight - centerY.current) / 2,
+    });
+    centerX.current = scaledWidth;
+    centerY.current = scaledHeight;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [imageScale]);
+
+  useEffect(() => {
     previewCanvasRef.current = document.createElement("canvas");
     if (previewCanvasRef && previewCanvasRef.current) {
       const ctx = previewCanvasRef.current.getContext("2d");
@@ -80,6 +105,7 @@ export const useCanvasImageRendering = (
           Math.min(1, 1000 / image.width, 800 / image.height) *
           (imageScale / 100);
         // const scaleFactor = 1;
+
         const scaledWidth = image.width * scaleFactor;
         const scaledHeight = image.height * scaleFactor;
         if (!width && !height) {
@@ -90,8 +116,19 @@ export const useCanvasImageRendering = (
         }
         // width = Math.min(image.width + 150, scaledWidth + 150);
         // height = Math.min(image.height + 150, scaledHeight + 150);
-        const x = (width - scaledWidth) / 2;
-        const y = (height - scaledHeight) / 2;
+        if (!imagePosition) {
+          centerX.current = scaledWidth;
+          centerY.current = scaledHeight;
+          setImagePosition({
+            x: (width - scaledWidth) / 2,
+            y: (height - scaledHeight) / 2,
+          });
+          return;
+        }
+
+        // const x = (width - scaledWidth) / 2;
+        // const y = (height - scaledHeight) / 2;
+        // setImagePosition({ x, y });
         previewCanvasRef.current.width = width;
         previewCanvasRef.current.height = height;
         // const radius = 20; // Set your desired radius
@@ -129,7 +166,10 @@ export const useCanvasImageRendering = (
 
         // Draw rounded rectangle
         ctx.beginPath();
-        ctx.translate(x + scaledWidth / 2, y + scaledHeight / 2);
+        ctx.translate(
+          imagePosition.x + scaledWidth / 2,
+          imagePosition.y + scaledHeight / 2
+        );
         ctx.rotate((imageRotation * Math.PI) / 180);
         ctx.filter = "blur(15px)";
         ctx.fillStyle = "#000000A0";
@@ -205,6 +245,7 @@ export const useCanvasImageRendering = (
         setPreview(previewCanvasRef.current.toDataURL("image/png"));
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     previewCanvasRef,
     image,
@@ -215,16 +256,18 @@ export const useCanvasImageRendering = (
     strokeWidth,
     imageStrokeWidth,
     imageStrokeFill,
-    imageScale,
     imageRotation,
     frameWidth,
     frameHeight,
+    imagePosition,
   ]);
 
   return {
     preview,
     canvasRef,
     ctx: context.current,
+    imagePosition,
+    imageScale,
     setPreview,
     setImageRadius,
     setFrameRadius,
@@ -235,5 +278,8 @@ export const useCanvasImageRendering = (
     setImageStrokeFill,
     setImageScale,
     setImageRotation,
+    setImagePosition,
+    setFrameHeight,
+    setFrameWidth,
   };
 };

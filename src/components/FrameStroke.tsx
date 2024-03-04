@@ -6,8 +6,11 @@ const FrameStroke = () => {
   const { setStrokeFill, setStrokeWidth } = useCanvasContext();
   return (
     <div>
-      <h3 className="text-sm text-muted-foreground">Stroke</h3>
-      <FillControl setFill={setStrokeFill} defaultFill="#aaaaaa" />
+      <FillControl
+        title="Stroke"
+        setFill={setStrokeFill}
+        defaultFill="#aaaaaa"
+      />
       <WidthControl setStroke={setStrokeWidth} defaultWidth={20} />
     </div>
   );

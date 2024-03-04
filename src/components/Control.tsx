@@ -5,7 +5,7 @@ import { Dispatch, SetStateAction } from "react";
 type ControlProps = {
   property: string | StaticImport;
   value: number;
-  onChange: Dispatch<SetStateAction<number>>;
+  onChange: Dispatch<SetStateAction<number>> | any;
 };
 
 const Control = ({ property, value, onChange }: ControlProps) => {

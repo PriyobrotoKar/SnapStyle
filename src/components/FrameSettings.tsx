@@ -23,7 +23,7 @@ const FrameSettings = () => {
         onChange={setCanvasRadius}
       />
       <FrameStroke />
-      <FillControl setFill={setBgFill} defaultFill="#ffffff" />
+      <FillControl title="Fill" setFill={setBgFill} defaultFill="#ffffff" />
     </div>
   );
 };

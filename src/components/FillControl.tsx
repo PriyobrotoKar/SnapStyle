@@ -14,9 +14,11 @@ import {
 import { HexAlphaColorPicker } from "react-colorful";
 
 const FillControl = ({
+  title,
   setFill,
   defaultFill,
 }: {
+  title: string;
   setFill: Dispatch<SetStateAction<string>>;
   defaultFill: string;
 }) => {
@@ -106,7 +108,7 @@ const FillControl = ({
 
   return (
     <div>
-      <h3 className="text-sm text-muted-foreground">Fill</h3>
+      <h3 className="text-sm text-muted-foreground">{title}</h3>
       <div className="flex gap-3 justify-between items-center">
         <Popover>
           <PopoverTrigger>
