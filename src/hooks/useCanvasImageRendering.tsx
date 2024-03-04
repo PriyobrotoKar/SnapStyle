@@ -114,8 +114,7 @@ export const useCanvasImageRendering = (
           setFrameWidth(width);
           setFrameHeight(height);
         }
-        // width = Math.min(image.width + 150, scaledWidth + 150);
-        // height = Math.min(image.height + 150, scaledHeight + 150);
+
         if (!imagePosition) {
           centerX.current = scaledWidth;
           centerY.current = scaledHeight;
@@ -126,14 +125,9 @@ export const useCanvasImageRendering = (
           return;
         }
 
-        // const x = (width - scaledWidth) / 2;
-        // const y = (height - scaledHeight) / 2;
-        // setImagePosition({ x, y });
         previewCanvasRef.current.width = width;
         previewCanvasRef.current.height = height;
-        // const radius = 20; // Set your desired radius
 
-        // ctx.drawImage(image, x, y);
         ctx.beginPath();
         ctx.moveTo(0, 0);
         ctx.arcTo(width, 0, width, height, frameRadius);
