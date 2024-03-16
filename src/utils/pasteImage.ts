@@ -10,11 +10,11 @@ export const pasteImageFromClipboard = async (): Promise<HTMLImageElement> => {
           resolve(img);
         };
         img.onerror = (error) => {
-          reject(error); // Reject if there's an error loading the image
+          reject(error);
         };
       })
       .catch((error) => {
-        reject(error); // Reject if there's an error reading from the clipboard
+        reject(error);
       });
   });
 };
