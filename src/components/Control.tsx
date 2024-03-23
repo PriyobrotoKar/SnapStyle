@@ -2,25 +2,31 @@ import { StaticImport } from "next/dist/shared/lib/get-img-props";
 import Image from "next/image";
 import { Dispatch, SetStateAction } from "react";
 
-type ControlProps = {
-  property: string | StaticImport;
+const Control = ({
+  label,
+  value,
+  onChange,
+}: {
+  label: string | StaticImport;
   value: number;
-  onChange: Dispatch<SetStateAction<number>> | any;
-};
-
-const Control = ({ property, value, onChange }: ControlProps) => {
+  onChange: Dispatch<SetStateAction<number>>;
+}) => {
   return (
-    <div className="flex gap-4 border border-transparent transition-all hover:border-border focus-within:border-border w-fit py-1 px-2 rounded">
-      {typeof property === "string" ? (
-        <span className="text-sm text-muted-foreground">{property}</span>
+    <div className="flex gap-2 items-center bg-neutral-900/20 w-fit px-4 py-2 rounded-xl">
+      {typeof label === "string" ? (
+        <span className="text-muted-foreground">{label}</span>
       ) : (
-        <Image src={property} alt="" width={10} height={10} />
+        <Image src={label} alt="" width={12} height={12} />
       )}
       <input
-        className="text-sm bg-transparent border-none outline-none  w-14"
-        type="number"
+        className="bg-transparent"
+        style={{ width: value.toString().length + "ch" }}
+        type="text"
+        inputMode="numeric"
         value={value}
-        onChange={(e) => onChange(Number(e.target.value))}
+        onChange={(e) =>
+          !isNaN(Number(e.target.value)) && onChange(Number(e.target.value))
+        }
       />
     </div>
   );

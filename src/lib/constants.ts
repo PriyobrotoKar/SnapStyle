@@ -1,0 +1,2 @@
+export const MAX_PREVIEW_FRAME_WIDTH = 1000;
+export const MAX_PREVIEW_FRAME_HEIGHT = 800;

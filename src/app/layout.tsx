@@ -1,6 +1,5 @@
 import { Toaster } from "@/components/ui/sonner";
-import CanvasProvider from "@/providers/CanvasProvider";
-import PreviewProvider from "@/providers/PreviewProvider";
+import ControlCenterProvider from "@/providers/ControlCenterProvider";
 import { ThemeProvider } from "@/providers/theme-provider";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
@@ -20,13 +19,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${inter.className} h-screen bg-gradient-to-t from-background to-secondary/40 from-40%`}
-      >
-        <ThemeProvider attribute="class" defaultTheme="system">
-          <CanvasProvider>
-            <PreviewProvider>{children}</PreviewProvider>
-          </CanvasProvider>
+      <body className={`${inter.className} h-screen `}>
+        <ThemeProvider attribute="class" defaultTheme="dark">
+          <ControlCenterProvider>{children}</ControlCenterProvider>
           <Toaster position="bottom-center" />
         </ThemeProvider>
       </body>

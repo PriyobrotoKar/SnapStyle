@@ -2,17 +2,37 @@
 
 import Preview from "@/components/Preview";
 import Sidebar from "@/components/Sidebar";
-import { useCanvasContext } from "@/providers/CanvasProvider";
+import { pasteImageFromClipboard } from "@/lib/pasteImage";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export default function Home() {
-  const { preview, canvasRef } = useCanvasContext();
-
+  const [image, setImage] = useState<string | null>(null);
+  useEffect(() => {
+    const handlePaste = async (event: ClipboardEvent) => {
+      event.preventDefault();
+      try {
+        const imageFromClipboard = await pasteImageFromClipboard();
+        setImage(imageFromClipboard);
+      } catch (error) {
+        toast.error("Please paste an image");
+      }
+    };
+    document.body.addEventListener("paste", handlePaste);
+    return () => document.body.removeEventListener("paste", handlePaste);
+  }, []);
   return (
-    <div className="h-full p-10 flex gap-10 justify-center items-center">
-      {/* <div className="absolute -top-[10%] left-1/2 -translate-x-1/2 w-[80%] h-[40svh] bg-secondary/50 blur-[90px] -z-10"></div> */}
-      <Preview preview={preview} />
-      {/* <canvas className="hidden" ref={canvasRef}></canvas> */}
-      <Sidebar />
+    <div className="h-full  flex gap-10  items-stretch">
+      {!image ? (
+        <h1>OK</h1>
+      ) : (
+        <>
+          <div className="flex-1 flex items-center justify-center">
+            <Preview image={image} />
+          </div>
+          <Sidebar />
+        </>
+      )}
     </div>
   );
 }

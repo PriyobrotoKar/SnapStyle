@@ -1,47 +1,16 @@
-"use client";
-
-import { useCanvasContext } from "@/providers/CanvasProvider";
-import { useState } from "react";
-import { toast } from "sonner";
-import FrameSettings from "./FrameSettings";
-import ImageSettings from "./ImageSettings";
-import { Separator } from "./ui/separator";
+import { useControlContext } from "@/providers/ControlCenterProvider";
+import RadiusIcon from "../../public/radius.svg";
+import Control from "./Control";
 
 const Sidebar = () => {
-  const [success, setSuccess] = useState(false);
-  const { preview, canvasRef, ctx, setPreview } = useCanvasContext();
-  const copyToClipboard = () => {
-    if (canvasRef && canvasRef.current && preview) {
-      canvasRef.current.toBlob((blob) => {
-        console.log(blob);
-        setSuccess(true);
-        navigator.clipboard.write([
-          new ClipboardItem({ "image/png": blob as Blob }),
-        ]);
-        setTimeout(() => {
-          setSuccess(false);
-        }, 4000);
-      });
-    } else {
-      toast.error("Bro please paste a screenshot first");
-    }
-  };
-  const clearCanvas = () => {
-    if (canvasRef.current) {
-      console.log("clear", ctx);
-      ctx?.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-      canvasRef.current.width = canvasRef.current.width;
-      setPreview("");
-    }
-  };
+  const { frameRadius, setFrameRadius } = useControlContext();
   return (
-    <div
-      className={`bg-popover/50 p-4 space-y-2  self-stretch w-[20rem] rounded-xl border border-neutral-800 `}
-    >
-      <h1 className="text-muted-foreground">Editing Panel</h1>
-      <Separator />
-      <FrameSettings />
-      <ImageSettings />
+    <div className="bg-violet-950/20 self-stretch w-[25rem] flex-grow-0 p-10">
+      <Control
+        label={RadiusIcon}
+        value={frameRadius}
+        onChange={setFrameRadius}
+      />
     </div>
   );
 };
