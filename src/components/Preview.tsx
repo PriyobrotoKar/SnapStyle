@@ -4,16 +4,17 @@ import { useState } from "react";
 const Preview = ({ image }: { image: string }) => {
   const [displayPreview, setDisplayPreview] = useState(false);
 
-  const { frameRadius } = useControlContext();
+  const { frameRadius, frameFill } = useControlContext();
   console.log(displayPreview);
 
   return (
     <div
       style={{
         borderRadius: frameRadius,
+        backgroundColor: frameFill,
         display: displayPreview ? "flex" : "none",
       }}
-      className="max-w-screen-lg h-[80%]  justify-center items-center bg-white"
+      className="max-w-screen-lg h-[80%]  justify-center items-center "
     >
       <img
         onLoad={() => setDisplayPreview(true)}
