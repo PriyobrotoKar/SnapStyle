@@ -10,7 +10,13 @@ import {
   hsvaToHexa,
 } from "@uiw/color-convert";
 import Wheel from "@uiw/react-color-wheel";
-import { Dispatch, SetStateAction, useState } from "react";
+import {
+  ChangeEvent,
+  Dispatch,
+  KeyboardEvent,
+  SetStateAction,
+  useState,
+} from "react";
 import { Separator } from "./ui/separator";
 
 interface FillControlProps {
@@ -22,6 +28,47 @@ interface FillControlProps {
 type OpacityInputProps = Pick<FillControlProps, "onChange"> & {
   hsva: HsvaColor;
   setHsva: Dispatch<SetStateAction<HsvaColor>>;
+};
+
+function sanitizeFillColor(fillColor: string, fallbackFIll: string) {
+  // Regular expression to match hexadecimal color code
+  const hexColorRegex = /^#?([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/;
+
+  // Check if the input is a valid hexadecimal color code
+  if (hexColorRegex.test(fillColor)) {
+    return fillColor.startsWith("#") ? fillColor.slice(1) : fillColor; // Convert to lowercase for consistency
+  } else {
+    // If the input is not a valid hexadecimal color code, return a default color
+    return fallbackFIll.slice(1); // Default to black
+  }
+}
+
+const HexFillInput = ({ hsva, setHsva, onChange }: OpacityInputProps) => {
+  const [fillInput, setFillInput] = useState(hsvaToHex(hsva).slice(1));
+
+  const applyFill = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key !== "Enter") {
+      return;
+    }
+    let fill = sanitizeFillColor(fillInput, hsvaToHex(hsva));
+    setFillInput(fill);
+    setHsva(hexToHsva("#" + fill));
+    onChange("#" + fill);
+  };
+
+  const handleHexInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setFillInput(e.target.value);
+  };
+  return (
+    <input
+      type="text"
+      value={fillInput.toUpperCase()}
+      onChange={handleHexInputChange}
+      onKeyDown={applyFill}
+      className="bg-transparent outline-none text"
+      style={{ width: "8ch" }}
+    />
+  );
 };
 
 const OpacityInput = ({ hsva, onChange, setHsva }: OpacityInputProps) => {
@@ -52,7 +99,7 @@ const FillControl = ({ defaultFill, onChange, title }: FillControlProps) => {
   console.log(hsvaToHex(hsva));
   return (
     <div>
-      <h2 className="text-sm text-purple-600">{title}</h2>
+      <h2 className=" text-primary">{title}</h2>
       <div
         className="flex items-center px-4 py-2 rounded-lg w-fit gap-4"
         style={{ backgroundColor: hsvaToHex(hsva) + "10" }}
@@ -81,12 +128,7 @@ const FillControl = ({ defaultFill, onChange, title }: FillControlProps) => {
                 className="w-6 h-3 rounded-sm"
                 style={{ backgroundColor: hsvaToHex(hsva) }}
               ></div>
-              <input
-                type="text"
-                value={hsvaToHex(hsva)}
-                className="bg-transparent outline-none text"
-                style={{ width: "8ch" }}
-              />
+              <HexFillInput hsva={hsva} setHsva={setHsva} onChange={onChange} />
               <Separator
                 orientation="vertical"
                 className="self-stretch h-auto my-1 bg-white"
@@ -95,12 +137,7 @@ const FillControl = ({ defaultFill, onChange, title }: FillControlProps) => {
             </div>
           </PopoverContent>
         </Popover>
-        <input
-          type="text"
-          value={hsvaToHex(hsva).slice(1).toUpperCase()}
-          className="bg-transparent outline-none text"
-          style={{ width: "8ch" }}
-        />
+        <HexFillInput hsva={hsva} setHsva={setHsva} onChange={onChange} />
         <Separator
           orientation="vertical"
           className="self-stretch h-auto my-1 bg-white"

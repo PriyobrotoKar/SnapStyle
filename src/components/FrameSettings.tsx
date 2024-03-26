@@ -8,7 +8,8 @@ const FrameSettings = () => {
     useControlContext();
 
   return (
-    <div>
+    <section>
+      <h1 className="text-lg font-medium">Frame Settings</h1>
       <FillControl
         defaultFill={frameFill}
         onChange={setFrameFill}
@@ -19,7 +20,7 @@ const FrameSettings = () => {
         value={frameRadius}
         onChange={setFrameRadius}
       />
-    </div>
+    </section>
   );
 };
 

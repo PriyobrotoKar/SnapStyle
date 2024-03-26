@@ -19,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.className} h-screen `}>
+      <body className={`${inter.className} h-screen text-base`}>
         <ThemeProvider attribute="class" defaultTheme="dark">
           <ControlCenterProvider>{children}</ControlCenterProvider>
           <Toaster position="bottom-center" />

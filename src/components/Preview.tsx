@@ -14,11 +14,11 @@ const Preview = ({ image }: { image: string }) => {
         backgroundColor: frameFill,
         display: displayPreview ? "flex" : "none",
       }}
-      className="max-w-screen-lg h-[80%]  justify-center items-center "
+      className="max-w-[90%] justify-center items-center "
     >
       <img
         onLoad={() => setDisplayPreview(true)}
-        className="w-[80%] rounded-lg border-[5px] border-red-600 shadow-[0px_10px_40px_10px_#00000070]"
+        className="w-[80%] m-20 rounded-lg border-[5px] border-red-600 shadow-[0px_10px_40px_10px_#00000070]"
         src={image}
         alt=""
       />

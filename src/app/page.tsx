@@ -22,7 +22,7 @@ export default function Home() {
     return () => document.body.removeEventListener("paste", handlePaste);
   }, []);
   return (
-    <div className="h-full  flex gap-10  items-stretch">
+    <div className="h-full  flex  items-stretch">
       {!image ? (
         <h1>OK</h1>
       ) : (
