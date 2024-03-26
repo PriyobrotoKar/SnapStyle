@@ -10,19 +10,22 @@ import {
   hsvaToHexa,
 } from "@uiw/color-convert";
 import Wheel from "@uiw/react-color-wheel";
+import { Eye } from "lucide-react";
 import {
   ChangeEvent,
   Dispatch,
   KeyboardEvent,
   SetStateAction,
+  useEffect,
   useState,
 } from "react";
+import { Button } from "./ui/button";
 import { Separator } from "./ui/separator";
 
 interface FillControlProps {
   defaultFill: string;
-  onChange: Dispatch<SetStateAction<string>>;
-  title: string;
+  onChange: Dispatch<SetStateAction<string>> | ((val: string) => void);
+  label: string;
 }
 
 type OpacityInputProps = Pick<FillControlProps, "onChange"> & {
@@ -45,6 +48,10 @@ function sanitizeFillColor(fillColor: string, fallbackFIll: string) {
 
 const HexFillInput = ({ hsva, setHsva, onChange }: OpacityInputProps) => {
   const [fillInput, setFillInput] = useState(hsvaToHex(hsva).slice(1));
+
+  useEffect(() => {
+    setFillInput(hsvaToHex(hsva).slice(1));
+  }, [hsva]);
 
   const applyFill = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key !== "Enter") {
@@ -94,55 +101,68 @@ const OpacityInput = ({ hsva, onChange, setHsva }: OpacityInputProps) => {
   );
 };
 
-const FillControl = ({ defaultFill, onChange, title }: FillControlProps) => {
+const FillControl = ({ defaultFill, onChange, label }: FillControlProps) => {
   const [hsva, setHsva] = useState(hexToHsva(defaultFill));
-  console.log(hsvaToHex(hsva));
-  return (
-    <div>
-      <h2 className=" text-primary">{title}</h2>
-      <div
-        className="flex items-center px-4 py-2 rounded-lg w-fit gap-4"
-        style={{ backgroundColor: hsvaToHex(hsva) + "10" }}
-      >
-        <Popover>
-          <PopoverTrigger>
-            <div
-              className="w-6 h-3 rounded-sm"
-              style={{ backgroundColor: hsvaToHex(hsva) }}
-            ></div>
-          </PopoverTrigger>
-          <PopoverContent className="w-fit">
-            <Wheel
-              color={hsva}
-              onChange={(color) => {
-                onChange(hsvaToHexa({ ...hsva, ...color.hsva }));
-                setHsva({ ...hsva, ...color.hsva });
-              }}
-            />
 
-            <div
-              className="flex bg-yellow-700/10 items-center px-4 py-2 rounded-lg w-fit gap-4"
-              style={{ backgroundColor: hsvaToHex(hsva) + "10" }}
-            >
+  return (
+    <div className="space-y-2">
+      <h2 className=" text-primary">{label}</h2>
+      <div className="flex gap-4">
+        <div
+          className="flex items-center px-4 py-2 rounded-xl w-fit gap-4"
+          style={{ backgroundColor: hsvaToHex(hsva) + "10" }}
+        >
+          <Popover>
+            <PopoverTrigger>
               <div
                 className="w-6 h-3 rounded-sm"
                 style={{ backgroundColor: hsvaToHex(hsva) }}
               ></div>
-              <HexFillInput hsva={hsva} setHsva={setHsva} onChange={onChange} />
-              <Separator
-                orientation="vertical"
-                className="self-stretch h-auto my-1 bg-white"
+            </PopoverTrigger>
+            <PopoverContent className="w-fit">
+              <Wheel
+                color={hsva}
+                onChange={(color) => {
+                  onChange(hsvaToHexa({ ...hsva, ...color.hsva }));
+                  setHsva({ ...hsva, ...color.hsva });
+                }}
               />
-              <OpacityInput onChange={onChange} hsva={hsva} setHsva={setHsva} />
-            </div>
-          </PopoverContent>
-        </Popover>
-        <HexFillInput hsva={hsva} setHsva={setHsva} onChange={onChange} />
-        <Separator
-          orientation="vertical"
-          className="self-stretch h-auto my-1 bg-white"
-        />
-        <OpacityInput onChange={onChange} hsva={hsva} setHsva={setHsva} />
+
+              <div
+                className="flex bg-yellow-700/10 items-center px-4 py-2 rounded-lg w-fit gap-4"
+                style={{ backgroundColor: hsvaToHex(hsva) + "10" }}
+              >
+                <div
+                  className="w-6 h-3 rounded-sm"
+                  style={{ backgroundColor: hsvaToHex(hsva) }}
+                ></div>
+                <HexFillInput
+                  hsva={hsva}
+                  setHsva={setHsva}
+                  onChange={onChange}
+                />
+                <Separator
+                  orientation="vertical"
+                  className="self-stretch h-auto my-1 bg-white"
+                />
+                <OpacityInput
+                  onChange={onChange}
+                  hsva={hsva}
+                  setHsva={setHsva}
+                />
+              </div>
+            </PopoverContent>
+          </Popover>
+          <HexFillInput hsva={hsva} setHsva={setHsva} onChange={onChange} />
+          <Separator
+            orientation="vertical"
+            className="self-stretch h-auto my-1 bg-white"
+          />
+          <OpacityInput onChange={onChange} hsva={hsva} setHsva={setHsva} />
+        </div>
+        <Button variant={"secondary"}>
+          <Eye size={14} />
+        </Button>
       </div>
     </div>
   );

@@ -4,14 +4,18 @@ import { useState } from "react";
 const Preview = ({ image }: { image: string }) => {
   const [displayPreview, setDisplayPreview] = useState(false);
 
-  const { frameRadius, frameFill } = useControlContext();
-  console.log(displayPreview);
+  const { frameRadius, frameFill, frameStroke } = useControlContext();
+  const strokePosition =
+    frameStroke.position === "inside" ? "border" : "outline";
 
   return (
     <div
       style={{
         borderRadius: frameRadius,
         backgroundColor: frameFill,
+        [`${strokePosition}Width`]: frameStroke.width,
+        [`${strokePosition}Color`]: frameStroke.color,
+        [`${strokePosition}Style`]: "solid",
         display: displayPreview ? "flex" : "none",
       }}
       className="max-w-[90%] justify-center items-center "
