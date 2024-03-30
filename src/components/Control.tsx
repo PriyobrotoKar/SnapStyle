@@ -1,4 +1,4 @@
-import { Dispatch, ReactNode, SetStateAction } from "react";
+import { Dispatch, ReactNode, SetStateAction, memo } from "react";
 
 const Control = ({
   label,
@@ -18,10 +18,9 @@ const Control = ({
       )} */}
       <span className="text-muted-foreground">{label}</span>
       <input
-        className="bg-transparent"
+        className="bg-transparent appearance-none outline-none"
         style={{ width: value.toString().length + "ch" }}
-        type="text"
-        inputMode="numeric"
+        type="number"
         value={value}
         onChange={(e) =>
           !isNaN(Number(e.target.value)) && onChange(Number(e.target.value))
@@ -31,4 +30,4 @@ const Control = ({
   );
 };
 
-export default Control;
+export default memo(Control);

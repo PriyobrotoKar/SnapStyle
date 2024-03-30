@@ -10,12 +10,13 @@ import {
   hsvaToHexa,
 } from "@uiw/color-convert";
 import Wheel from "@uiw/react-color-wheel";
-import { Eye } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import {
   ChangeEvent,
   Dispatch,
   KeyboardEvent,
   SetStateAction,
+  memo,
   useEffect,
   useState,
 } from "react";
@@ -23,6 +24,7 @@ import { Button } from "./ui/button";
 import { Separator } from "./ui/separator";
 
 interface FillControlProps {
+  fill: string;
   defaultFill: string;
   onChange: Dispatch<SetStateAction<string>> | ((val: string) => void);
   label: string;
@@ -101,16 +103,23 @@ const OpacityInput = ({ hsva, onChange, setHsva }: OpacityInputProps) => {
   );
 };
 
-const FillControl = ({ defaultFill, onChange, label }: FillControlProps) => {
+const FillControl = ({
+  fill,
+  defaultFill,
+  onChange,
+  label,
+}: FillControlProps) => {
   const [hsva, setHsva] = useState(hexToHsva(defaultFill));
-
   return (
     <div className="space-y-2">
       <h2 className=" text-primary">{label}</h2>
       <div className="flex gap-4">
         <div
           className="flex items-center px-4 py-2 rounded-xl w-fit gap-4"
-          style={{ backgroundColor: hsvaToHex(hsva) + "10" }}
+          style={{
+            backgroundColor: hsvaToHex(hsva) + "10",
+            opacity: fill ? "1" : "0.4",
+          }}
         >
           <Popover>
             <PopoverTrigger>
@@ -160,12 +169,15 @@ const FillControl = ({ defaultFill, onChange, label }: FillControlProps) => {
           />
           <OpacityInput onChange={onChange} hsva={hsva} setHsva={setHsva} />
         </div>
-        <Button variant={"secondary"}>
-          <Eye size={14} />
+        <Button
+          onClick={() => onChange(fill ? "" : hsvaToHexa(hsva))}
+          variant={"secondary"}
+        >
+          {fill ? <Eye size={14} /> : <EyeOff size={14} />}
         </Button>
       </div>
     </div>
   );
 };
 
-export default FillControl;
+export default memo(FillControl);

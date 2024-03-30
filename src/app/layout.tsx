@@ -1,5 +1,5 @@
 import { Toaster } from "@/components/ui/sonner";
-import ControlCenterProvider from "@/providers/ControlCenterProvider";
+import RecoilProvider from "@/providers/RecoilProvider";
 import { ThemeProvider } from "@/providers/theme-provider";
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
@@ -24,7 +24,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.className} h-screen text-base`}>
         <ThemeProvider attribute="class" defaultTheme="dark">
-          <ControlCenterProvider>{children}</ControlCenterProvider>
+          <RecoilProvider>{children}</RecoilProvider>
           <Toaster position="bottom-center" />
         </ThemeProvider>
       </body>

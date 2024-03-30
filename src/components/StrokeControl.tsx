@@ -5,17 +5,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useControlContext } from "@/providers/ControlCenterProvider";
+import { frameStrokeState } from "@/lib/atoms";
+import { DEFAULT_FRAME_STROKE_FILL } from "@/lib/constants";
 import { ListFilter } from "lucide-react";
+import { memo } from "react";
+import { useRecoilState } from "recoil";
 import Control from "./Control";
 import FillControl from "./FillControl";
 
 const StrokeControl = () => {
-  const { frameStroke, setFrameStroke } = useControlContext();
+  const [frameStroke, setFrameStroke] = useRecoilState(frameStrokeState);
   return (
     <div className="space-y-2">
       <FillControl
-        defaultFill={frameStroke.color}
+        defaultFill={DEFAULT_FRAME_STROKE_FILL}
+        fill={frameStroke.color}
         onChange={(color: string) => setFrameStroke({ ...frameStroke, color })}
         label="Stroke"
       />
@@ -46,4 +50,4 @@ const StrokeControl = () => {
   );
 };
 
-export default StrokeControl;
+export default memo(StrokeControl);
