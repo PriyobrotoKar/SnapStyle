@@ -5,29 +5,41 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { frameStrokeState } from "@/lib/atoms";
-import { DEFAULT_FRAME_STROKE_FILL } from "@/lib/constants";
+import { ControlCenterState } from "@/lib/atoms";
 import { ListFilter } from "lucide-react";
 import { memo } from "react";
-import { useRecoilState } from "recoil";
+import { RecoilState, useRecoilState } from "recoil";
 import Control from "./Control";
 import FillControl from "./FillControl";
 
-const StrokeControl = () => {
-  const [frameStroke, setFrameStroke] = useRecoilState(frameStrokeState);
+interface StrokeControlProps {
+  strokeType: RecoilState<
+    StrokeProperties<ControlCenterState>[keyof StrokeProperties<ControlCenterState>]
+  >;
+  defaultFill: string;
+}
+
+type EndsWithStroke<T> = T extends `${infer Prefix}Stroke` ? T : never;
+
+type StrokeProperties<T> = {
+  [K in keyof T as EndsWithStroke<K>]: T[K];
+};
+
+const StrokeControl = ({ strokeType, defaultFill }: StrokeControlProps) => {
+  const [stroke, setStroke] = useRecoilState(strokeType);
   return (
     <div className="space-y-2">
       <FillControl
-        defaultFill={DEFAULT_FRAME_STROKE_FILL}
-        fill={frameStroke.color}
-        onChange={(color: string) => setFrameStroke({ ...frameStroke, color })}
+        defaultFill={defaultFill}
+        fill={stroke.color}
+        onChange={(color: string) => setStroke({ ...stroke, color })}
         label="Stroke"
       />
       <div className="flex gap-6">
         <Select
-          defaultValue={frameStroke.position}
+          defaultValue={stroke.position}
           onValueChange={(val: "inside" | "outside") =>
-            setFrameStroke({ ...frameStroke, position: val })
+            setStroke({ ...stroke, position: val })
           }
         >
           <SelectTrigger className="w-[180px]">
@@ -40,10 +52,8 @@ const StrokeControl = () => {
         </Select>
         <Control
           label={<ListFilter size={16} />}
-          value={frameStroke.width}
-          onChange={(width: number) =>
-            setFrameStroke({ ...frameStroke, width })
-          }
+          value={stroke.width}
+          onChange={(width: number) => setStroke({ ...stroke, width })}
         />
       </div>
     </div>

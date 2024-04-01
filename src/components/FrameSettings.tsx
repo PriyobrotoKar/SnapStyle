@@ -2,8 +2,9 @@ import {
   frameDimensionState,
   frameFillState,
   frameRadiusState,
+  frameStrokeState,
 } from "@/lib/atoms";
-import { DEFAULT_FRAME_FILL } from "@/lib/constants";
+import { DEFAULT_FRAME_FILL, DEFAULT_FRAME_STROKE_FILL } from "@/lib/constants";
 import Image from "next/image";
 import { useCallback, useMemo } from "react";
 import { useRecoilState } from "recoil";
@@ -55,7 +56,10 @@ const FrameSettings = () => {
         onChange={setFrameFill}
         label="Fill"
       />
-      <StrokeControl />
+      <StrokeControl
+        strokeType={frameStrokeState}
+        defaultFill={DEFAULT_FRAME_STROKE_FILL}
+      />
     </section>
   );
 };

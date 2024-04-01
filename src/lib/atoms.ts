@@ -1,7 +1,11 @@
 import { AtomOptions, RecoilState, atom, selector } from "recoil";
-import { DEFAULT_FRAME_FILL, DEFAULT_FRAME_STROKE_FILL } from "./constants";
+import {
+  DEFAULT_FRAME_FILL,
+  DEFAULT_FRAME_STROKE_FILL,
+  DEFAULT_IMAGE_STROKE_FILL,
+} from "./constants";
 
-interface ControlCenterState {
+export interface ControlCenterState {
   frameDimension: {
     width: number;
     height: number;
@@ -13,6 +17,14 @@ interface ControlCenterState {
     width: number;
     position: "inside" | "outside";
   };
+  imageStroke: {
+    color: string;
+    width: number;
+    position: "inside" | "outside";
+  };
+  imageRadius: number;
+  imageRotation: number;
+  imageScale: number;
 }
 
 let atoms: Array<RecoilState<any>> = [];
@@ -49,6 +61,29 @@ export const frameStrokeState = createAtom<ControlCenterState["frameStroke"]>({
     width: 5,
     position: "inside",
   },
+});
+
+export const imageStrokeState = createAtom<ControlCenterState["imageStroke"]>({
+  key: "imageStroke",
+  default: {
+    color: DEFAULT_IMAGE_STROKE_FILL,
+    width: 5,
+    position: "inside",
+  },
+});
+export const imageRadiusState = createAtom<ControlCenterState["imageRadius"]>({
+  key: "imageRadius",
+  default: 10,
+});
+export const imageRotationState = createAtom<
+  ControlCenterState["imageRotation"]
+>({
+  key: "imageRotation",
+  default: 0,
+});
+export const imageScaleState = createAtom<ControlCenterState["imageScale"]>({
+  key: "imageScale",
+  default: 1,
 });
 
 export const controlCenterState = selector<ControlCenterState>({
