@@ -5,6 +5,7 @@ import { useRecoilState, useRecoilValue } from "recoil";
 const Preview = ({ image }: { image: string }) => {
   const [displayPreview, setDisplayPreview] = useState(false);
   const frameRef = useRef<HTMLDivElement>(null);
+  const imageRef = useRef<HTMLImageElement>(null);
 
   const {
     frameDimension,
@@ -15,6 +16,7 @@ const Preview = ({ image }: { image: string }) => {
     imageRadius,
     imageRotation,
     imageScale,
+    imagePosition,
   } = useRecoilValue(controlCenterState);
 
   const [_, setFrameDimension] = useRecoilState(frameDimensionState);
@@ -27,7 +29,7 @@ const Preview = ({ image }: { image: string }) => {
   console.log(frameDimension.width || "70");
 
   useEffect(() => {
-    if (displayPreview && frameRef.current) {
+    if (displayPreview && frameRef.current && imageRef.current) {
       setFrameDimension({
         width: frameRef.current.getBoundingClientRect().width,
         height: frameRef.current.getBoundingClientRect().height,
@@ -49,11 +51,12 @@ const Preview = ({ image }: { image: string }) => {
           frameStroke.color === "" ? 0 : frameStroke.width,
         [`${frameStrokePosition}Color`]: frameStroke.color,
         [`${frameStrokePosition}Style`]: "solid",
-        display: displayPreview ? "flex" : "none",
+        display: displayPreview ? "block" : "none",
       }}
-      className=" max-w-[90%] max-h-[90%] h-auto justify-center items-center p-20 overflow-hidden"
+      className="relative max-w-[90%] max-h-[80vh] h-auto p-20 overflow-hidden"
     >
       <img
+        ref={imageRef}
         onLoad={() => {
           setDisplayPreview(true);
         }}
@@ -61,12 +64,13 @@ const Preview = ({ image }: { image: string }) => {
           borderRadius: `${imageRadius}px`,
           rotate: `${imageRotation}deg`,
           scale: imageScale,
+          translate: `${imagePosition.x}% ${imagePosition.y}%`,
           [`${imageStrokePosition}Width`]:
             imageStroke.color === "" ? 0 : imageStroke.width,
           [`${imageStrokePosition}Color`]: imageStroke.color,
           [`${imageStrokePosition}Style`]: "solid",
         }}
-        className="w-full max-w-[50vw]  rounded-lg shadow-[0px_10px_40px_10px_#00000070]"
+        className="w-full aspect-auto max-w-[50vw] rounded-lg shadow-[0px_10px_40px_10px_#00000070]"
         src={image}
         alt=""
       />

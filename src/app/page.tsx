@@ -1,5 +1,6 @@
 "use client";
 
+import Export from "@/components/Export";
 import Preview from "@/components/Preview";
 import Sidebar from "@/components/Sidebar";
 import { pasteImageFromClipboard } from "@/lib/pasteImage";
@@ -22,13 +23,14 @@ export default function Home() {
     return () => document.body.removeEventListener("paste", handlePaste);
   }, []);
   return (
-    <div className="h-full  flex  items-stretch">
+    <div className="flex-1 flex  items-stretch">
       {!image ? (
         <h1>OK</h1>
       ) : (
         <>
-          <div className="flex-1 flex items-center justify-center">
+          <div className="flex-1 gap-6 flex flex-col items-center justify-center">
             <Preview image={image} />
+            <Export />
           </div>
           <Sidebar />
         </>

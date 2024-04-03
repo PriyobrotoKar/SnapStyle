@@ -1,4 +1,5 @@
 import {
+  imagePositionState,
   imageRadiusState,
   imageRotationState,
   imageScaleState,
@@ -18,9 +19,26 @@ const ImageSettings = () => {
   const [imageRadius, setImageRadius] = useRecoilState(imageRadiusState);
   const [imageRotation, setImageRotation] = useRecoilState(imageRotationState);
   const [imageScale, setImageScale] = useRecoilState(imageScaleState);
+  const [imagePosition, setImagePosition] = useRecoilState(imagePositionState);
   return (
     <div className="space-y-4">
       <h1 className="text-lg font-medium">Image Settings</h1>
+      <div className="flex gap-6 items-center">
+        <Control
+          label={"X"}
+          value={imagePosition.x}
+          onChange={(val: number) =>
+            setImagePosition({ ...imagePosition, x: val })
+          }
+        />
+        <Control
+          label={"Y"}
+          value={imagePosition.y}
+          onChange={(val: number) =>
+            setImagePosition({ ...imagePosition, y: val })
+          }
+        />
+      </div>
       <div className="flex gap-6 items-center">
         <Control
           label={useMemo(

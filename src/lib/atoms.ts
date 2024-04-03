@@ -17,6 +17,10 @@ export interface ControlCenterState {
     width: number;
     position: "inside" | "outside";
   };
+  imagePosition: {
+    x: number;
+    y: number;
+  };
   imageStroke: {
     color: string;
     width: number;
@@ -60,6 +64,16 @@ export const frameStrokeState = createAtom<ControlCenterState["frameStroke"]>({
     color: DEFAULT_FRAME_STROKE_FILL,
     width: 5,
     position: "inside",
+  },
+});
+
+export const imagePositionState = createAtom<
+  ControlCenterState["imagePosition"]
+>({
+  key: "imagePosition",
+  default: {
+    x: 0,
+    y: 0,
   },
 });
 

@@ -1,3 +1,4 @@
+import Header from "@/components/Header";
 import { Toaster } from "@/components/ui/sonner";
 import RecoilProvider from "@/providers/RecoilProvider";
 import { ThemeProvider } from "@/providers/theme-provider";
@@ -22,9 +23,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.className} h-screen text-base`}>
+      <body className={`${inter.className} flex flex-col h-screen text-base`}>
         <ThemeProvider attribute="class" defaultTheme="dark">
-          <RecoilProvider>{children}</RecoilProvider>
+          <RecoilProvider>
+            <Header />
+            {children}
+          </RecoilProvider>
           <Toaster position="bottom-center" />
         </ThemeProvider>
       </body>
