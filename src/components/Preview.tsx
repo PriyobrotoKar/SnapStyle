@@ -51,9 +51,9 @@ const Preview = ({ image }: { image: string }) => {
           frameStroke.color === "" ? 0 : frameStroke.width,
         [`${frameStrokePosition}Color`]: frameStroke.color,
         [`${frameStrokePosition}Style`]: "solid",
-        display: displayPreview ? "block" : "none",
+        display: displayPreview ? "flex" : "none",
       }}
-      className="relative max-w-[90%] max-h-[80vh] h-auto p-20 overflow-hidden"
+      className=" relative max-w-[90%] max-h-[80vh] h-auto justify-center items-center p-20 overflow-hidden"
     >
       <img
         ref={imageRef}
@@ -70,7 +70,7 @@ const Preview = ({ image }: { image: string }) => {
           [`${imageStrokePosition}Color`]: imageStroke.color,
           [`${imageStrokePosition}Style`]: "solid",
         }}
-        className="w-full aspect-auto max-w-[50vw] rounded-lg shadow-[0px_10px_40px_10px_#00000070]"
+        className="aspect-auto max-w-[50vw] rounded-lg shadow-[0px_10px_40px_10px_#00000070]"
         src={image}
         alt=""
       />

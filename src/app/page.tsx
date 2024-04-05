@@ -28,8 +28,10 @@ export default function Home() {
         <h1>OK</h1>
       ) : (
         <>
-          <div className="flex-1 gap-6 flex flex-col items-center justify-center">
-            <Preview image={image} />
+          <div className="flex-1  flex flex-col items-center justify-center">
+            <div className="flex-1 flex justify-center items-center w-full">
+              <Preview image={image} />
+            </div>
             <Export />
           </div>
           <Sidebar />
