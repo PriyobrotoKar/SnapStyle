@@ -1,9 +1,15 @@
-import { controlCenterState, frameDimensionState } from "@/lib/atoms";
+import {
+  controlCenterState,
+  frameDimensionState,
+  imageSourceState,
+} from "@/lib/atoms";
+import { Loader2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 
-const Preview = ({ image }: { image: string }) => {
+const Preview = () => {
   const [displayPreview, setDisplayPreview] = useState(false);
+  const image = useRecoilValue(imageSourceState);
   const frameRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
 
@@ -38,43 +44,51 @@ const Preview = ({ image }: { image: string }) => {
   }, [displayPreview, setFrameDimension]);
 
   return (
-    <div
-      ref={frameRef}
-      style={{
-        borderRadius: frameRadius,
-        backgroundColor: frameFill,
-        // ...(frameDimension.width && { width: frameDimension.width }),
-        // ...(frameDimension.height && { height: frameDimension.height }),
-        width: frameDimension.width || "fit-content",
-        height: frameDimension.height || "fit-content",
-        [`${frameStrokePosition}Width`]:
-          frameStroke.color === "" ? 0 : frameStroke.width,
-        [`${frameStrokePosition}Color`]: frameStroke.color,
-        [`${frameStrokePosition}Style`]: "solid",
-        display: displayPreview ? "flex" : "none",
-      }}
-      className=" relative max-w-[90%] max-h-[80vh] h-auto justify-center items-center p-20 overflow-hidden"
-    >
-      <img
-        ref={imageRef}
-        onLoad={() => {
-          setDisplayPreview(true);
-        }}
+    <>
+      <div
+        ref={frameRef}
         style={{
-          borderRadius: `${imageRadius}px`,
-          rotate: `${imageRotation}deg`,
-          scale: imageScale,
-          translate: `${imagePosition.x}% ${imagePosition.y}%`,
-          [`${imageStrokePosition}Width`]:
-            imageStroke.color === "" ? 0 : imageStroke.width,
-          [`${imageStrokePosition}Color`]: imageStroke.color,
-          [`${imageStrokePosition}Style`]: "solid",
+          borderRadius: frameRadius,
+          backgroundColor: frameFill,
+          // ...(frameDimension.width && { width: frameDimension.width }),
+          // ...(frameDimension.height && { height: frameDimension.height }),
+          width: frameDimension.width || "fit-content",
+          height: frameDimension.height || "fit-content",
+          [`${frameStrokePosition}Width`]:
+            frameStroke.color === "" ? 0 : frameStroke.width,
+          [`${frameStrokePosition}Color`]: frameStroke.color,
+          [`${frameStrokePosition}Style`]: "solid",
+          display: displayPreview ? "flex" : "none",
         }}
-        className="aspect-auto max-w-[50vw] rounded-lg shadow-[0px_10px_40px_10px_#00000070]"
-        src={image}
-        alt=""
-      />
-    </div>
+        className=" relative max-w-[90%] max-h-[80vh] h-auto justify-center items-center p-20 overflow-hidden"
+      >
+        <img
+          ref={imageRef}
+          onLoad={() => {
+            setDisplayPreview(true);
+          }}
+          style={{
+            borderRadius: `${imageRadius}px`,
+            rotate: `${imageRotation}deg`,
+            scale: imageScale,
+            translate: `${imagePosition.x}% ${imagePosition.y}%`,
+            [`${imageStrokePosition}Width`]:
+              imageStroke.color === "" ? 0 : imageStroke.width,
+            [`${imageStrokePosition}Color`]: imageStroke.color,
+            [`${imageStrokePosition}Style`]: "solid",
+          }}
+          className="aspect-auto max-w-[50vw] max-h-[60vh] rounded-lg shadow-[0px_10px_40px_10px_#00000070]"
+          src={image || ""}
+          alt=""
+        />
+      </div>
+      {!displayPreview && (
+        <div className="space-y-2 text-muted">
+          <Loader2 className="mx-auto animate-spin " />
+          <div>Loading...</div>
+        </div>
+      )}
+    </>
   );
 };
 

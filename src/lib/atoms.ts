@@ -38,6 +38,10 @@ const createAtom = <T>(options: AtomOptions<T>) => {
   return state;
 };
 
+export const imageSourceState = atom<string | null>({
+  key: "imageSource",
+  default: null,
+});
 export const frameDimensionState = createAtom<
   ControlCenterState["frameDimension"]
 >({

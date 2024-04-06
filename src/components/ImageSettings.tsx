@@ -13,6 +13,7 @@ import { useMemo } from "react";
 import { useRecoilState } from "recoil";
 import RadiusIcon from "../../public/radius.svg";
 import Control from "./Control";
+import CropSettings from "./CropSettings";
 import StrokeControl from "./StrokeControl";
 
 const ImageSettings = () => {
@@ -38,6 +39,7 @@ const ImageSettings = () => {
             setImagePosition({ ...imagePosition, y: val })
           }
         />
+        <CropSettings />
       </div>
       <div className="flex gap-6 items-center">
         <Control

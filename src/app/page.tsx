@@ -3,12 +3,16 @@
 import Export from "@/components/Export";
 import Preview from "@/components/Preview";
 import Sidebar from "@/components/Sidebar";
+import UploadImage from "@/components/UploadImage";
+import { imageSourceState } from "@/lib/atoms";
 import { pasteImageFromClipboard } from "@/lib/pasteImage";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useRecoilState } from "recoil";
 import { toast } from "sonner";
 
 export default function Home() {
-  const [image, setImage] = useState<string | null>(null);
+  const [image, setImage] = useRecoilState(imageSourceState);
+
   useEffect(() => {
     const handlePaste = async (event: ClipboardEvent) => {
       event.preventDefault();
@@ -21,16 +25,16 @@ export default function Home() {
     };
     document.body.addEventListener("paste", handlePaste);
     return () => document.body.removeEventListener("paste", handlePaste);
-  }, []);
+  }, [setImage]);
   return (
     <div className="flex-1 flex  items-stretch">
       {!image ? (
-        <h1>OK</h1>
+        <UploadImage />
       ) : (
         <>
           <div className="flex-1  flex flex-col items-center justify-center">
             <div className="flex-1 flex justify-center items-center w-full">
-              <Preview image={image} />
+              <Preview />
             </div>
             <Export />
           </div>
