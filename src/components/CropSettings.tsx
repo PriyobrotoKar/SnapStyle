@@ -1,7 +1,7 @@
 import { imageSourceState } from "@/lib/atoms";
 import cropImage from "@/lib/cropImage";
 import { Crop as CropIcon, Link } from "lucide-react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import ReactCrop, {
   Crop,
   PercentCrop,
@@ -28,7 +28,7 @@ const CropSettings = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [lockAspect, setLockAspect] = useState(false);
   const [cropAspect, setCropAspect] = useState<string | undefined>();
-  const [completedCrop, setCompletedCrop] = useState<PercentCrop>();
+  // const [completedCrop, setCompletedCrop] = useState<PercentCrop>();
   const [image, setImage] = useRecoilState(imageSourceState);
   console.log(!image);
   if (!image) {
@@ -54,14 +54,11 @@ const CropSettings = () => {
   };
 
   const handleCropSave = () => {
-    if (!completedCrop) {
+    if (!crop) {
       return;
     }
 
-    const src = cropImage(
-      img,
-      convertToPixelCrop(completedCrop, img.width, img.height)
-    );
+    const src = cropImage(img, convertToPixelCrop(crop, img.width, img.height));
     setIsOpen(false);
     src && setImage(src);
   };
@@ -90,7 +87,7 @@ const CropSettings = () => {
           crop={crop}
           aspect={getCropAspect()}
           onChange={(c, cPer) => setCrop(cPer)}
-          onComplete={(c, cPer) => setCompletedCrop(cPer)}
+          // onComplete={(c, cPer) => setCompletedCrop(cPer)}
         >
           <img onLoad={onImageLoad} src={image} alt="crop-preview" />
         </ReactCrop>
