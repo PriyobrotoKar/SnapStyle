@@ -10,7 +10,8 @@ import {
   hsvaToHexa,
 } from "@uiw/color-convert";
 import Wheel from "@uiw/react-color-wheel";
-import { Eye, EyeOff } from "lucide-react";
+import ShadeSlider from "@uiw/react-color-shade-slider";
+import { Eye, EyeOff, Pipette } from "lucide-react";
 import {
   ChangeEvent,
   Dispatch,
@@ -22,6 +23,7 @@ import {
 } from "react";
 import { Button } from "./ui/button";
 import { Separator } from "./ui/separator";
+import { getColorFromEyeDropper } from "@/lib/eyeDropper";
 
 interface FillControlProps {
   fill: string;
@@ -128,37 +130,78 @@ const FillControl = ({
                 style={{ backgroundColor: hsvaToHex(hsva) }}
               ></div>
             </PopoverTrigger>
-            <PopoverContent className="w-fit">
-              <Wheel
-                color={hsva}
-                onChange={(color) => {
-                  onChange(hsvaToHexa({ ...hsva, ...color.hsva }));
-                  setHsva({ ...hsva, ...color.hsva });
-                }}
-              />
+            <PopoverContent className="w-fit space-y-4">
+              <div className="flex justify-between">
+                <Wheel
+                  color={hsva}
+                  onChange={(color) => {
+                    onChange(hsvaToHexa({ ...hsva, ...color.hsva }));
+                    setHsva({ ...hsva, ...color.hsva });
+                  }}
+                />
+                <ShadeSlider
+                  hsva={hsva}
+                  direction="vertical"
+                  className="w-8 self-stretch "
+                  // radius={8}
+                  // bgProps={{ style: { borderWidth: 2 } }}
+                  style={{ height: "auto" }}
+                  pointerProps={{
+                    className: "w-full",
+                    fillProps: {
+                      style: {
+                        width: "100%",
+                        borderRadius: 0,
+                        position: "relative",
+                        left: "1px",
+                        top: "9px",
+                        height: 2,
+                      },
+                    },
+                  }}
+                  onChange={(newShade) => {
+                    setHsva({ ...hsva, ...newShade });
+                    onChange(hsvaToHexa({ ...hsva, ...newShade }));
+                  }}
+                />
+              </div>
 
-              <div
-                className="flex bg-yellow-700/10 items-center px-4 py-2 rounded-lg w-fit gap-4"
-                style={{ backgroundColor: hsvaToHex(hsva) + "10" }}
-              >
+              <div className="flex gap-2">
                 <div
-                  className="w-6 h-3 rounded-sm"
-                  style={{ backgroundColor: hsvaToHex(hsva) }}
-                ></div>
-                <HexFillInput
-                  hsva={hsva}
-                  setHsva={setHsva}
-                  onChange={onChange}
-                />
-                <Separator
-                  orientation="vertical"
-                  className="self-stretch h-auto my-1 bg-white"
-                />
-                <OpacityInput
-                  onChange={onChange}
-                  hsva={hsva}
-                  setHsva={setHsva}
-                />
+                  className="flex bg-yellow-700/10 items-center px-4 py-2 rounded-lg w-fit gap-4"
+                  style={{ backgroundColor: hsvaToHex(hsva) + "10" }}
+                >
+                  <div
+                    className="w-6 h-3 rounded-sm"
+                    style={{ backgroundColor: hsvaToHex(hsva) }}
+                  ></div>
+                  <HexFillInput
+                    hsva={hsva}
+                    setHsva={setHsva}
+                    onChange={onChange}
+                  />
+                  <Separator
+                    orientation="vertical"
+                    className="self-stretch h-auto my-1 bg-white"
+                  />
+                  <OpacityInput
+                    onChange={onChange}
+                    hsva={hsva}
+                    setHsva={setHsva}
+                  />
+                </div>
+                <Button
+                  size={"icon"}
+                  onClick={async () => {
+                    const color = await getColorFromEyeDropper();
+                    if (!color) return;
+                    onChange(color);
+                    setHsva(hexToHsva(color));
+                  }}
+                  variant={"secondary"}
+                >
+                  <Pipette size={14} />
+                </Button>
               </div>
             </PopoverContent>
           </Popover>
