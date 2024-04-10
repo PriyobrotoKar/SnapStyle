@@ -42,6 +42,12 @@ export const imageSourceState = atom<string | null>({
   key: "imageSource",
   default: null,
 });
+
+export const PreviewFrameState = atom<HTMLDivElement | null>({
+  key: "PreviewFrame",
+  default: null,
+});
+
 export const frameDimensionState = createAtom<
   ControlCenterState["frameDimension"]
 >({

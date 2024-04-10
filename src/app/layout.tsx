@@ -29,7 +29,7 @@ export default function RootLayout({
             <Header />
             {children}
           </RecoilProvider>
-          <Toaster position="bottom-center" />
+          <Toaster position="bottom-left" />
         </ThemeProvider>
       </body>
     </html>

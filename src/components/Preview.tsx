@@ -1,4 +1,5 @@
 import {
+  PreviewFrameState,
   controlCenterState,
   frameDimensionState,
   imageSourceState,
@@ -10,7 +11,9 @@ import { useRecoilState, useRecoilValue } from "recoil";
 const Preview = () => {
   const [displayPreview, setDisplayPreview] = useState(false);
   const image = useRecoilValue(imageSourceState);
+  const [___, setPreviewFrame] = useRecoilState(PreviewFrameState);
   const frameRef = useRef<HTMLDivElement>(null);
+
   const imageRef = useRef<HTMLImageElement>(null);
 
   const {
@@ -41,7 +44,14 @@ const Preview = () => {
         height: frameRef.current.getBoundingClientRect().height,
       });
     }
-  }, [displayPreview, setFrameDimension]);
+  }, [displayPreview, setFrameDimension, setPreviewFrame]);
+
+  useEffect(() => {
+    if (displayPreview && frameRef.current && imageRef.current) {
+      console.log(frameRef.current.clientWidth);
+      setPreviewFrame(frameRef.current);
+    }
+  }, [displayPreview, setPreviewFrame]);
 
   return (
     <>
@@ -60,7 +70,7 @@ const Preview = () => {
           [`${frameStrokePosition}Style`]: "solid",
           display: displayPreview ? "flex" : "none",
         }}
-        className=" relative max-w-[90%] max-h-[80vh] h-auto justify-center items-center p-20 overflow-hidden"
+        className=" relative   justify-center items-center p-14 overflow-hidden"
       >
         <img
           ref={imageRef}
