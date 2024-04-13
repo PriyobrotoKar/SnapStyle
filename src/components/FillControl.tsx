@@ -24,6 +24,8 @@ import {
 import { Button } from "./ui/button";
 import { Separator } from "./ui/separator";
 import { getColorFromEyeDropper } from "@/lib/eyeDropper";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { controlCenterState, versionHistoryState } from "@/lib/atoms";
 
 interface FillControlProps {
   fill: string;
@@ -52,6 +54,9 @@ function sanitizeFillColor(fillColor: string, fallbackFIll: string) {
 
 const HexFillInput = ({ hsva, setHsva, onChange }: OpacityInputProps) => {
   const [fillInput, setFillInput] = useState(hsvaToHex(hsva).slice(1));
+  const [versionHistory, setVersionHistory] =
+    useRecoilState(versionHistoryState);
+  const controlCenter = useRecoilValue(controlCenterState);
 
   useEffect(() => {
     setFillInput(hsvaToHex(hsva).slice(1));
@@ -69,6 +74,10 @@ const HexFillInput = ({ hsva, setHsva, onChange }: OpacityInputProps) => {
 
   const handleHexInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFillInput(e.target.value);
+    setVersionHistory({
+      position: versionHistory.position + 1,
+      timeline: [...versionHistory.timeline, controlCenter],
+    });
   };
   return (
     <input
@@ -83,6 +92,9 @@ const HexFillInput = ({ hsva, setHsva, onChange }: OpacityInputProps) => {
 };
 
 const OpacityInput = ({ hsva, onChange, setHsva }: OpacityInputProps) => {
+  const [versionHistory, setVersionHistory] =
+    useRecoilState(versionHistoryState);
+  const controlCenter = useRecoilValue(controlCenterState);
   return (
     <input
       type="text"
@@ -98,6 +110,10 @@ const OpacityInput = ({ hsva, onChange, setHsva }: OpacityInputProps) => {
           ...hsva,
           a: Number(e.target.value.slice(0, -1)) / 100,
         });
+        setVersionHistory({
+          position: versionHistory.position + 1,
+          timeline: [...versionHistory.timeline, controlCenter],
+        });
       }}
       className="bg-transparent outline-none text"
       style={{ width: "4ch" }}
@@ -111,7 +127,16 @@ const FillControl = ({
   onChange,
   label,
 }: FillControlProps) => {
+  console.log(defaultFill);
   const [hsva, setHsva] = useState(hexToHsva(defaultFill));
+  const [versionHistory, setVersionHistory] =
+    useRecoilState(versionHistoryState);
+  const controlCenter = useRecoilValue(controlCenterState);
+
+  useEffect(() => {
+    setHsva(hexToHsva(defaultFill));
+  }, [defaultFill]);
+
   return (
     <div className="space-y-2">
       <h2 className=" text-primary">{label}</h2>
@@ -137,6 +162,10 @@ const FillControl = ({
                   onChange={(color) => {
                     onChange(hsvaToHexa({ ...hsva, ...color.hsva }));
                     setHsva({ ...hsva, ...color.hsva });
+                    setVersionHistory({
+                      position: versionHistory.position + 1,
+                      timeline: [...versionHistory.timeline, controlCenter],
+                    });
                   }}
                 />
                 <ShadeSlider
@@ -162,6 +191,10 @@ const FillControl = ({
                   onChange={(newShade) => {
                     setHsva({ ...hsva, ...newShade });
                     onChange(hsvaToHexa({ ...hsva, ...newShade }));
+                    setVersionHistory({
+                      position: versionHistory.position + 1,
+                      timeline: [...versionHistory.timeline, controlCenter],
+                    });
                   }}
                 />
               </div>
@@ -197,6 +230,10 @@ const FillControl = ({
                     if (!color) return;
                     onChange(color);
                     setHsva(hexToHsva(color));
+                    setVersionHistory({
+                      position: versionHistory.position + 1,
+                      timeline: [...versionHistory.timeline, controlCenter],
+                    });
                   }}
                   variant={"secondary"}
                 >
@@ -213,7 +250,13 @@ const FillControl = ({
           <OpacityInput onChange={onChange} hsva={hsva} setHsva={setHsva} />
         </div>
         <Button
-          onClick={() => onChange(fill ? "" : hsvaToHexa(hsva))}
+          onClick={() => {
+            onChange(fill ? "" : hsvaToHexa(hsva));
+            setVersionHistory({
+              position: versionHistory.position + 1,
+              timeline: [...versionHistory.timeline, controlCenter],
+            });
+          }}
           variant={"secondary"}
         >
           {fill ? <Eye size={14} /> : <EyeOff size={14} />}

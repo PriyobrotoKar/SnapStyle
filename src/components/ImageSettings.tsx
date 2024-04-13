@@ -1,4 +1,5 @@
 import {
+  controlCenterState,
   imagePositionState,
   imageRadiusState,
   imageRotationState,
@@ -10,7 +11,7 @@ import { AngleIcon } from "@radix-ui/react-icons";
 import { MoveDiagonal } from "lucide-react";
 import Image from "next/image";
 import { useMemo } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import RadiusIcon from "../../public/radius.svg";
 import Control from "./Control";
 import CropSettings from "./CropSettings";
@@ -21,6 +22,7 @@ const ImageSettings = () => {
   const [imageRotation, setImageRotation] = useRecoilState(imageRotationState);
   const [imageScale, setImageScale] = useRecoilState(imageScaleState);
   const [imagePosition, setImagePosition] = useRecoilState(imagePositionState);
+  const controlCenter = useRecoilValue(controlCenterState);
   return (
     <div className="space-y-4">
       <h1 className="text-lg font-medium">Image Settings</h1>
@@ -68,7 +70,9 @@ const ImageSettings = () => {
 
       <StrokeControl
         strokeType={imageStrokeState}
-        defaultFill={DEFAULT_IMAGE_STROKE_FILL}
+        defaultFill={
+          controlCenter.imageStroke.color || DEFAULT_IMAGE_STROKE_FILL
+        }
       />
     </div>
   );

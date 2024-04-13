@@ -1,4 +1,4 @@
-import { AtomOptions, RecoilState, atom, selector } from "recoil";
+import { AtomOptions, DefaultValue, RecoilState, atom, selector } from "recoil";
 import {
   DEFAULT_FRAME_FILL,
   DEFAULT_FRAME_STROKE_FILL,
@@ -31,6 +31,11 @@ export interface ControlCenterState {
   imageScale: number;
 }
 
+interface VersionHistory {
+  position: number;
+  timeline: ControlCenterState[];
+}
+
 let atoms: Array<RecoilState<any>> = [];
 const createAtom = <T>(options: AtomOptions<T>) => {
   const state = atom(options);
@@ -46,6 +51,10 @@ export const imageSourceState = atom<string | null>({
 export const PreviewFrameState = atom<HTMLDivElement | null>({
   key: "PreviewFrame",
   default: null,
+});
+export const versionHistoryState = atom<VersionHistory>({
+  key: "VersionHistory",
+  default: { position: -1, timeline: [] },
 });
 
 export const frameDimensionState = createAtom<
@@ -123,4 +132,13 @@ export const controlCenterState = selector<ControlCenterState>({
     );
     return atomsValues as ControlCenterState;
   },
+  set: ({ set }, newValue) => {
+    Object.keys(newValue).forEach((key) => {
+      set(
+        atoms.find((atom) => atom.key === key)!,
+        newValue[key as keyof (ControlCenterState | DefaultValue)]
+      );
+    });
+  },
+  dangerouslyAllowMutability: true,
 });

@@ -1,4 +1,5 @@
 import {
+  controlCenterState,
   frameDimensionState,
   frameFillState,
   frameRadiusState,
@@ -7,7 +8,7 @@ import {
 import { DEFAULT_FRAME_FILL, DEFAULT_FRAME_STROKE_FILL } from "@/lib/constants";
 import Image from "next/image";
 import { useCallback, useMemo } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import RadiusIcon from "../../public/radius.svg";
 import Control from "./Control";
 import FillControl from "./FillControl";
@@ -18,6 +19,8 @@ const FrameSettings = () => {
   const [frameDimension, setFrameDimension] =
     useRecoilState(frameDimensionState);
   const [frameFill, setFrameFill] = useRecoilState(frameFillState);
+  const controlCenter = useRecoilValue(controlCenterState);
+
   return (
     <section className="space-y-4">
       <h1 className="text-lg font-medium">Frame Settings</h1>
@@ -51,14 +54,16 @@ const FrameSettings = () => {
         onChange={setFrameRadius}
       />
       <FillControl
-        defaultFill={DEFAULT_FRAME_FILL}
+        defaultFill={controlCenter.frameFill || DEFAULT_FRAME_FILL}
         fill={frameFill}
         onChange={setFrameFill}
         label="Fill"
       />
       <StrokeControl
         strokeType={frameStrokeState}
-        defaultFill={DEFAULT_FRAME_STROKE_FILL}
+        defaultFill={
+          controlCenter.frameStroke.color || DEFAULT_FRAME_STROKE_FILL
+        }
       />
     </section>
   );
