@@ -74,7 +74,7 @@ const CropSettings = () => {
   return (
     <Popover open={isOpen}>
       <PopoverTrigger onClick={() => setIsOpen(!isOpen)}>
-        <Button variant={"secondary"}>
+        <Button variant={"secondary"} size={"icon"}>
           <CropIcon size={16} />
         </Button>
       </PopoverTrigger>

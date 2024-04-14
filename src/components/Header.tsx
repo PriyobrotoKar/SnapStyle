@@ -15,6 +15,7 @@ const Header = () => {
     useRecoilState(versionHistoryState);
   const handleRefreshCanvas = () => {
     setImage(null);
+    setVersionHistory({ position: -1, timeline: [] });
   };
 
   const handleUndoHistory = () => {
@@ -28,11 +29,15 @@ const Header = () => {
     <div className="bg-card p-4 flex justify-between">
       <div className="text-2xl text-primary font-semibold">BetterSS</div>
       <div>
-        <Button variant={"secondary"} onClick={handleUndoHistory}>
+        <Button
+          disabled={versionHistory.position === -1}
+          variant={"secondary"}
+          onClick={handleUndoHistory}
+        >
           Undo
         </Button>
       </div>
-      <div>
+      <div className="space-x-4">
         <Button variant={"secondary"} onClick={handleRefreshCanvas}>
           Start Again
         </Button>

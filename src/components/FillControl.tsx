@@ -258,6 +258,7 @@ const FillControl = ({
             });
           }}
           variant={"secondary"}
+          size={"icon"}
         >
           {fill ? <Eye size={14} /> : <EyeOff size={14} />}
         </Button>
