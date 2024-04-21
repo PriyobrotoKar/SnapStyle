@@ -35,8 +35,6 @@ const Preview = () => {
   const imageStrokePosition =
     imageStroke.position === "inside" ? "border" : "outline";
 
-  console.log(frameDimension.width || "70");
-
   useEffect(() => {
     if (displayPreview && frameRef.current && imageRef.current) {
       setFrameDimension({
@@ -48,7 +46,6 @@ const Preview = () => {
 
   useEffect(() => {
     if (displayPreview && frameRef.current && imageRef.current) {
-      console.log(frameRef.current.clientWidth);
       setPreviewFrame(frameRef.current);
     }
   }, [displayPreview, setPreviewFrame]);

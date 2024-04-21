@@ -21,7 +21,11 @@ const Control = ({
     }
     setVersionHistory({
       position: versionHistory.position + 1,
-      timeline: [...versionHistory.timeline, controlCenter],
+      timeline: [...versionHistory.timeline].toSpliced(
+        versionHistory.position + 1,
+        versionHistory.timeline.length - (versionHistory.position + 1),
+        controlCenter
+      ),
     });
     onChange(Number(e.target.value));
   };

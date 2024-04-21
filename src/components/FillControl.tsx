@@ -76,7 +76,11 @@ const HexFillInput = ({ hsva, setHsva, onChange }: OpacityInputProps) => {
     setFillInput(e.target.value);
     setVersionHistory({
       position: versionHistory.position + 1,
-      timeline: [...versionHistory.timeline, controlCenter],
+      timeline: [...versionHistory.timeline].toSpliced(
+        versionHistory.position + 1,
+        versionHistory.timeline.length - (versionHistory.position + 1),
+        controlCenter
+      ),
     });
   };
   return (
@@ -127,7 +131,6 @@ const FillControl = ({
   onChange,
   label,
 }: FillControlProps) => {
-  console.log(defaultFill);
   const [hsva, setHsva] = useState(hexToHsva(defaultFill));
   const [versionHistory, setVersionHistory] =
     useRecoilState(versionHistoryState);
@@ -164,7 +167,12 @@ const FillControl = ({
                     setHsva({ ...hsva, ...color.hsva });
                     setVersionHistory({
                       position: versionHistory.position + 1,
-                      timeline: [...versionHistory.timeline, controlCenter],
+                      timeline: [...versionHistory.timeline].toSpliced(
+                        versionHistory.position + 1,
+                        versionHistory.timeline.length -
+                          (versionHistory.position + 1),
+                        controlCenter
+                      ),
                     });
                   }}
                 />
@@ -193,7 +201,12 @@ const FillControl = ({
                     onChange(hsvaToHexa({ ...hsva, ...newShade }));
                     setVersionHistory({
                       position: versionHistory.position + 1,
-                      timeline: [...versionHistory.timeline, controlCenter],
+                      timeline: [...versionHistory.timeline].toSpliced(
+                        versionHistory.position + 1,
+                        versionHistory.timeline.length -
+                          (versionHistory.position + 1),
+                        controlCenter
+                      ),
                     });
                   }}
                 />
@@ -232,7 +245,12 @@ const FillControl = ({
                     setHsva(hexToHsva(color));
                     setVersionHistory({
                       position: versionHistory.position + 1,
-                      timeline: [...versionHistory.timeline, controlCenter],
+                      timeline: [...versionHistory.timeline].toSpliced(
+                        versionHistory.position + 1,
+                        versionHistory.timeline.length -
+                          (versionHistory.position + 1),
+                        controlCenter
+                      ),
                     });
                   }}
                   variant={"secondary"}
@@ -254,7 +272,11 @@ const FillControl = ({
             onChange(fill ? "" : hsvaToHexa(hsva));
             setVersionHistory({
               position: versionHistory.position + 1,
-              timeline: [...versionHistory.timeline, controlCenter],
+              timeline: [...versionHistory.timeline].toSpliced(
+                versionHistory.position + 1,
+                versionHistory.timeline.length - (versionHistory.position + 1),
+                controlCenter
+              ),
             });
           }}
           variant={"secondary"}

@@ -7,6 +7,7 @@ import {
   imageSourceState,
   versionHistoryState,
 } from "@/lib/atoms";
+import { useEffect } from "react";
 
 const Header = () => {
   const [image, setImage] = useRecoilState(imageSourceState);
@@ -18,23 +19,47 @@ const Header = () => {
     setVersionHistory({ position: -1, timeline: [] });
   };
 
+  useEffect(() => {
+    console.log(versionHistory);
+  }, [versionHistory]);
+
   const handleUndoHistory = () => {
+    let newTimeline = [...versionHistory.timeline];
+    newTimeline[versionHistory.position] = controlCenter;
     setControlCenter(versionHistory.timeline[versionHistory.position]);
     setVersionHistory({
-      ...versionHistory,
       position: versionHistory.position - 1,
+      timeline: newTimeline,
+    });
+  };
+  const handleRedoHistory = () => {
+    let newTimeline = [...versionHistory.timeline];
+    newTimeline[versionHistory.position + 1] = controlCenter;
+    setControlCenter(versionHistory.timeline[versionHistory.position + 1]);
+    setVersionHistory({
+      position: versionHistory.position + 1,
+      timeline: newTimeline,
     });
   };
   return (
     <div className="bg-card p-4 flex justify-between">
       <div className="text-2xl text-primary font-semibold">BetterSS</div>
-      <div>
+      <div className="space-x-4">
         <Button
           disabled={versionHistory.position === -1}
           variant={"secondary"}
           onClick={handleUndoHistory}
         >
           Undo
+        </Button>
+        <Button
+          disabled={
+            versionHistory.position === versionHistory.timeline.length - 1
+          }
+          variant={"secondary"}
+          onClick={handleRedoHistory}
+        >
+          Redo
         </Button>
       </div>
       <div className="space-x-4">

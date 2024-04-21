@@ -30,7 +30,7 @@ const CropSettings = () => {
   const [cropAspect, setCropAspect] = useState<string | undefined>();
   // const [completedCrop, setCompletedCrop] = useState<PercentCrop>();
   const [image, setImage] = useRecoilState(imageSourceState);
-  console.log(!image);
+
   if (!image) {
     return null;
   }
