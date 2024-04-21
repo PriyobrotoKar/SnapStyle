@@ -24,13 +24,18 @@ import {
 import { Button } from "./ui/button";
 import { Separator } from "./ui/separator";
 import { getColorFromEyeDropper } from "@/lib/eyeDropper";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { controlCenterState, versionHistoryState } from "@/lib/atoms";
+import { SetterOrUpdater, useRecoilState, useRecoilValue } from "recoil";
+import {
+  ControlCenterState,
+  controlCenterState,
+  versionHistoryState,
+} from "@/lib/atoms";
 
 interface FillControlProps {
   fill: string;
-  defaultFill: string;
-  onChange: Dispatch<SetStateAction<string>> | ((val: string) => void);
+  showFill: boolean;
+  // defaultFill: string;
+  onChange: SetterOrUpdater<ControlCenterState["frameFill" | "frameStroke"]>;
   label: string;
 }
 
@@ -69,7 +74,7 @@ const HexFillInput = ({ hsva, setHsva, onChange }: OpacityInputProps) => {
     let fill = sanitizeFillColor(fillInput, hsvaToHex(hsva));
     setFillInput(fill);
     setHsva(hexToHsva("#" + fill));
-    onChange("#" + fill);
+    onChange((prev) => ({ ...prev, color: "#" + fill }));
   };
 
   const handleHexInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -104,12 +109,13 @@ const OpacityInput = ({ hsva, onChange, setHsva }: OpacityInputProps) => {
       type="text"
       value={(hsva.a * 100).toFixed(0) + "%"}
       onChange={(e) => {
-        onChange(
-          hsvaToHexa({
+        onChange((prev) => ({
+          ...prev,
+          color: hsvaToHexa({
             ...hsva,
             a: Number(e.target.value.slice(0, -1)) / 100,
-          })
-        );
+          }),
+        }));
         setHsva({
           ...hsva,
           a: Number(e.target.value.slice(0, -1)) / 100,
@@ -127,18 +133,19 @@ const OpacityInput = ({ hsva, onChange, setHsva }: OpacityInputProps) => {
 
 const FillControl = ({
   fill,
-  defaultFill,
+  showFill,
+  // defaultFill,
   onChange,
   label,
 }: FillControlProps) => {
-  const [hsva, setHsva] = useState(hexToHsva(defaultFill));
+  const [hsva, setHsva] = useState(hexToHsva(fill));
   const [versionHistory, setVersionHistory] =
     useRecoilState(versionHistoryState);
   const controlCenter = useRecoilValue(controlCenterState);
 
   useEffect(() => {
-    setHsva(hexToHsva(defaultFill));
-  }, [defaultFill]);
+    setHsva(hexToHsva(fill));
+  }, [fill]);
 
   return (
     <div className="space-y-2">
@@ -148,7 +155,7 @@ const FillControl = ({
           className="flex items-center px-4 py-2 rounded-xl w-fit gap-4"
           style={{
             backgroundColor: hsvaToHex(hsva) + "10",
-            opacity: fill ? "1" : "0.4",
+            opacity: showFill ? "1" : "0.4",
           }}
         >
           <Popover>
@@ -163,7 +170,10 @@ const FillControl = ({
                 <Wheel
                   color={hsva}
                   onChange={(color) => {
-                    onChange(hsvaToHexa({ ...hsva, ...color.hsva }));
+                    onChange((prev) => ({
+                      ...prev,
+                      color: hsvaToHexa({ ...hsva, ...color.hsva }),
+                    }));
                     setHsva({ ...hsva, ...color.hsva });
                     setVersionHistory({
                       position: versionHistory.position + 1,
@@ -198,7 +208,10 @@ const FillControl = ({
                   }}
                   onChange={(newShade) => {
                     setHsva({ ...hsva, ...newShade });
-                    onChange(hsvaToHexa({ ...hsva, ...newShade }));
+                    onChange((prev) => ({
+                      ...prev,
+                      color: hsvaToHexa({ ...hsva, ...newShade }),
+                    }));
                     setVersionHistory({
                       position: versionHistory.position + 1,
                       timeline: [...versionHistory.timeline].toSpliced(
@@ -215,7 +228,10 @@ const FillControl = ({
               <div className="flex gap-2">
                 <div
                   className="flex bg-yellow-700/10 items-center px-4 py-2 rounded-lg w-fit gap-4"
-                  style={{ backgroundColor: hsvaToHex(hsva) + "10" }}
+                  style={{
+                    backgroundColor: hsvaToHex(hsva) + "10",
+                    opacity: showFill ? 1 : 0.5,
+                  }}
                 >
                   <div
                     className="w-6 h-3 rounded-sm"
@@ -241,7 +257,7 @@ const FillControl = ({
                   onClick={async () => {
                     const color = await getColorFromEyeDropper();
                     if (!color) return;
-                    onChange(color);
+                    onChange((prev) => ({ ...prev, color }));
                     setHsva(hexToHsva(color));
                     setVersionHistory({
                       position: versionHistory.position + 1,
@@ -269,7 +285,7 @@ const FillControl = ({
         </div>
         <Button
           onClick={() => {
-            onChange(fill ? "" : hsvaToHexa(hsva));
+            onChange((prev) => ({ ...prev, showFill: !showFill }));
             setVersionHistory({
               position: versionHistory.position + 1,
               timeline: [...versionHistory.timeline].toSpliced(
@@ -282,7 +298,7 @@ const FillControl = ({
           variant={"secondary"}
           size={"icon"}
         >
-          {fill ? <Eye size={14} /> : <EyeOff size={14} />}
+          {showFill ? <Eye size={14} /> : <EyeOff size={14} />}
         </Button>
       </div>
     </div>

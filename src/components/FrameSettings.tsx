@@ -54,17 +54,13 @@ const FrameSettings = () => {
         onChange={setFrameRadius}
       />
       <FillControl
-        defaultFill={controlCenter.frameFill || DEFAULT_FRAME_FILL}
-        fill={frameFill}
+        // defaultFill={controlCenter.frameFill || DEFAULT_FRAME_FILL}
+        fill={frameFill.color}
+        showFill={frameFill.showFill}
         onChange={setFrameFill}
         label="Fill"
       />
-      <StrokeControl
-        strokeType={frameStrokeState}
-        defaultFill={
-          controlCenter.frameStroke.color || DEFAULT_FRAME_STROKE_FILL
-        }
-      />
+      <StrokeControl strokeType={frameStrokeState} />
     </section>
   );
 };

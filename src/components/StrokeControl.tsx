@@ -8,31 +8,40 @@ import {
 import { ControlCenterState } from "@/lib/atoms";
 import { ListFilter } from "lucide-react";
 import { memo } from "react";
-import { RecoilState, useRecoilState } from "recoil";
+import { RecoilState, SetterOrUpdater, useRecoilState } from "recoil";
 import Control from "./Control";
 import FillControl from "./FillControl";
 
+// interface StrokeControlProps {
+//   strokeType: RecoilState<
+//     StrokeProperties<ControlCenterState>[keyof StrokeProperties<ControlCenterState>]
+//   >;
+//   defaultFill: string;
+// }
+
+// type EndsWithStroke<T> = T extends `${infer Prefix}Stroke` ? T : never;
+
+// type StrokeProperties<T> = {
+//   [K in keyof T as EndsWithStroke<K>]: T[K];
+// };
+
 interface StrokeControlProps {
-  strokeType: RecoilState<
-    StrokeProperties<ControlCenterState>[keyof StrokeProperties<ControlCenterState>]
-  >;
-  defaultFill: string;
+  strokeType: RecoilState<ControlCenterState["frameStroke"]>;
 }
 
-type EndsWithStroke<T> = T extends `${infer Prefix}Stroke` ? T : never;
-
-type StrokeProperties<T> = {
-  [K in keyof T as EndsWithStroke<K>]: T[K];
-};
-
-const StrokeControl = ({ strokeType, defaultFill }: StrokeControlProps) => {
+const StrokeControl = ({ strokeType }: StrokeControlProps) => {
   const [stroke, setStroke] = useRecoilState(strokeType);
   return (
     <div className="space-y-2">
       <FillControl
-        defaultFill={defaultFill}
+        // defaultFill={defaultFill}
         fill={stroke.color}
-        onChange={(color: string) => setStroke({ ...stroke, color })}
+        showFill={stroke.showFill}
+        onChange={
+          setStroke as unknown as SetterOrUpdater<
+            Pick<ControlCenterState["frameStroke"], "color" | "showFill">
+          >
+        }
         label="Stroke"
       />
       <div className="flex gap-6">

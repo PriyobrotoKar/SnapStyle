@@ -56,13 +56,14 @@ const Preview = () => {
         ref={frameRef}
         style={{
           borderRadius: frameRadius,
-          backgroundColor: frameFill,
+          backgroundColor: frameFill.showFill ? frameFill.color : "",
           // ...(frameDimension.width && { width: frameDimension.width }),
           // ...(frameDimension.height && { height: frameDimension.height }),
           width: frameDimension.width || "fit-content",
           height: frameDimension.height || "fit-content",
-          [`${frameStrokePosition}Width`]:
-            frameStroke.color === "" ? 0 : frameStroke.width,
+          [`${frameStrokePosition}Width`]: frameStroke.showFill
+            ? frameStroke.width
+            : 0,
           [`${frameStrokePosition}Color`]: frameStroke.color,
           [`${frameStrokePosition}Style`]: "solid",
           display: displayPreview ? "flex" : "none",
@@ -79,8 +80,9 @@ const Preview = () => {
             rotate: `${imageRotation}deg`,
             scale: imageScale,
             translate: `${imagePosition.x}% ${imagePosition.y}%`,
-            [`${imageStrokePosition}Width`]:
-              imageStroke.color === "" ? 0 : imageStroke.width,
+            [`${imageStrokePosition}Width`]: imageStroke.showFill
+              ? imageStroke.width
+              : 0,
             [`${imageStrokePosition}Color`]: imageStroke.color,
             [`${imageStrokePosition}Style`]: "solid",
           }}

@@ -11,9 +11,13 @@ export interface ControlCenterState {
     height: number;
   };
   frameRadius: number;
-  frameFill: string;
+  frameFill: {
+    color: string;
+    showFill: boolean;
+  };
   frameStroke: {
     color: string;
+    showFill: boolean;
     width: number;
     position: "inside" | "outside";
   };
@@ -23,6 +27,7 @@ export interface ControlCenterState {
   };
   imageStroke: {
     color: string;
+    showFill: boolean;
     width: number;
     position: "inside" | "outside";
   };
@@ -74,13 +79,17 @@ export const frameRadiusState = createAtom<ControlCenterState["frameRadius"]>({
 
 export const frameFillState = createAtom<ControlCenterState["frameFill"]>({
   key: "frameFill",
-  default: DEFAULT_FRAME_FILL,
+  default: {
+    color: DEFAULT_FRAME_FILL,
+    showFill: true,
+  },
 });
 
 export const frameStrokeState = createAtom<ControlCenterState["frameStroke"]>({
   key: "frameStroke",
   default: {
     color: DEFAULT_FRAME_STROKE_FILL,
+    showFill: true,
     width: 5,
     position: "inside",
   },
@@ -100,6 +109,7 @@ export const imageStrokeState = createAtom<ControlCenterState["imageStroke"]>({
   key: "imageStroke",
   default: {
     color: DEFAULT_IMAGE_STROKE_FILL,
+    showFill: true,
     width: 5,
     position: "inside",
   },
