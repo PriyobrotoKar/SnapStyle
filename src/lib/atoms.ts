@@ -7,6 +7,7 @@ import {
 
 export interface ControlCenterState {
   frameDimension: {
+    isCustomDimension: boolean;
     width: number;
     height: number;
   };
@@ -71,6 +72,7 @@ export const frameDimensionState = createAtom<
 >({
   key: "frameDimension",
   default: {
+    isCustomDimension: false,
     width: 0,
     height: 0,
   },

@@ -27,7 +27,7 @@ export default function Home() {
     return () => document.body.removeEventListener("paste", handlePaste);
   }, [setImage]);
   return (
-    <div className="flex-1 flex  items-stretch">
+    <div className="flex-1 flex  items-stretch  h-[80vh]">
       {!image ? (
         <UploadImage />
       ) : (

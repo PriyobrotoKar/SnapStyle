@@ -29,7 +29,12 @@ const FrameSettings = () => {
           label={"W"}
           value={Number(frameDimension.width.toFixed(0))}
           onChange={useCallback(
-            (width: number) => setFrameDimension({ ...frameDimension, width }),
+            (width: number) =>
+              setFrameDimension({
+                ...frameDimension,
+                width,
+                isCustomDimension: true,
+              }),
             [frameDimension, setFrameDimension]
           )}
         />
@@ -38,7 +43,11 @@ const FrameSettings = () => {
           value={Number(frameDimension.height.toFixed(0))}
           onChange={useCallback(
             (height: number) =>
-              setFrameDimension({ ...frameDimension, height }),
+              setFrameDimension({
+                ...frameDimension,
+                height,
+                isCustomDimension: true,
+              }),
             [frameDimension, setFrameDimension]
           )}
         />

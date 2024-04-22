@@ -39,10 +39,12 @@ const Preview = () => {
   useEffect(() => {
     if (displayPreview && frameRef.current && imageRef.current) {
       setFrameDimension({
+        ...frameDimension,
         width: frameRef.current.getBoundingClientRect().width,
         height: frameRef.current.getBoundingClientRect().height,
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [displayPreview, setFrameDimension, setPreviewFrame]);
 
   useEffect(() => {
@@ -50,6 +52,37 @@ const Preview = () => {
       setPreviewFrame(frameRef.current);
     }
   }, [displayPreview, setPreviewFrame]);
+
+  useEffect(() => {
+    let previousWindowHeight = window.innerHeight;
+    let previousWindowWidth = window.innerWidth;
+
+    const changeDimensionOnResize = () => {
+      let windowWidth = window.innerWidth;
+      let windowHeight = window.innerHeight;
+      let increaseHeightAmount = (windowHeight - previousWindowHeight) / 2;
+      let increaseWidthAmount = (windowWidth - previousWindowWidth) / 2;
+      let wPercentage = windowWidth * 0.6;
+      let hPercentage = windowHeight * 0.65;
+
+      setFrameDimension((prev) => ({
+        ...frameDimension,
+        height: prev.height + increaseHeightAmount,
+        width: prev.width + increaseWidthAmount,
+      }));
+
+      previousWindowHeight = windowHeight;
+      previousWindowWidth = windowWidth;
+    };
+
+    if (frameDimension.isCustomDimension) {
+      window.removeEventListener("resize", changeDimensionOnResize);
+    } else {
+      window.addEventListener("resize", changeDimensionOnResize);
+    }
+
+    return () => window.removeEventListener("resize", changeDimensionOnResize);
+  }, [frameDimension, setFrameDimension]);
 
   return (
     <>
