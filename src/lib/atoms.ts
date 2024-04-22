@@ -25,6 +25,10 @@ export interface ControlCenterState {
     x: number;
     y: number;
   };
+  imagePerspective: {
+    x: number;
+    y: number;
+  };
   imageStroke: {
     color: string;
     showFill: boolean;
@@ -99,6 +103,15 @@ export const imagePositionState = createAtom<
   ControlCenterState["imagePosition"]
 >({
   key: "imagePosition",
+  default: {
+    x: 0,
+    y: 0,
+  },
+});
+export const imagePerspectiveState = createAtom<
+  ControlCenterState["imagePerspective"]
+>({
+  key: "imagePerspective",
   default: {
     x: 0,
     y: 0,

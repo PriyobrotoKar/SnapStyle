@@ -30,6 +30,7 @@ import {
   controlCenterState,
   versionHistoryState,
 } from "@/lib/atoms";
+import Label from "./Label";
 
 interface FillControlProps {
   fill: string;
@@ -149,7 +150,7 @@ const FillControl = ({
 
   return (
     <div className="space-y-2">
-      <h2 className=" text-primary">{label}</h2>
+      <Label>{label}</Label>
       <div className="flex gap-4">
         <div
           className="flex items-center px-4 py-2 rounded-xl w-fit gap-4"

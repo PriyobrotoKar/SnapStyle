@@ -1,5 +1,6 @@
 import {
   controlCenterState,
+  imagePerspectiveState,
   imagePositionState,
   imageRadiusState,
   imageRotationState,
@@ -16,13 +17,17 @@ import RadiusIcon from "../../public/radius.svg";
 import Control from "./Control";
 import CropSettings from "./CropSettings";
 import StrokeControl from "./StrokeControl";
+import Label from "./Label";
 
 const ImageSettings = () => {
   const [imageRadius, setImageRadius] = useRecoilState(imageRadiusState);
   const [imageRotation, setImageRotation] = useRecoilState(imageRotationState);
   const [imageScale, setImageScale] = useRecoilState(imageScaleState);
   const [imagePosition, setImagePosition] = useRecoilState(imagePositionState);
-  const controlCenter = useRecoilValue(controlCenterState);
+  const [imagePerspective, setImagePerspective] = useRecoilState(
+    imagePerspectiveState
+  );
+
   return (
     <div className="space-y-4">
       <h1 className="text-lg font-medium">Image Settings</h1>
@@ -68,12 +73,26 @@ const ImageSettings = () => {
         />
       </div>
 
-      <StrokeControl
-        strokeType={imageStrokeState}
-        defaultFill={
-          controlCenter.imageStroke.color || DEFAULT_IMAGE_STROKE_FILL
-        }
-      />
+      <div>
+        <Label>Perspective</Label>
+        <div className="flex gap-6">
+          <Control
+            label="X"
+            value={imagePerspective.x}
+            onChange={(val: number) =>
+              setImagePerspective({ ...imagePerspective, x: val })
+            }
+          />
+          <Control
+            label="Y"
+            value={imagePerspective.y}
+            onChange={(val: number) =>
+              setImagePerspective({ ...imagePerspective, y: val })
+            }
+          />
+        </div>
+      </div>
+      <StrokeControl strokeType={imageStrokeState} />
     </div>
   );
 };

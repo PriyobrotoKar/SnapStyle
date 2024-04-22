@@ -26,6 +26,7 @@ const Preview = () => {
     imageRotation,
     imageScale,
     imagePosition,
+    imagePerspective,
   } = useRecoilValue(controlCenterState);
 
   const [_, setFrameDimension] = useRecoilState(frameDimensionState);
@@ -85,6 +86,7 @@ const Preview = () => {
               : 0,
             [`${imageStrokePosition}Color`]: imageStroke.color,
             [`${imageStrokePosition}Style`]: "solid",
+            transform: `perspective(1000px) rotateX(${imagePerspective.x}deg) rotateY(${imagePerspective.y}deg)`,
           }}
           className="aspect-auto max-w-[50vw] max-h-[60vh] rounded-lg shadow-[0px_10px_40px_10px_#00000070]"
           src={image || ""}
