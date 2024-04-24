@@ -20,6 +20,7 @@
     "@uiw/color-convert": "^2.1.1",
     "@uiw/react-color-shade-slider": "^2.1.1",
     "@uiw/react-color-wheel": "^2.1.1",
+    "canvas-confetti": "^1.9.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "dom-to-image": "^2.6.0",
@@ -38,6 +39,7 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
+    "@types/canvas-confetti": "^1.6.4",
     "@types/dom-to-image": "^2.6.7",
     "@types/node": "^20",
     "@types/react": "^18",
