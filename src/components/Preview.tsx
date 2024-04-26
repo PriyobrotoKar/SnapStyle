@@ -27,6 +27,7 @@ const Preview = () => {
     imageScale,
     imagePosition,
     imagePerspective,
+    enableNoise,
   } = useRecoilValue(controlCenterState);
 
   const [_, setFrameDimension] = useRecoilState(frameDimensionState);
@@ -104,6 +105,9 @@ const Preview = () => {
         }}
         className=" relative   justify-center items-center p-14 overflow-hidden"
       >
+        {enableNoise && (
+          <div className="bg-[url('/noise.png')] opacity-10 w-full h-full absolute inset-0"></div>
+        )}
         <img
           ref={imageRef}
           onLoad={() => {
@@ -119,9 +123,10 @@ const Preview = () => {
               : 0,
             [`${imageStrokePosition}Color`]: imageStroke.color,
             [`${imageStrokePosition}Style`]: "solid",
+            width: displayPreview ? "auto" : "50vw",
             transform: `perspective(1000px) rotateX(${imagePerspective.x}deg) rotateY(${imagePerspective.y}deg)`,
           }}
-          className="aspect-auto max-w-[50vw] max-h-[60vh] rounded-lg shadow-[0px_10px_40px_10px_#00000070]"
+          className="aspect-auto  max-h-[60vh] rounded-lg shadow-[0px_10px_40px_10px_#00000070]"
           src={image || ""}
           alt=""
         />

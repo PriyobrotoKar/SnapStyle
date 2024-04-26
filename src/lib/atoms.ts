@@ -39,6 +39,7 @@ export interface ControlCenterState {
   imageRadius: number;
   imageRotation: number;
   imageScale: number;
+  enableNoise: boolean;
 }
 
 interface VersionHistory {
@@ -142,6 +143,10 @@ export const imageRotationState = createAtom<
 export const imageScaleState = createAtom<ControlCenterState["imageScale"]>({
   key: "imageScale",
   default: 1,
+});
+export const enableNoise = createAtom<ControlCenterState["enableNoise"]>({
+  key: "enableNoise",
+  default: true,
 });
 
 export const controlCenterState = selector<ControlCenterState>({
