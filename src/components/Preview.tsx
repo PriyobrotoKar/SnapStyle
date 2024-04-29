@@ -2,6 +2,7 @@ import {
   PreviewFrameState,
   controlCenterState,
   frameDimensionState,
+  frameGradientStartFillState,
   imageSourceState,
 } from "@/lib/atoms";
 import { Loader2 } from "lucide-react";
@@ -28,7 +29,24 @@ const Preview = () => {
     imagePosition,
     imagePerspective,
     enableNoise,
+    activeFill,
+    frameGradientStartFill,
+    frameGradientEndFill,
   } = useRecoilValue(controlCenterState);
+
+  const getBackground = () => {
+    if (frameFill.showFill && activeFill === "solid") {
+      console.log(activeFill);
+      return frameFill.color;
+    }
+
+    if (activeFill === "gradient") {
+      console.log(activeFill);
+
+      // return `linear-gradient(45deg,${frameGradientStartFillState},${frameGradientEndFill})`;
+      return `linear-gradient(45deg,${frameGradientStartFill.color},${frameGradientEndFill.color})`;
+    }
+  };
 
   const [_, setFrameDimension] = useRecoilState(frameDimensionState);
 
@@ -91,7 +109,9 @@ const Preview = () => {
         ref={frameRef}
         style={{
           borderRadius: frameRadius,
-          backgroundColor: frameFill.showFill ? frameFill.color : "",
+          // backgroundColor:
+          //   frameFill.showFill && activeFill === "solid" ? frameFill.color : "",
+          background: getBackground(),
           // ...(frameDimension.width && { width: frameDimension.width }),
           // ...(frameDimension.height && { height: frameDimension.height }),
           width: frameDimension.width || "fit-content",

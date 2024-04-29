@@ -12,7 +12,16 @@ export interface ControlCenterState {
     height: number;
   };
   frameRadius: number;
+  activeFill: "solid" | "gradient" | "image";
   frameFill: {
+    color: string;
+    showFill: boolean;
+  };
+  frameGradientStartFill: {
+    color: string;
+    showFill: boolean;
+  };
+  frameGradientEndFill: {
     color: string;
     showFill: boolean;
   };
@@ -83,12 +92,34 @@ export const frameRadiusState = createAtom<ControlCenterState["frameRadius"]>({
   key: "frameRadius",
   default: 20,
 });
+export const activeFillState = createAtom<ControlCenterState["activeFill"]>({
+  key: "activeFill",
+  default: "solid",
+});
 
 export const frameFillState = createAtom<ControlCenterState["frameFill"]>({
   key: "frameFill",
   default: {
     color: DEFAULT_FRAME_FILL,
     showFill: true,
+  },
+});
+export const frameGradientStartFillState = createAtom<
+  ControlCenterState["frameGradientStartFill"]
+>({
+  key: "frameGradientStartFill",
+  default: {
+    color: "#e1e1e1",
+    showFill: false,
+  },
+});
+export const frameGradientEndFillState = createAtom<
+  ControlCenterState["frameGradientEndFill"]
+>({
+  key: "frameGradientEndFill",
+  default: {
+    color: "#aeaeae",
+    showFill: false,
   },
 });
 

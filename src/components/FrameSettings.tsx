@@ -65,6 +65,7 @@ const FrameSettings = () => {
         onChange={setFrameRadius}
       />
       <FillControl
+        enableTabs={true}
         // defaultFill={controlCenter.frameFill || DEFAULT_FRAME_FILL}
         fill={frameFill.color}
         showFill={frameFill.showFill}
