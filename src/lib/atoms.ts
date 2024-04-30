@@ -17,6 +17,12 @@ export interface ControlCenterState {
     color: string;
     showFill: boolean;
   };
+  frameGradientRotation: number;
+  frameGradientStops: {
+    mid: number;
+    start: number;
+    end: number;
+  };
   frameGradientStartFill: {
     color: string;
     showFill: boolean;
@@ -104,6 +110,14 @@ export const frameFillState = createAtom<ControlCenterState["frameFill"]>({
     showFill: true,
   },
 });
+
+export const frameGradientRotationState = createAtom<
+  ControlCenterState["frameGradientRotation"]
+>({
+  key: "frameGradientRotation",
+  default: 45,
+});
+
 export const frameGradientStartFillState = createAtom<
   ControlCenterState["frameGradientStartFill"]
 >({
@@ -120,6 +134,16 @@ export const frameGradientEndFillState = createAtom<
   default: {
     color: "#aeaeae",
     showFill: false,
+  },
+});
+export const frameGradientStopState = createAtom<
+  ControlCenterState["frameGradientStops"]
+>({
+  key: "frameGradientStops",
+  default: {
+    mid: 50,
+    start: 0,
+    end: 100,
   },
 });
 

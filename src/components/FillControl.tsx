@@ -12,6 +12,7 @@ import {
 import Wheel from "@uiw/react-color-wheel";
 import ShadeSlider from "@uiw/react-color-shade-slider";
 import {
+  ArrowLeftRight,
   Blend,
   Brush,
   Eye,
@@ -38,10 +39,14 @@ import {
   activeFillState,
   controlCenterState,
   frameGradientEndFillState,
+  frameGradientRotationState,
   frameGradientStartFillState,
+  frameGradientStopState,
   versionHistoryState,
 } from "@/lib/atoms";
 import Label from "./Label";
+import Control from "./Control";
+import { AngleIcon } from "@radix-ui/react-icons";
 
 interface FillControlProps {
   fill: string;
@@ -269,8 +274,14 @@ const GradientFillControl = ({
   const [frameGradientStartFill, setFrameGradientStartFill] = useRecoilState(
     frameGradientStartFillState
   );
+  const [frameGradientRotation, setFrameGradientRotation] = useRecoilState(
+    frameGradientRotationState
+  );
   const [frameGradientEndFill, setframeGradientEndFill] = useRecoilState(
     frameGradientEndFillState
+  );
+  const [frameGradientStops, setFrameGradientStops] = useRecoilState(
+    frameGradientStopState
   );
   const [hsvaStart, setHsvaStart] = useState(
     hexToHsva(frameGradientStartFill.color)
@@ -284,9 +295,17 @@ const GradientFillControl = ({
     useRecoilState(versionHistoryState);
 
   const controlCenter = useRecoilValue(controlCenterState);
+
+  const handleGradientFlip = () => {
+    setFrameGradientStartFill(frameGradientEndFill);
+    setframeGradientEndFill(frameGradientStartFill);
+    setHsvaStart(hsvaEnd);
+    setHsvaEnd(hsvaStart);
+  };
+
   return (
-    <div>
-      <div className="flex justify-between">
+    <div className="space-y-6">
+      <div className="flex justify-between ">
         <Wheel
           color={activeSelector === "start" ? hsvaStart : hsvaEnd}
           onChange={(color) => {
@@ -360,7 +379,43 @@ const GradientFillControl = ({
         />
       </div>
 
-      <div>
+      <div className="flex items-center gap-4 justify-center">
+        <Control
+          label={<AngleIcon />}
+          value={frameGradientRotation}
+          onChange={setFrameGradientRotation}
+        />
+        <Button
+          onClick={handleGradientFlip}
+          size={"icon"}
+          variant={"secondary"}
+        >
+          <ArrowLeftRight size={16} />
+        </Button>
+      </div>
+
+      <div
+        style={{
+          background: `linear-gradient(90deg,${frameGradientStartFill.color},${frameGradientStops.mid}%,${frameGradientEndFill.color})`,
+        }}
+        className="h-4 rounded-full flex justify-center items-center"
+      >
+        <input
+          type="range"
+          name="midStop"
+          id="midStop"
+          className=" slider"
+          value={frameGradientStops.mid}
+          onChange={(e) =>
+            setFrameGradientStops({
+              ...frameGradientStops,
+              mid: Number(e.target.value),
+            })
+          }
+        />
+      </div>
+
+      <div className="space-y-2">
         <div className="flex gap-2">
           <div
             className="flex bg-yellow-700/10 items-center px-4 py-2 rounded-lg w-fit gap-4"
@@ -522,16 +577,15 @@ const FillControl = ({
               ></div>
             </PopoverTrigger>
             <PopoverContent className="w-fit space-y-4">
-              {activeTab === "solid" ||
-                (!enableTabs && (
-                  <SolidFillControl
-                    showFill={showFill}
-                    onChange={onChange}
-                    hsva={hsva}
-                    enableTabs={enableTabs}
-                    setHsva={setHsva}
-                  />
-                ))}
+              {activeTab === "solid" && (
+                <SolidFillControl
+                  showFill={showFill}
+                  onChange={onChange}
+                  hsva={hsva}
+                  enableTabs={enableTabs}
+                  setHsva={setHsva}
+                />
+              )}
               {activeTab === "gradient" && enableTabs && (
                 <GradientFillControl onChange={onChange} />
               )}

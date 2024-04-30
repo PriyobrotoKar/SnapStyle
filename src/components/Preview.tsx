@@ -32,6 +32,8 @@ const Preview = () => {
     activeFill,
     frameGradientStartFill,
     frameGradientEndFill,
+    frameGradientRotation,
+    frameGradientStops,
   } = useRecoilValue(controlCenterState);
 
   const getBackground = () => {
@@ -41,10 +43,7 @@ const Preview = () => {
     }
 
     if (activeFill === "gradient") {
-      console.log(activeFill);
-
-      // return `linear-gradient(45deg,${frameGradientStartFillState},${frameGradientEndFill})`;
-      return `linear-gradient(45deg,${frameGradientStartFill.color},${frameGradientEndFill.color})`;
+      return `linear-gradient(${frameGradientRotation}deg,${frameGradientStartFill.color},${frameGradientStops.mid}%,${frameGradientEndFill.color})`;
     }
   };
 
