@@ -8,15 +8,16 @@ import {
   versionHistoryState,
 } from "@/lib/atoms";
 import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 const Header = () => {
+  const router = useRouter();
   const [image, setImage] = useRecoilState(imageSourceState);
   const [controlCenter, setControlCenter] = useRecoilState(controlCenterState);
   const [versionHistory, setVersionHistory] =
     useRecoilState(versionHistoryState);
   const handleRefreshCanvas = () => {
-    setImage(null);
-    setVersionHistory({ position: -1, timeline: [] });
+    location.reload();
   };
 
   useEffect(() => {

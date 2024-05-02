@@ -43,7 +43,7 @@ const Preview = () => {
     }
 
     if (activeFill === "gradient") {
-      return `linear-gradient(${frameGradientRotation}deg,${frameGradientStartFill.color},${frameGradientStops.mid}%,${frameGradientEndFill.color})`;
+      return `linear-gradient(${frameGradientRotation}deg,${frameGradientStartFill.color} ${frameGradientStops.start}%,${frameGradientStops.mid}%,${frameGradientEndFill.color} ${frameGradientStops.end}%)`;
     }
   };
 

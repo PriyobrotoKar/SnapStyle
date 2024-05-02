@@ -17,7 +17,7 @@ import {
   Brush,
   Eye,
   EyeOff,
-  Image,
+  Image as ImageIcon,
   Paintbrush2,
   Pipette,
 } from "lucide-react";
@@ -396,23 +396,61 @@ const GradientFillControl = ({
 
       <div
         style={{
-          background: `linear-gradient(90deg,${frameGradientStartFill.color},${frameGradientStops.mid}%,${frameGradientEndFill.color})`,
+          background: `linear-gradient(90deg,${frameGradientStartFill.color} ${frameGradientStops.start}%,${frameGradientStops.mid}%,${frameGradientEndFill.color} ${frameGradientStops.end}%)`,
         }}
-        className="h-4 rounded-full flex justify-center items-center"
+        className="h-4 relative rounded-full flex  items-center"
       >
         <input
           type="range"
           name="midStop"
           id="midStop"
-          className=" slider"
+          className=" slider absolute"
           value={frameGradientStops.mid}
           onChange={(e) =>
             setFrameGradientStops({
-              ...frameGradientStops,
+              start: Math.min(Number(e.target.value), frameGradientStops.start),
               mid: Number(e.target.value),
+              end: Math.max(Number(e.target.value), frameGradientStops.end),
             })
           }
         />
+
+        <input
+          type="range"
+          name="startStop"
+          id="startStop"
+          className=" slider absolute"
+          style={{ width: frameGradientStops.mid - 4 + "%" }}
+          max={frameGradientStops.mid}
+          value={frameGradientStops.start}
+          onChange={(e) =>
+            setFrameGradientStops({
+              ...frameGradientStops,
+              start: Number(e.target.value),
+            })
+          }
+        />
+
+        <input
+          type="range"
+          name="endStop"
+          id="endStop"
+          min={frameGradientStops.mid}
+          className=" slider absolute right-0"
+          style={{ width: 100 - frameGradientStops.mid - 4 + "%" }}
+          value={frameGradientStops.end}
+          onChange={(e) =>
+            setFrameGradientStops({
+              ...frameGradientStops,
+              end: Number(e.target.value),
+            })
+          }
+        />
+
+        <div
+          className="size-4 absolute bottom-4 bg-white "
+          style={{ left: frameGradientStops.start - 2 + "%" }}
+        ></div>
       </div>
 
       <div className="space-y-2">
@@ -550,7 +588,7 @@ const FillControl = ({
     },
     {
       id: "image",
-      icon: <Image size={14} />,
+      icon: <ImageIcon size={14} />,
     },
   ];
 
