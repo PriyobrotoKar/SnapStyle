@@ -47,6 +47,7 @@ import {
 import Label from "./Label";
 import Control from "./Control";
 import { AngleIcon } from "@radix-ui/react-icons";
+import ReactSlider from "react-slider";
 
 interface FillControlProps {
   fill: string;
@@ -398,59 +399,51 @@ const GradientFillControl = ({
         style={{
           background: `linear-gradient(90deg,${frameGradientStartFill.color} ${frameGradientStops.start}%,${frameGradientStops.mid}%,${frameGradientEndFill.color} ${frameGradientStops.end}%)`,
         }}
-        className="h-4 relative rounded-full flex  items-center"
+        className="h-4 relative rounded-full flex  items-center "
       >
-        <input
-          type="range"
-          name="midStop"
-          id="midStop"
-          className=" slider absolute"
-          value={frameGradientStops.mid}
-          onChange={(e) =>
+        <ReactSlider
+          defaultValue={[
+            frameGradientStops.start,
+            frameGradientStops.mid,
+            frameGradientStops.end,
+          ]}
+          className="w-full h-2"
+          onChange={(value) => {
             setFrameGradientStops({
-              start: Math.min(Number(e.target.value), frameGradientStops.start),
-              mid: Number(e.target.value),
-              end: Math.max(Number(e.target.value), frameGradientStops.end),
-            })
-          }
+              start: value[0],
+              mid: value[1],
+              end: value[2],
+            });
+          }}
+          renderTrack={(props) => (
+            <span
+              {...props}
+              className="h-0.5 inline-flex top-1/2 -translate-y-1/2 bg-white"
+            ></span>
+          )}
+          renderThumb={(props, state) => (
+            <span
+              {...props}
+              className="size-2 relative rounded-full bg-white inline-flex z-0 hover:cursor-pointer hover:scale-110 active:cursor-pointer active:scale-110 transition-transform"
+            >
+              {state.index !== 1 && (
+                <>
+                  <span
+                    className="inline-flex absolute left-1/2 -translate-x-1/2 size-4 border-2 border-white bottom-4 "
+                    style={{
+                      backgroundColor:
+                        state.valueNow <= frameGradientStops.mid &&
+                        state.index === 0
+                          ? frameGradientStartFill.color
+                          : frameGradientEndFill.color,
+                    }}
+                  ></span>
+                  <span className="size-1.5 -z-10 bg-white absolute bottom-3 left-1/2 -translate-x-1/2 rotate-45"></span>
+                </>
+              )}
+            </span>
+          )}
         />
-
-        <input
-          type="range"
-          name="startStop"
-          id="startStop"
-          className=" slider absolute"
-          style={{ width: frameGradientStops.mid - 4 + "%" }}
-          max={frameGradientStops.mid}
-          value={frameGradientStops.start}
-          onChange={(e) =>
-            setFrameGradientStops({
-              ...frameGradientStops,
-              start: Number(e.target.value),
-            })
-          }
-        />
-
-        <input
-          type="range"
-          name="endStop"
-          id="endStop"
-          min={frameGradientStops.mid}
-          className=" slider absolute right-0"
-          style={{ width: 100 - frameGradientStops.mid - 4 + "%" }}
-          value={frameGradientStops.end}
-          onChange={(e) =>
-            setFrameGradientStops({
-              ...frameGradientStops,
-              end: Number(e.target.value),
-            })
-          }
-        />
-
-        <div
-          className="size-4 absolute bottom-4 bg-white "
-          style={{ left: frameGradientStops.start - 2 + "%" }}
-        ></div>
       </div>
 
       <div className="space-y-2">
@@ -574,7 +567,10 @@ const FillControl = ({
   const [versionHistory, setVersionHistory] =
     useRecoilState(versionHistoryState);
   const controlCenter = useRecoilValue(controlCenterState);
-
+  console.log(
+    controlCenter.frameGradientStartFill,
+    controlCenter.frameGradientEndFill
+  );
   const [activeTab, setActiveTab] = useRecoilState(activeFillState);
 
   const tabs = [
@@ -592,6 +588,20 @@ const FillControl = ({
     },
   ];
 
+  const gradient = (opacity: string) => {
+    return `linear-gradient(${controlCenter.frameGradientRotation}deg,${
+      (controlCenter.frameGradientStartFill.color.length > 7
+        ? controlCenter.frameGradientStartFill.color.slice(0, -2)
+        : controlCenter.frameGradientStartFill.color) + opacity
+    } ${controlCenter.frameGradientStops.start}%,${
+      controlCenter.frameGradientStops.mid
+    }%,${
+      (controlCenter.frameGradientEndFill.color.length > 7
+        ? controlCenter.frameGradientEndFill.color.slice(0, -2)
+        : controlCenter.frameGradientEndFill.color) + opacity
+    } ${controlCenter.frameGradientStops.end}%)`;
+  };
+
   useEffect(() => {
     setHsva(hexToHsva(fill));
   }, [fill]);
@@ -603,7 +613,10 @@ const FillControl = ({
         <div
           className="flex items-center px-4 py-2 rounded-xl w-fit gap-4"
           style={{
-            backgroundColor: hsvaToHex(hsva) + "10",
+            background:
+              activeTab === "solid" || !enableTabs
+                ? hsvaToHex(hsva) + "10"
+                : gradient("20"),
             opacity: showFill ? "1" : "0.4",
           }}
         >
@@ -611,19 +624,25 @@ const FillControl = ({
             <PopoverTrigger>
               <div
                 className="w-6 h-3 rounded-sm"
-                style={{ backgroundColor: hsvaToHex(hsva) }}
+                style={{
+                  background:
+                    activeTab === "solid" || !enableTabs
+                      ? hsvaToHex(hsva)
+                      : gradient("FF"),
+                }}
               ></div>
             </PopoverTrigger>
             <PopoverContent className="w-fit space-y-4">
-              {activeTab === "solid" && (
-                <SolidFillControl
-                  showFill={showFill}
-                  onChange={onChange}
-                  hsva={hsva}
-                  enableTabs={enableTabs}
-                  setHsva={setHsva}
-                />
-              )}
+              {activeTab === "solid" ||
+                (!enableTabs && (
+                  <SolidFillControl
+                    showFill={showFill}
+                    onChange={onChange}
+                    hsva={hsva}
+                    enableTabs={enableTabs}
+                    setHsva={setHsva}
+                  />
+                ))}
               {activeTab === "gradient" && enableTabs && (
                 <GradientFillControl onChange={onChange} />
               )}

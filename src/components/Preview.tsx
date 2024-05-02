@@ -37,7 +37,10 @@ const Preview = () => {
   } = useRecoilValue(controlCenterState);
 
   const getBackground = () => {
-    if (frameFill.showFill && activeFill === "solid") {
+    if (!frameFill.showFill) {
+      return;
+    }
+    if (activeFill === "solid") {
       console.log(activeFill);
       return frameFill.color;
     }
