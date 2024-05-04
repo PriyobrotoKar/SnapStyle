@@ -34,6 +34,7 @@ const Preview = () => {
     frameGradientEndFill,
     frameGradientRotation,
     frameGradientStops,
+    fillImage,
   } = useRecoilValue(controlCenterState);
 
   const getBackground = () => {
@@ -42,11 +43,20 @@ const Preview = () => {
     }
     if (activeFill === "solid") {
       console.log(activeFill);
-      return frameFill.color;
+      return { background: frameFill.color };
     }
 
     if (activeFill === "gradient") {
-      return `linear-gradient(${frameGradientRotation}deg,${frameGradientStartFill.color} ${frameGradientStops.start}%,${frameGradientStops.mid}%,${frameGradientEndFill.color} ${frameGradientStops.end}%)`;
+      return {
+        background: `linear-gradient(${frameGradientRotation}deg,${frameGradientStartFill.color} ${frameGradientStops.start}%,${frameGradientStops.mid}%,${frameGradientEndFill.color} ${frameGradientStops.end}%)`,
+      };
+    }
+    if (activeFill === "image") {
+      console.log(activeFill);
+      return {
+        backgroundImage: `url(${fillImage})`,
+        backgroundSize: fillImage !== "/imageFallback.svg" ? "cover" : "",
+      };
     }
   };
 
@@ -113,7 +123,7 @@ const Preview = () => {
           borderRadius: frameRadius,
           // backgroundColor:
           //   frameFill.showFill && activeFill === "solid" ? frameFill.color : "",
-          background: getBackground(),
+          ...getBackground(),
           // ...(frameDimension.width && { width: frameDimension.width }),
           // ...(frameDimension.height && { height: frameDimension.height }),
           width: frameDimension.width || "fit-content",

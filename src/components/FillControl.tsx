@@ -36,6 +36,7 @@ import { getColorFromEyeDropper } from "@/lib/eyeDropper";
 import { SetterOrUpdater, useRecoilState, useRecoilValue } from "recoil";
 import {
   ControlCenterState,
+  FillImageState,
   activeFillState,
   controlCenterState,
   frameGradientEndFillState,
@@ -48,6 +49,8 @@ import Label from "./Label";
 import Control from "./Control";
 import { AngleIcon } from "@radix-ui/react-icons";
 import ReactSlider from "react-slider";
+import Image from "next/image";
+import { getBase64 } from "@/lib/utils";
 
 interface FillControlProps {
   fill: string;
@@ -555,6 +558,44 @@ const GradientFillControl = ({
   );
 };
 
+const ImageFillControl = () => {
+  const [image, setImage] = useRecoilState(FillImageState);
+
+  const handleChangeImage = async (e: ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files?.length) {
+      return;
+    }
+    const img = e.target.files[0];
+    setImage(await getBase64(img));
+  };
+
+  return (
+    <div className="relative group">
+      <div>
+        <Image
+          src={image}
+          alt="imageFallback"
+          className="w-72"
+          width={500}
+          height={300}
+        />
+        <div className="absolute w-full h-full inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex justify-center items-center transition-opacity">
+          <input
+            className="hidden"
+            type="file"
+            name="bgImage"
+            id="bgImage"
+            onChange={handleChangeImage}
+          />
+          <Button variant={"secondary"}>
+            <label htmlFor="bgImage">Choose Image</label>
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const FillControl = ({
   fill,
   showFill,
@@ -628,24 +669,26 @@ const FillControl = ({
                   background:
                     activeTab === "solid" || !enableTabs
                       ? hsvaToHex(hsva)
-                      : gradient("FF"),
+                      : activeTab === "gradient"
+                      ? gradient("FF")
+                      : `url(${controlCenter.fillImage}) center center / cover`,
                 }}
               ></div>
             </PopoverTrigger>
             <PopoverContent className="w-fit space-y-4">
-              {activeTab === "solid" ||
-                (!enableTabs && (
-                  <SolidFillControl
-                    showFill={showFill}
-                    onChange={onChange}
-                    hsva={hsva}
-                    enableTabs={enableTabs}
-                    setHsva={setHsva}
-                  />
-                ))}
+              {(activeTab === "solid" || !enableTabs) && (
+                <SolidFillControl
+                  showFill={showFill}
+                  onChange={onChange}
+                  hsva={hsva}
+                  enableTabs={enableTabs}
+                  setHsva={setHsva}
+                />
+              )}
               {activeTab === "gradient" && enableTabs && (
                 <GradientFillControl onChange={onChange} />
               )}
+              {activeTab === "image" && enableTabs && <ImageFillControl />}
 
               {enableTabs && (
                 <div className="flex gap-2 justify-center items-center">
@@ -674,7 +717,7 @@ const FillControl = ({
           ) : activeTab === "gradient" ? (
             <span>Linear</span>
           ) : (
-            ""
+            <span>Image</span>
           )}
           <Separator
             orientation="vertical"

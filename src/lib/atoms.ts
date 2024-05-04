@@ -55,6 +55,7 @@ export interface ControlCenterState {
   imageRotation: number;
   imageScale: number;
   enableNoise: boolean;
+  fillImage: string;
 }
 
 interface VersionHistory {
@@ -202,6 +203,10 @@ export const imageScaleState = createAtom<ControlCenterState["imageScale"]>({
 export const enableNoise = createAtom<ControlCenterState["enableNoise"]>({
   key: "enableNoise",
   default: true,
+});
+export const FillImageState = createAtom<ControlCenterState["fillImage"]>({
+  key: "fillImage",
+  default: "/imageFallback.svg",
 });
 
 export const controlCenterState = selector<ControlCenterState>({
