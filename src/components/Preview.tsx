@@ -35,6 +35,7 @@ const Preview = () => {
     frameGradientRotation,
     frameGradientStops,
     fillImage,
+    fillImageFilter,
   } = useRecoilValue(controlCenterState);
 
   const getBackground = () => {
@@ -115,6 +116,8 @@ const Preview = () => {
     return () => window.removeEventListener("resize", changeDimensionOnResize);
   }, [frameDimension, setFrameDimension]);
 
+  console.log(fillImageFilter);
+
   return (
     <>
       <div
@@ -123,7 +126,7 @@ const Preview = () => {
           borderRadius: frameRadius,
           // backgroundColor:
           //   frameFill.showFill && activeFill === "solid" ? frameFill.color : "",
-          ...getBackground(),
+
           // ...(frameDimension.width && { width: frameDimension.width }),
           // ...(frameDimension.height && { height: frameDimension.height }),
           width: frameDimension.width || "fit-content",
@@ -137,6 +140,17 @@ const Preview = () => {
         }}
         className=" relative   justify-center items-center p-14 overflow-hidden"
       >
+        <div
+          style={{
+            ...getBackground(),
+            // display: activeFill === "image" ? "block" : "none",
+            filter:
+              activeFill === "image"
+                ? `blur(${fillImageFilter.blur}px) brightness(${fillImageFilter.brightness}%) contrast(${fillImageFilter.contrast}%) saturate(${fillImageFilter.saturation}%)`
+                : "",
+          }}
+          className="absolute w-full h-full inset-0"
+        ></div>
         {enableNoise && (
           <div className="bg-[url('/noise.png')] opacity-10 w-full h-full absolute inset-0"></div>
         )}

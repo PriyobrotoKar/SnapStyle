@@ -36,6 +36,7 @@ import { getColorFromEyeDropper } from "@/lib/eyeDropper";
 import { SetterOrUpdater, useRecoilState, useRecoilValue } from "recoil";
 import {
   ControlCenterState,
+  FillImageFilterState,
   FillImageState,
   activeFillState,
   controlCenterState,
@@ -560,6 +561,7 @@ const GradientFillControl = ({
 
 const ImageFillControl = () => {
   const [image, setImage] = useRecoilState(FillImageState);
+  const [filters, setFilters] = useRecoilState(FillImageFilterState);
 
   const handleChangeImage = async (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files?.length) {
@@ -569,9 +571,16 @@ const ImageFillControl = () => {
     setImage(await getBase64(img));
   };
 
+  const handleFilterSliderChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setFilters((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
   return (
-    <div className="relative group">
-      <div>
+    <div>
+      <div className="relative group">
         <Image
           src={image}
           alt="imageFallback"
@@ -590,6 +599,52 @@ const ImageFillControl = () => {
           <Button variant={"secondary"}>
             <label htmlFor="bgImage">Choose Image</label>
           </Button>
+        </div>
+      </div>
+
+      <div>
+        <div className="flex items-center justify-between">
+          Blur{" "}
+          <input
+            type="range"
+            name="blur"
+            id=""
+            value={filters.blur}
+            onChange={handleFilterSliderChange}
+          />
+        </div>
+        <div className="flex items-center justify-between">
+          Brightness{" "}
+          <input
+            type="range"
+            name="brightness"
+            max={200}
+            id=""
+            value={filters.brightness}
+            onChange={handleFilterSliderChange}
+          />
+        </div>
+        <div className="flex items-center justify-between">
+          Contrast{" "}
+          <input
+            type="range"
+            name="contrast"
+            max={200}
+            id=""
+            value={filters.contrast}
+            onChange={handleFilterSliderChange}
+          />
+        </div>
+        <div className="flex items-center justify-between">
+          Saturation{" "}
+          <input
+            type="range"
+            max={200}
+            name="saturation"
+            id=""
+            value={filters.saturation}
+            onChange={handleFilterSliderChange}
+          />
         </div>
       </div>
     </div>

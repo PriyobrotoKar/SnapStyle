@@ -56,6 +56,12 @@ export interface ControlCenterState {
   imageScale: number;
   enableNoise: boolean;
   fillImage: string;
+  fillImageFilter: {
+    blur: number;
+    brightness: number;
+    contrast: number;
+    saturation: number;
+  };
 }
 
 interface VersionHistory {
@@ -207,6 +213,17 @@ export const enableNoise = createAtom<ControlCenterState["enableNoise"]>({
 export const FillImageState = createAtom<ControlCenterState["fillImage"]>({
   key: "fillImage",
   default: "/imageFallback.svg",
+});
+export const FillImageFilterState = createAtom<
+  ControlCenterState["fillImageFilter"]
+>({
+  key: "fillImageFilter",
+  default: {
+    blur: 0,
+    contrast: 100,
+    brightness: 100,
+    saturation: 100,
+  },
 });
 
 export const controlCenterState = selector<ControlCenterState>({
