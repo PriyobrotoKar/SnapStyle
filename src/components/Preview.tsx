@@ -36,6 +36,7 @@ const Preview = () => {
     frameGradientStops,
     fillImage,
     fillImageFilter,
+    fillImageTransform,
   } = useRecoilValue(controlCenterState);
 
   const getBackground = () => {
@@ -52,13 +53,13 @@ const Preview = () => {
         background: `linear-gradient(${frameGradientRotation}deg,${frameGradientStartFill.color} ${frameGradientStops.start}%,${frameGradientStops.mid}%,${frameGradientEndFill.color} ${frameGradientStops.end}%)`,
       };
     }
-    if (activeFill === "image") {
-      console.log(activeFill);
-      return {
-        backgroundImage: `url(${fillImage})`,
-        backgroundSize: fillImage !== "/imageFallback.svg" ? "cover" : "",
-      };
-    }
+    // if (activeFill === "image") {
+    //   console.log(activeFill);
+    //   return {
+    //     backgroundImage: `url(${fillImage})`,
+    //     backgroundSize: fillImage !== "/imageFallback.svg" ? "cover" : "",
+    //   };
+    // }
   };
 
   const [_, setFrameDimension] = useRecoilState(frameDimensionState);
@@ -124,6 +125,7 @@ const Preview = () => {
         ref={frameRef}
         style={{
           borderRadius: frameRadius,
+          ...getBackground(),
           // backgroundColor:
           //   frameFill.showFill && activeFill === "solid" ? frameFill.color : "",
 
@@ -140,10 +142,28 @@ const Preview = () => {
         }}
         className=" relative   justify-center items-center p-14 overflow-hidden"
       >
+        {/* <Image
+          style={{
+            translate: `${fillImageTransform.x}% ${fillImageTransform.y}%`,
+            rotate: `${fillImageTransform.rotation}deg`,
+            filter:
+              activeFill === "image"
+                ? `blur(${fillImageFilter.blur}px) brightness(${fillImageFilter.brightness}%) contrast(${fillImageFilter.contrast}%) saturate(${fillImageFilter.saturation}%)`
+                : "",
+          }}
+          src={fillImage || "/imageFallback.svg"}
+          alt="bgImage"
+          fill
+          className="absolute object-cover h-full inset-0 aspect-auto"
+        /> */}
         <div
           style={{
-            ...getBackground(),
-            // display: activeFill === "image" ? "block" : "none",
+            // translate: `${fillImageTransform.x}% ${fillImageTransform.y}%`,
+            backgroundPosition: `${fillImageTransform.x}% ${fillImageTransform.y}%`,
+            rotate: `${fillImageTransform.rotation}deg`,
+            backgroundImage: `url(${fillImage})`,
+            backgroundRepeat: "no-repeat",
+            backgroundSize: fillImage !== "/imageFallback.svg" ? "cover" : "",
             filter:
               activeFill === "image"
                 ? `blur(${fillImageFilter.blur}px) brightness(${fillImageFilter.brightness}%) contrast(${fillImageFilter.contrast}%) saturate(${fillImageFilter.saturation}%)`

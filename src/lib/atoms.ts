@@ -56,6 +56,11 @@ export interface ControlCenterState {
   imageScale: number;
   enableNoise: boolean;
   fillImage: string;
+  fillImageTransform: {
+    x: number;
+    y: number;
+    rotation: number;
+  };
   fillImageFilter: {
     blur: number;
     brightness: number;
@@ -223,6 +228,16 @@ export const FillImageFilterState = createAtom<
     contrast: 100,
     brightness: 100,
     saturation: 100,
+  },
+});
+export const FillImageTransformState = createAtom<
+  ControlCenterState["fillImageTransform"]
+>({
+  key: "fillImageTransform",
+  default: {
+    x: 50,
+    y: 50,
+    rotation: 0,
   },
 });
 

@@ -38,6 +38,7 @@ import {
   ControlCenterState,
   FillImageFilterState,
   FillImageState,
+  FillImageTransformState,
   activeFillState,
   controlCenterState,
   frameGradientEndFillState,
@@ -562,6 +563,7 @@ const GradientFillControl = ({
 const ImageFillControl = () => {
   const [image, setImage] = useRecoilState(FillImageState);
   const [filters, setFilters] = useRecoilState(FillImageFilterState);
+  const [transforms, setTransforms] = useRecoilState(FillImageTransformState);
 
   const handleChangeImage = async (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files?.length) {
@@ -579,8 +581,8 @@ const ImageFillControl = () => {
   };
 
   return (
-    <div>
-      <div className="relative group">
+    <div className="space-y-4">
+      <div className="relative group rounded-xl overflow-hidden">
         <Image
           src={image}
           alt="imageFallback"
@@ -602,12 +604,33 @@ const ImageFillControl = () => {
         </div>
       </div>
 
+      <div className="flex gap-2 justify-center items-center">
+        <Control
+          value={transforms.x}
+          label="X"
+          onChange={(val: number) => setTransforms({ ...transforms, x: val })}
+        />
+        <Control
+          value={transforms.y}
+          label="Y"
+          onChange={(val: number) => setTransforms({ ...transforms, y: val })}
+        />
+        <Control
+          value={transforms.rotation}
+          label={<AngleIcon />}
+          onChange={(val: number) =>
+            setTransforms({ ...transforms, rotation: val })
+          }
+        />
+      </div>
+
       <div>
         <div className="flex items-center justify-between">
           Blur{" "}
           <input
             type="range"
             name="blur"
+            className="slider appearance-none bg-transparent "
             id=""
             value={filters.blur}
             onChange={handleFilterSliderChange}
@@ -620,6 +643,7 @@ const ImageFillControl = () => {
             name="brightness"
             max={200}
             id=""
+            className="slider appearance-none bg-transparent "
             value={filters.brightness}
             onChange={handleFilterSliderChange}
           />
@@ -631,6 +655,7 @@ const ImageFillControl = () => {
             name="contrast"
             max={200}
             id=""
+            className="slider appearance-none bg-transparent "
             value={filters.contrast}
             onChange={handleFilterSliderChange}
           />
@@ -642,6 +667,7 @@ const ImageFillControl = () => {
             max={200}
             name="saturation"
             id=""
+            className="slider appearance-none bg-transparent "
             value={filters.saturation}
             onChange={handleFilterSliderChange}
           />
