@@ -53,13 +53,6 @@ const Preview = () => {
         background: `linear-gradient(${frameGradientRotation}deg,${frameGradientStartFill.color} ${frameGradientStops.start}%,${frameGradientStops.mid}%,${frameGradientEndFill.color} ${frameGradientStops.end}%)`,
       };
     }
-    // if (activeFill === "image") {
-    //   console.log(activeFill);
-    //   return {
-    //     backgroundImage: `url(${fillImage})`,
-    //     backgroundSize: fillImage !== "/imageFallback.svg" ? "cover" : "",
-    //   };
-    // }
   };
 
   const [_, setFrameDimension] = useRecoilState(frameDimensionState);
@@ -161,7 +154,8 @@ const Preview = () => {
             // translate: `${fillImageTransform.x}% ${fillImageTransform.y}%`,
             backgroundPosition: `${fillImageTransform.x}% ${fillImageTransform.y}%`,
             rotate: `${fillImageTransform.rotation}deg`,
-            backgroundImage: `url(${fillImage})`,
+            backgroundImage:
+              fillImage !== "/imageFallback.svg" ? `url(${fillImage})` : "",
             backgroundRepeat: "no-repeat",
             backgroundSize: fillImage !== "/imageFallback.svg" ? "cover" : "",
             filter:

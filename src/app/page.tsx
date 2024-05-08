@@ -7,25 +7,12 @@ import UploadImage from "@/components/UploadImage";
 import { imageSourceState } from "@/lib/atoms";
 import { pasteImageFromClipboard } from "@/lib/pasteImage";
 import { useEffect } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { toast } from "sonner";
 
 export default function Home() {
-  const [image, setImage] = useRecoilState(imageSourceState);
+  const image = useRecoilValue(imageSourceState);
 
-  useEffect(() => {
-    const handlePaste = async (event: ClipboardEvent) => {
-      event.preventDefault();
-      try {
-        const imageFromClipboard = await pasteImageFromClipboard();
-        setImage(imageFromClipboard);
-      } catch (error) {
-        toast.error("Please paste an image");
-      }
-    };
-    document.body.addEventListener("paste", handlePaste);
-    return () => document.body.removeEventListener("paste", handlePaste);
-  }, [setImage]);
   return (
     <div className="flex-1 flex  items-stretch  h-[80vh]">
       {!image ? (

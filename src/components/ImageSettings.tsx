@@ -73,7 +73,7 @@ const ImageSettings = () => {
         />
       </div>
 
-      <div>
+      <div className="space-y-2">
         <Label>Perspective</Label>
         <div className="flex gap-6">
           <Control

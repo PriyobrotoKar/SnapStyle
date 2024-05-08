@@ -1,6 +1,7 @@
 import { controlCenterState, versionHistoryState } from "@/lib/atoms";
 import { ChangeEvent, Dispatch, ReactNode, SetStateAction, memo } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
+import DragLabel from "./DragLabel";
 
 const Control = ({
   label,
@@ -37,7 +38,7 @@ const Control = ({
       ) : (
         <Image src={label} alt="" width={12} height={12} />
       )} */}
-      <span className="text-muted-foreground">{label}</span>
+      <DragLabel label={label} value={value} setValue={onChange} />
       <input
         className="bg-transparent appearance-none outline-none"
         style={{ width: value.toString().length + "ch" }}
