@@ -67,6 +67,16 @@ export interface ControlCenterState {
     contrast: number;
     saturation: number;
   };
+  BackdropText: {
+    text: string;
+    size: number;
+    x: number;
+    y: number;
+  };
+  BackdropTextColor: {
+    color: string;
+    showFill: boolean;
+  };
 }
 
 interface VersionHistory {
@@ -238,6 +248,26 @@ export const FillImageTransformState = createAtom<
     x: 50,
     y: 50,
     rotation: 0,
+  },
+});
+export const BackdropTextState = createAtom<ControlCenterState["BackdropText"]>(
+  {
+    key: "BackdropText",
+    default: {
+      text: "",
+      size: 40,
+      x: 0,
+      y: 0,
+    },
+  }
+);
+export const BackdropTextFillState = createAtom<
+  ControlCenterState["BackdropTextColor"]
+>({
+  key: "BackdropTextColor",
+  default: {
+    color: "#000000",
+    showFill: true,
   },
 });
 

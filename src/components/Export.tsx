@@ -38,7 +38,7 @@ const Export = () => {
     }
   };
   return (
-    <div className="space-x-2 my-6 border flex gap-2 items-center rounded-2xl p-2 bg-card  overflow-hidden">
+    <div className="space-x-2 flex-[0_0_4rem] my-6 border flex gap-2 items-center rounded-2xl p-2 bg-card  overflow-hidden">
       <Select
         defaultValue={`${pixelRatio}x`}
         onValueChange={(val) => setPixelRatio(Number(val[0]) as 1 | 2)}

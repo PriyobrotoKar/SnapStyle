@@ -32,12 +32,7 @@ const Control = ({
   };
 
   return (
-    <div className="flex gap-2 items-center bg-background w-fit px-4 py-2 rounded-xl">
-      {/* {typeof label !== "object" ? (
-        <span className="text-muted-foreground">{label}</span>
-      ) : (
-        <Image src={label} alt="" width={12} height={12} />
-      )} */}
+    <div className="flex  items-center bg-background w-fit px-4 py-2 rounded-xl">
       <DragLabel label={label} value={value} setValue={onChange} />
       <input
         className="bg-transparent appearance-none outline-none"

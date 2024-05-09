@@ -48,10 +48,14 @@ const DragLabel = ({
     };
   }, [startVal, setValue, snapshot]);
 
+  if (!label) {
+    return;
+  }
+
   return (
     <span
       onMouseDown={onStart}
-      className="text-muted-foreground cursor-ew-resize select-none *:pointer-events-none"
+      className="text-muted-foreground cursor-ew-resize select-none *:pointer-events-none mr-2"
     >
       {label}
     </span>

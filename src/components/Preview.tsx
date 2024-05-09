@@ -37,6 +37,8 @@ const Preview = () => {
     fillImage,
     fillImageFilter,
     fillImageTransform,
+    BackdropText,
+    BackdropTextColor,
   } = useRecoilValue(controlCenterState);
 
   const getBackground = () => {
@@ -44,7 +46,6 @@ const Preview = () => {
       return;
     }
     if (activeFill === "solid") {
-      console.log(activeFill);
       return { background: frameFill.color };
     }
 
@@ -52,6 +53,31 @@ const Preview = () => {
       return {
         background: `linear-gradient(${frameGradientRotation}deg,${frameGradientStartFill.color} ${frameGradientStops.start}%,${frameGradientStops.mid}%,${frameGradientEndFill.color} ${frameGradientStops.end}%)`,
       };
+    }
+  };
+
+  console.log(BackdropText.x, BackdropText.y);
+
+  const getJustifyContent = () => {
+    if (BackdropText.y < 50) {
+      return "column";
+    } else if (BackdropText.y > 50) {
+      return "column-reverse";
+    } else if (BackdropText.x > 50) {
+      return "row-reverse";
+    } else {
+      return "row";
+    }
+  };
+
+  const getItemAlignment = () => {
+    if (BackdropText.x === 50 || BackdropText.y === 50) {
+      return "center";
+    }
+    if (BackdropText.x < 50) {
+      return "flex-start";
+    } else if (BackdropText.x > 50) {
+      return "flex-end";
     }
   };
 
@@ -110,8 +136,6 @@ const Preview = () => {
     return () => window.removeEventListener("resize", changeDimensionOnResize);
   }, [frameDimension, setFrameDimension]);
 
-  console.log(fillImageFilter);
-
   return (
     <>
       <div
@@ -132,8 +156,10 @@ const Preview = () => {
           [`${frameStrokePosition}Color`]: frameStroke.color,
           [`${frameStrokePosition}Style`]: "solid",
           display: displayPreview ? "flex" : "none",
+          flexDirection: getJustifyContent(),
+          alignItems: getItemAlignment(),
         }}
-        className=" relative   justify-center items-center p-14 overflow-hidden"
+        className=" relative p-14 overflow-hidden"
       >
         {/* <Image
           style={{
@@ -168,6 +194,15 @@ const Preview = () => {
         {enableNoise && (
           <div className="bg-[url('/noise.png')] opacity-10 w-full h-full absolute inset-0"></div>
         )}
+        <div
+          style={{
+            fontSize: BackdropText.size + "px",
+            color: BackdropTextColor.color,
+          }}
+          className="relative z-20 flex-1"
+        >
+          {BackdropText.text}
+        </div>
         <img
           ref={imageRef}
           onLoad={() => {
@@ -186,7 +221,7 @@ const Preview = () => {
             width: displayPreview ? "auto" : "50vw",
             transform: `perspective(1000px) rotateX(${imagePerspective.x}deg) rotateY(${imagePerspective.y}deg)`,
           }}
-          className="aspect-auto  max-h-[60vh] rounded-lg shadow-[0px_10px_40px_10px_#00000070]"
+          className="aspect-auto z-20 relative flex-[2_1_0%] min-w-0 block max-h-[60vh] rounded-lg shadow-[0px_10px_40px_10px_#00000070]"
           src={image || ""}
           alt=""
         />

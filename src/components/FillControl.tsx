@@ -689,10 +689,6 @@ const FillControl = ({
   const [versionHistory, setVersionHistory] =
     useRecoilState(versionHistoryState);
   const controlCenter = useRecoilValue(controlCenterState);
-  console.log(
-    controlCenter.frameGradientStartFill,
-    controlCenter.frameGradientEndFill
-  );
   const [activeTab, setActiveTab] = useRecoilState(activeFillState);
 
   const tabs = [
