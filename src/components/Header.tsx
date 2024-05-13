@@ -47,6 +47,7 @@ const Header = () => {
       <div className="text-2xl text-primary font-semibold">BetterSS</div>
       <div className="space-x-4">
         <Button
+          tooltip="Undo last change"
           disabled={versionHistory.position === -1}
           variant={"secondary"}
           onClick={handleUndoHistory}
@@ -54,6 +55,7 @@ const Header = () => {
           Undo
         </Button>
         <Button
+          tooltip="Redo last change"
           disabled={
             versionHistory.position === versionHistory.timeline.length - 1
           }
@@ -64,10 +66,19 @@ const Header = () => {
         </Button>
       </div>
       <div className="space-x-4">
-        <Button variant={"secondary"} onClick={handleRefreshCanvas}>
+        <Button
+          tooltip="Reset Canvas"
+          variant={"secondary"}
+          onClick={handleRefreshCanvas}
+        >
           Start Again
         </Button>
-        <Button disabled variant={"secondary"} onClick={handleRefreshCanvas}>
+        <Button
+          tooltip="Coming Soon"
+          disabled
+          variant={"secondary"}
+          onClick={handleRefreshCanvas}
+        >
           Save Preset
         </Button>
       </div>

@@ -33,11 +33,13 @@ export const Grains = () => {
       <Label>Grains</Label>
       <div className="flex gap-4">
         <Control
+          tooltip="Density"
           value={noise.density}
           onChange={(val: number) => setNoise({ ...noise, density: val })}
           label={<Sun size={16} />}
         />
         <Control
+          tooltip="Opacity"
           value={noise.opacity}
           onChange={(val: number) => setNoise({ ...noise, opacity: val })}
           label={<Grip size={16} />}
@@ -56,16 +58,19 @@ const Shadow = () => {
       <Label>Shadow</Label>
       <div className="flex gap-4 items-center">
         <Control
+          tooltip="X-Axis"
           value={shadow.x}
           label="X"
           onChange={(val: number) => setShadow({ ...shadow, x: val })}
         />
         <Control
+          tooltip="Y-Axis"
           value={shadow.y}
           label="Y"
           onChange={(val: number) => setShadow({ ...shadow, y: val })}
         />
         <Control
+          tooltip="Blur"
           value={shadow.blur}
           label={
             <div className="size-3 rounded-full bg-muted-foreground blur-[2px]" />
@@ -106,6 +111,7 @@ const Pattern = () => {
             </SelectContent>
           </Select>
           <Control
+            tooltip="Intensity"
             label={<Tally4 size={16} />}
             value={pattern.intensity}
             onChange={(val: number) =>
@@ -113,6 +119,7 @@ const Pattern = () => {
             }
           />
           <Control
+            tooltip="Rotate"
             label={<AngleIcon />}
             value={pattern.rotation}
             onChange={(val: number) =>
@@ -157,10 +164,11 @@ const EffectTabs = () => {
   ];
 
   return (
-    <div className="space-x-4">
+    <div className="flex gap-4">
       {tabs.map((tab, i) => {
         return (
           <Button
+            tooltip={tab.name}
             onClick={() => {
               if (!active.find((effect) => effect.name === tab.name))
                 setActive([

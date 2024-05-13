@@ -61,6 +61,7 @@ const StrokeControl = ({ strokeType }: StrokeControlProps) => {
         </Select>
         <Control
           label={<ListFilter size={16} />}
+          tooltip="Width"
           value={stroke.width}
           onChange={(width: number) => setStroke({ ...stroke, width })}
         />

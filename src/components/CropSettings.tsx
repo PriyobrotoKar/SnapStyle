@@ -74,7 +74,7 @@ const CropSettings = () => {
   return (
     <Popover open={isOpen}>
       <PopoverTrigger onClick={() => setIsOpen(!isOpen)}>
-        <Button variant={"secondary"} size={"icon"}>
+        <Button tooltip="Crop" variant={"secondary"} size={"icon"}>
           <CropIcon size={16} />
         </Button>
       </PopoverTrigger>
@@ -95,6 +95,7 @@ const CropSettings = () => {
           <div className="flex gap-8">
             <div className="flex gap-4">
               <Control
+                tooltip="Width"
                 label="W"
                 value={Number(
                   convertToPixelCrop(crop, img.width, img.height).width.toFixed(
@@ -129,6 +130,7 @@ const CropSettings = () => {
               </Toggle>
               <Control
                 label="H"
+                tooltip="height"
                 value={Number(
                   convertToPixelCrop(
                     crop,
@@ -183,7 +185,9 @@ const CropSettings = () => {
                   <SelectItem value="4/3">4:3</SelectItem>
                 </SelectContent>
               </Select>
-              <Button onClick={handleCropSave}>Save</Button>
+              <Button tooltip="Save Crop" onClick={handleCropSave}>
+                Save
+              </Button>
             </div>
           </div>
         )}

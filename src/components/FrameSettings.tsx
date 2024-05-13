@@ -25,6 +25,7 @@ const FrameSettings = () => {
       <div className="flex gap-6">
         <Control
           label={"W"}
+          tooltip="Width"
           value={Number(frameDimension.width.toFixed(0))}
           onChange={useCallback(
             (width: number) =>
@@ -38,6 +39,7 @@ const FrameSettings = () => {
         />
         <Control
           label={"H"}
+          tooltip="Height"
           value={Number(frameDimension.height.toFixed(0))}
           onChange={useCallback(
             (height: number) =>
@@ -57,6 +59,7 @@ const FrameSettings = () => {
           ),
           []
         )}
+        tooltip="Radius"
         value={frameRadius}
         onChange={setFrameRadius}
       />

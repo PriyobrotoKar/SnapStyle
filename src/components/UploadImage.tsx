@@ -108,6 +108,7 @@ const UploadImage = () => {
         </div>
         <label htmlFor="upload" className="hover:cursor-pointer">
           <Button
+            tooltip="Upload an image from device"
             variant={"secondary"}
             className="gap-2 pointer-events-none"
             size={"lg"}

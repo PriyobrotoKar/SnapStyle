@@ -250,6 +250,7 @@ const SolidFillControl = ({
           <OpacityInput onChange={onChange} hsva={hsva} setHsva={setHsva} />
         </div>
         <Button
+          tooltip="Eyedropper"
           size={"icon"}
           onClick={async () => {
             const color = await getColorFromEyeDropper();
@@ -387,11 +388,13 @@ const GradientFillControl = ({
 
       <div className="flex items-center gap-4 justify-center">
         <Control
+          tooltip="Rotate"
           label={<AngleIcon />}
           value={frameGradientRotation}
           onChange={setFrameGradientRotation}
         />
         <Button
+          tooltip="Flip Gradient"
           onClick={handleGradientFlip}
           size={"icon"}
           variant={"secondary"}
@@ -483,6 +486,7 @@ const GradientFillControl = ({
             />
           </div>
           <Button
+            tooltip="Eyedropper"
             size={"icon"}
             onClick={async () => {
               const color = await getColorFromEyeDropper();
@@ -534,6 +538,7 @@ const GradientFillControl = ({
             />
           </div>
           <Button
+            tooltip="Eyedropper"
             size={"icon"}
             onClick={async () => {
               const color = await getColorFromEyeDropper();
@@ -598,7 +603,7 @@ const ImageFillControl = () => {
             id="bgImage"
             onChange={handleChangeImage}
           />
-          <Button variant={"secondary"}>
+          <Button variant={"secondary"} tooltip="Upload an image from device">
             <label htmlFor="bgImage">Choose Image</label>
           </Button>
         </div>
@@ -608,16 +613,19 @@ const ImageFillControl = () => {
         <Control
           value={transforms.x}
           label="X"
+          tooltip="X-Axis"
           onChange={(val: number) => setTransforms({ ...transforms, x: val })}
         />
         <Control
           value={transforms.y}
           label="Y"
+          tooltip="Y-Axis"
           onChange={(val: number) => setTransforms({ ...transforms, y: val })}
         />
         <Control
           value={transforms.rotation}
           label={<AngleIcon />}
+          tooltip="Rotate"
           onChange={(val: number) =>
             setTransforms({ ...transforms, rotation: val })
           }
@@ -725,11 +733,11 @@ const FillControl = ({
   }, [fill]);
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-2 ">
       <Label>{label}</Label>
-      <div className="flex gap-4">
+      <div className="flex gap-4 ">
         <div
-          className="flex items-center px-4 py-2 rounded-xl w-fit gap-4"
+          className="flex items-center px-4 py-2 rounded-xl w-fit gap-4 ring-1 ring-transparent outline outline-1 outline-transparent hover:outline-border focus-within:outline-0 active:outline-0  active:ring-foreground focus-within:ring-ring "
           style={{
             background:
               activeTab === "solid" || !enableTabs
@@ -741,7 +749,7 @@ const FillControl = ({
           <Popover>
             <PopoverTrigger>
               <div
-                className="w-6 h-3 rounded-sm"
+                className="w-6 h-3 rounded-sm border "
                 style={{
                   background:
                     activeTab === "solid" || !enableTabs
@@ -772,6 +780,7 @@ const FillControl = ({
                   {tabs.map((tab) => {
                     return (
                       <Button
+                        tooltip={tab.id}
                         onClick={() =>
                           setActiveTab(
                             tab.id as ControlCenterState["activeFill"]
@@ -803,6 +812,7 @@ const FillControl = ({
           <OpacityInput onChange={onChange} hsva={hsva} setHsva={setHsva} />
         </div>
         <Button
+          tooltip="Hide"
           onClick={() => {
             onChange((prev) => ({ ...prev, showFill: !showFill }));
             setVersionHistory({

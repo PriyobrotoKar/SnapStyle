@@ -64,6 +64,7 @@ const Export = () => {
         </SelectContent>
       </Select>
       <Button
+        tooltip="Copy image to your clipboard"
         onClick={handleCopyImage}
         size={"lg"}
         className="w-36"
@@ -72,6 +73,7 @@ const Export = () => {
         Copy
       </Button>
       <Button
+        tooltip="Save image as PNG"
         size={"lg"}
         onClick={handleSaveImage}
         className="w-36 transition-all duration-300 hover:shadow-primary/20 shadow-[0px_0px_16px_5px] shadow-transparent"

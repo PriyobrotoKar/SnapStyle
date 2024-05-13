@@ -37,6 +37,7 @@ const ImageSettings = () => {
       <div className="flex gap-6 items-center">
         <Control
           label={"X"}
+          tooltip="X-Axis"
           value={imagePosition.x}
           onChange={(val: number) =>
             setImagePosition({ ...imagePosition, x: val })
@@ -44,6 +45,7 @@ const ImageSettings = () => {
         />
         <Control
           label={"Y"}
+          tooltip="Y-Axis"
           value={imagePosition.y}
           onChange={(val: number) =>
             setImagePosition({ ...imagePosition, y: val })
@@ -59,15 +61,18 @@ const ImageSettings = () => {
             ),
             []
           )}
+          tooltip="Radius"
           value={imageRadius}
           onChange={setImageRadius}
         />
         <Control
+          tooltip="Rotate"
           label={<AngleIcon />}
           value={imageRotation}
           onChange={setImageRotation}
         />
         <Control
+          tooltip="Scale"
           label={<MoveDiagonal size={16} />}
           value={Number((imageScale * 100).toFixed(0))}
           onChange={(val: number) =>
@@ -81,6 +86,7 @@ const ImageSettings = () => {
         <div className="flex gap-6">
           <Control
             label="X"
+            tooltip="Tilt-X"
             value={imagePerspective.x}
             onChange={(val: number) =>
               setImagePerspective({ ...imagePerspective, x: val })
@@ -88,6 +94,7 @@ const ImageSettings = () => {
           />
           <Control
             label="Y"
+            tooltip="Tilt-Y"
             value={imagePerspective.y}
             onChange={(val: number) =>
               setImagePerspective({ ...imagePerspective, y: val })

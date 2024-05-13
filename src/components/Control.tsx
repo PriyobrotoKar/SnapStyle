@@ -2,13 +2,21 @@ import { controlCenterState, versionHistoryState } from "@/lib/atoms";
 import { ChangeEvent, Dispatch, ReactNode, SetStateAction, memo } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import DragLabel from "./DragLabel";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const Control = ({
   label,
   value,
   onChange,
+  tooltip,
 }: {
   label?: ReactNode;
+  tooltip: string;
   value: number;
   onChange: Dispatch<SetStateAction<number>> | ((val: number) => void);
 }) => {
@@ -32,16 +40,23 @@ const Control = ({
   };
 
   return (
-    <div className="flex  items-center bg-background w-fit h-min px-4 py-2 rounded-xl">
-      <DragLabel label={label} value={value} setValue={onChange} />
-      <input
-        className="bg-transparent appearance-none outline-none"
-        style={{ width: value.toString().length + "ch" }}
-        type="number"
-        value={value}
-        onChange={handleOnChange}
-      />
-    </div>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <div className="flex ring-1 ring-transparent outline outline-1 outline-transparent hover:outline-border focus-within:outline-0 active:outline-0  active:ring-foreground focus-within:ring-ring  items-center bg-background w-fit h-min px-4 py-2 rounded-xl">
+          <DragLabel label={label} value={value} setValue={onChange} />
+          <input
+            className="bg-transparent appearance-none outline-none"
+            style={{ width: value.toString().length + "ch" }}
+            type="number"
+            value={value}
+            onChange={handleOnChange}
+          />
+        </div>
+      </TooltipTrigger>
+      <TooltipContent>
+        <p>{tooltip}</p>
+      </TooltipContent>
+    </Tooltip>
   );
 };
 

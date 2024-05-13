@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/providers/theme-provider";
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const inter = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -26,8 +27,10 @@ export default function RootLayout({
       <body className={`${inter.className} flex flex-col h-screen text-base`}>
         <ThemeProvider attribute="class" defaultTheme="dark">
           <RecoilProvider>
-            <Header />
-            {children}
+            <TooltipProvider>
+              <Header />
+              {children}
+            </TooltipProvider>
           </RecoilProvider>
           <Toaster position="bottom-left" />
         </ThemeProvider>
