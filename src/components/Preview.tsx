@@ -8,6 +8,10 @@ import {
 import { Loader2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
+import { Grains } from "./EffectSettings";
+import waves from "./patterns/waves";
+
+import "@/app/fonts.css";
 
 const Preview = () => {
   const [displayPreview, setDisplayPreview] = useState(false);
@@ -28,7 +32,7 @@ const Preview = () => {
     imageScale,
     imagePosition,
     imagePerspective,
-    enableNoise,
+    noise,
     activeFill,
     frameGradientStartFill,
     frameGradientEndFill,
@@ -39,6 +43,11 @@ const Preview = () => {
     fillImageTransform,
     BackdropText,
     BackdropTextColor,
+    shadow,
+    shadowFill,
+    activeEffects,
+    pattern,
+    patternFill,
   } = useRecoilValue(controlCenterState);
 
   const getBackground = () => {
@@ -136,6 +145,12 @@ const Preview = () => {
     return () => window.removeEventListener("resize", changeDimensionOnResize);
   }, [frameDimension, setFrameDimension]);
 
+  console.log(
+    Boolean(
+      noise.enable && activeEffects.find((effect) => effect.name === "noise")
+    )
+  );
+
   return (
     <>
       <div
@@ -161,20 +176,6 @@ const Preview = () => {
         }}
         className=" relative p-14 overflow-hidden"
       >
-        {/* <Image
-          style={{
-            translate: `${fillImageTransform.x}% ${fillImageTransform.y}%`,
-            rotate: `${fillImageTransform.rotation}deg`,
-            filter:
-              activeFill === "image"
-                ? `blur(${fillImageFilter.blur}px) brightness(${fillImageFilter.brightness}%) contrast(${fillImageFilter.contrast}%) saturate(${fillImageFilter.saturation}%)`
-                : "",
-          }}
-          src={fillImage || "/imageFallback.svg"}
-          alt="bgImage"
-          fill
-          className="absolute object-cover h-full inset-0 aspect-auto"
-        /> */}
         <div
           style={{
             // translate: `${fillImageTransform.x}% ${fillImageTransform.y}%`,
@@ -191,18 +192,45 @@ const Preview = () => {
           }}
           className="absolute w-full h-full inset-0"
         ></div>
-        {enableNoise && (
-          <div className="bg-[url('/noise.png')] opacity-10 w-full h-full absolute inset-0"></div>
+        {Boolean(
+          noise.enable &&
+            activeEffects.find((effect) => effect.name === "noise")
+        ) && (
+          <div
+            style={{
+              scale: 100 + noise.density + "%",
+              opacity: noise.opacity + "%",
+            }}
+            className="bg-[url('/noise.png')] w-full h-full absolute inset-0"
+          ></div>
         )}
-        <div
-          style={{
-            fontSize: BackdropText.size + "px",
-            color: BackdropTextColor.color,
-          }}
-          className="relative z-20 flex-1"
-        >
-          {BackdropText.text}
-        </div>
+        {activeEffects.find((effect) => effect.name === "pattern") && (
+          <div
+            style={{
+              backgroundColor: patternFill.color,
+              maskImage: `url("/${pattern.type}.svg")`,
+              maskSize: `${pattern.intensity}%`,
+              transform: `rotate(${pattern.rotation}deg) scale(2)`,
+            }}
+            className="w-full h-full absolute inset-0 z-20"
+          ></div>
+        )}
+
+        {BackdropText.text &&
+          activeEffects.find((effect) => effect.name === "text") && (
+            <div
+              style={{
+                fontSize: BackdropText.size + "px",
+                color: BackdropTextColor.color,
+                ...(BackdropText.font !== "Default" && {
+                  fontFamily: BackdropText.font,
+                }),
+                fontWeight: BackdropText.isBold ? 700 : 400,
+              }}
+              className="relative z-20 flex-1"
+              dangerouslySetInnerHTML={{ __html: BackdropText.text }}
+            ></div>
+          )}
         <img
           ref={imageRef}
           onLoad={() => {
@@ -220,8 +248,14 @@ const Preview = () => {
             [`${imageStrokePosition}Style`]: "solid",
             width: displayPreview ? "auto" : "50vw",
             transform: `perspective(1000px) rotateX(${imagePerspective.x}deg) rotateY(${imagePerspective.y}deg)`,
+            boxShadow: `${shadow.x}px ${shadow.y}px ${shadow.blur}px 10px ${
+              shadowFill.showFill &&
+              activeEffects.find((effect) => effect.name === "shadow")
+                ? shadowFill.color
+                : ""
+            }`,
           }}
-          className="aspect-auto z-20 relative flex-[2_1_0%] min-w-0 block max-h-[60vh] rounded-lg shadow-[0px_10px_40px_10px_#00000070]"
+          className="aspect-auto self-center m-auto z-20 relative flex-[2_1_0%] min-w-0 block max-h-[60vh] rounded-lg shadow-[0px_10px_40px_10px_#00000070]"
           src={image || ""}
           alt=""
         />

@@ -4,6 +4,7 @@ import {
   DEFAULT_FRAME_STROKE_FILL,
   DEFAULT_IMAGE_STROKE_FILL,
 } from "./constants";
+import { ReactNode } from "react";
 
 export interface ControlCenterState {
   frameDimension: {
@@ -54,7 +55,11 @@ export interface ControlCenterState {
   imageRadius: number;
   imageRotation: number;
   imageScale: number;
-  enableNoise: boolean;
+  noise: {
+    enable: boolean;
+    density: number;
+    opacity: number;
+  };
   fillImage: string;
   fillImageTransform: {
     x: number;
@@ -70,6 +75,10 @@ export interface ControlCenterState {
   BackdropText: {
     text: string;
     size: number;
+    font: string;
+    weight: number;
+    isBold: boolean;
+    isItalics: boolean;
     x: number;
     y: number;
   };
@@ -77,6 +86,30 @@ export interface ControlCenterState {
     color: string;
     showFill: boolean;
   };
+  shadow: {
+    enable: boolean;
+    x: number;
+    y: number;
+    blur: number;
+    spread: number;
+  };
+  shadowFill: {
+    color: string;
+    showFill: boolean;
+  };
+  pattern: {
+    type: string;
+    intensity: number;
+    rotation: number;
+  };
+  patternFill: {
+    color: string;
+    showFill: boolean;
+  };
+  activeEffects: {
+    name: string;
+    effect: JSX.Element;
+  }[];
 }
 
 interface VersionHistory {
@@ -221,9 +254,13 @@ export const imageScaleState = createAtom<ControlCenterState["imageScale"]>({
   key: "imageScale",
   default: 1,
 });
-export const enableNoise = createAtom<ControlCenterState["enableNoise"]>({
-  key: "enableNoise",
-  default: true,
+export const noiseState = createAtom<ControlCenterState["noise"]>({
+  key: "noise",
+  default: {
+    enable: true,
+    density: 1,
+    opacity: 10,
+  },
 });
 export const FillImageState = createAtom<ControlCenterState["fillImage"]>({
   key: "fillImage",
@@ -256,7 +293,11 @@ export const BackdropTextState = createAtom<ControlCenterState["BackdropText"]>(
     default: {
       text: "",
       size: 40,
+      font: "Nothing You Could Do",
+      isBold: true,
+      isItalics: false,
       x: 0,
+      weight: 200,
       y: 0,
     },
   }
@@ -269,6 +310,47 @@ export const BackdropTextFillState = createAtom<
     color: "#000000",
     showFill: true,
   },
+});
+export const ShadowState = createAtom<ControlCenterState["shadow"]>({
+  key: "shadow",
+  default: {
+    enable: true,
+    x: 0,
+    y: 10,
+    blur: 40,
+    spread: 0,
+  },
+});
+export const ShadowFillState = createAtom<ControlCenterState["shadowFill"]>({
+  key: "shadowFill",
+  default: {
+    color: "#00000070",
+    showFill: true,
+  },
+});
+
+export const PatternState = createAtom<ControlCenterState["pattern"]>({
+  key: "pattern",
+  default: {
+    type: "waves",
+    intensity: 50,
+    rotation: 40,
+  },
+});
+
+export const PatternFillState = createAtom<ControlCenterState["patternFill"]>({
+  key: "patternFill",
+  default: {
+    color: "#00000040",
+    showFill: true,
+  },
+});
+
+export const activeEffectState = createAtom<
+  ControlCenterState["activeEffects"]
+>({
+  key: "activeEffects",
+  default: [],
 });
 
 export const controlCenterState = selector<ControlCenterState>({

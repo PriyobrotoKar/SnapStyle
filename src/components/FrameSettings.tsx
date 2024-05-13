@@ -1,6 +1,4 @@
 import {
-  controlCenterState,
-  enableNoise,
   frameDimensionState,
   frameFillState,
   frameRadiusState,
@@ -14,14 +12,12 @@ import RadiusIcon from "../../public/radius.svg";
 import Control from "./Control";
 import FillControl from "./FillControl";
 import StrokeControl from "./StrokeControl";
-import { Switch } from "./ui/switch";
 
 const FrameSettings = () => {
   const [frameRadius, setFrameRadius] = useRecoilState(frameRadiusState);
   const [frameDimension, setFrameDimension] =
     useRecoilState(frameDimensionState);
   const [frameFill, setFrameFill] = useRecoilState(frameFillState);
-  const [noise, setNoise] = useRecoilState(enableNoise);
 
   return (
     <section className="space-y-4">
@@ -72,14 +68,7 @@ const FrameSettings = () => {
         onChange={setFrameFill}
         label="Fill"
       />
-      <div className="flex gap-2 items-center">
-        <Switch
-          id="enableNoise"
-          checked={noise}
-          onCheckedChange={(checked) => setNoise(checked)}
-        />
-        <label htmlFor="enableNoise">Noise</label>
-      </div>
+
       <StrokeControl strokeType={frameStrokeState} />
     </section>
   );

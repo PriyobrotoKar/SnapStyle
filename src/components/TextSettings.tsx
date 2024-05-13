@@ -1,19 +1,28 @@
 import useAutosizeTextArea from "@/hooks/useAutoresizeTextArea";
-import { BackdropTextFillState, BackdropTextState } from "@/lib/atoms";
+import {
+  BackdropTextFillState,
+  BackdropTextState,
+  ControlCenterState,
+} from "@/lib/atoms";
+import { Toggle } from "@/components/ui/toggle";
+
 import React, { MouseEvent, useRef } from "react";
 import { SetterOrUpdater, useRecoilState } from "recoil";
 import Control from "./Control";
 import FillControl from "./FillControl";
+import Label from "./Label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const PositionGrid = ({
   setTextSettings,
 }: {
-  setTextSettings: SetterOrUpdater<{
-    text: string;
-    size: number;
-    x: number;
-    y: number;
-  }>;
+  setTextSettings: SetterOrUpdater<ControlCenterState["BackdropText"]>;
 }) => {
   const positions = [
     "top-left",
@@ -66,15 +75,14 @@ const PositionGrid = ({
     }
   };
   return (
-    <div className="grid grid-cols-3 bg-background gap-2 w-fit p-2 rounded-xl ">
-      {/* top-left */}
+    <div className="grid grid-cols-3 bg-background hover:scale-100 transition-transform origin-top gap-1 w-fit p-2 rounded-xl ">
       {positions.map((position) => {
         return (
           <div
             data-id={position}
             onClick={handleTextPosition}
             className={
-              "bg-muted hover:bg-neutral-700 size-4 transition-transform rounded-full hover:cursor-pointer hover:scale-110 " +
+              "bg-muted hover:bg-neutral-700 size-2 transition-transform rounded-full hover:cursor-pointer hover:scale-110 " +
               (position === "center-right" ? "col-start-3" : "")
             }
             key={position}
@@ -91,34 +99,65 @@ const TextSettings = () => {
   const [textColor, setTextColor] = useRecoilState(BackdropTextFillState);
   useAutosizeTextArea(textareaRef.current, textSettings.text);
   return (
-    <div className="space-y-4">
-      <h1 className="text-lg font-medium">Text Settings</h1>
-      <div>
+    <div className="space-y-2">
+      <Label>Typography</Label>
+      <div className="space-y-2">
         <div className="flex gap-4 h-min items-center bg-background rounded-xl px-3 py-2">
           <div className="text-muted-foreground">T</div>
           <textarea
             ref={textareaRef}
-            value={textSettings.text}
-            onChange={(e) =>
-              setTextSettings({ ...textSettings, text: e.target.value })
-            }
-            className="bg-transparent outline-none text resize-none w-full h-min"
+            value={textSettings.text.replace("<br/>", "\n")}
+            rows={1}
+            onChange={(e) => {
+              console.log(String.raw`${e.target.value}`);
+              setTextSettings({
+                ...textSettings,
+                text: e.target.value.replace("\n", "<br/>"),
+              });
+            }}
+            className="bg-transparent outline-none text resize-none w-full whitespace-pre-wrap"
             placeholder="This is a text"
           />
         </div>
-        <Control
-          value={textSettings.size}
-          onChange={(val: number) =>
-            setTextSettings({ ...textSettings, size: val })
-          }
-        />
-        <PositionGrid setTextSettings={setTextSettings} />
         <FillControl
           fill={textColor.color}
           showFill={textColor.showFill}
           onChange={setTextColor}
-          label="fill"
         />
+        <div className="flex gap-2 items-start">
+          <Select
+            defaultValue={textSettings.font}
+            onValueChange={(val: string) =>
+              setTextSettings({ ...textSettings, font: val })
+            }
+          >
+            <SelectTrigger className="w-[90px]">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="Default">Normal</SelectItem>
+              <SelectItem value="Nothing You Could Do">Scribble</SelectItem>
+              <SelectItem value="Playfair Display">Formal</SelectItem>
+              <SelectItem value="Zen Dots">Sport</SelectItem>
+              <SelectItem value="Sacramento">Cursive</SelectItem>
+            </SelectContent>
+          </Select>
+          <Control
+            value={textSettings.size}
+            onChange={(val: number) =>
+              setTextSettings({ ...textSettings, size: val })
+            }
+          />
+          <Toggle
+            pressed={textSettings.isBold}
+            onPressedChange={(pressed) =>
+              setTextSettings({ ...textSettings, isBold: pressed })
+            }
+          >
+            B
+          </Toggle>
+          <PositionGrid setTextSettings={setTextSettings} />
+        </div>
       </div>
     </div>
   );

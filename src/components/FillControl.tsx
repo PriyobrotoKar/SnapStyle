@@ -66,7 +66,7 @@ interface FillControlProps {
       | "frameGradientStartFill"
       | "frameGradientEndFill"]
   >;
-  label: string;
+  label?: string;
 }
 
 type OpacityInputProps = Pick<FillControlProps, "onChange"> & {

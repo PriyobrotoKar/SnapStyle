@@ -32,7 +32,7 @@ const Control = ({
   };
 
   return (
-    <div className="flex  items-center bg-background w-fit px-4 py-2 rounded-xl">
+    <div className="flex  items-center bg-background w-fit h-min px-4 py-2 rounded-xl">
       <DragLabel label={label} value={value} setValue={onChange} />
       <input
         className="bg-transparent appearance-none outline-none"
