@@ -1,3 +1,5 @@
+import { GoogleAnalytics } from "@next/third-parties/google";
+
 import Header from "@/components/Header";
 import { Toaster } from "@/components/ui/sonner";
 import RecoilProvider from "@/providers/RecoilProvider";
@@ -9,7 +11,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 
 const inter = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
-  subsets: ["devanagari"],
+  subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
@@ -24,6 +26,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <GoogleAnalytics gaId="G-KL8HBX29J6" />
+
       <body className={`${inter.className} flex flex-col h-screen text-base`}>
         <ThemeProvider attribute="class" defaultTheme="dark">
           <RecoilProvider>

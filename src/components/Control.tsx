@@ -8,6 +8,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { sendGAEvent } from "@next/third-parties/google";
 
 const Control = ({
   label,
@@ -37,6 +38,7 @@ const Control = ({
       ),
     });
     onChange(Number(e.target.value));
+    sendGAEvent("event", "tweeked" + tooltip);
   };
 
   return (

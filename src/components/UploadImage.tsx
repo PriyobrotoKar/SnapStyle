@@ -12,6 +12,7 @@ import { useRecoilState } from "recoil";
 import { toast } from "sonner";
 import { Button } from "./ui/button";
 import { getBase64 } from "@/lib/utils";
+import { sendGAEvent } from "@next/third-parties/google";
 
 const UploadImage = () => {
   const [image, setImage] = useRecoilState(imageSourceState);
@@ -40,6 +41,7 @@ const UploadImage = () => {
       try {
         const imageFromClipboard = await pasteImageFromClipboard();
         setImage(imageFromClipboard);
+        sendGAEvent("event", "imagePasted");
       } catch (error) {
         toast.error("Please paste an image");
       }
@@ -68,6 +70,7 @@ const UploadImage = () => {
     document.body.addEventListener("keydown", handleSetKeysPressed);
     document.body.addEventListener("keyup", handleUnsetKeysPressed);
     document.body.addEventListener("paste", handlePaste);
+
     return () => {
       document.body.removeEventListener("paste", handlePaste);
       document.body.removeEventListener("keydown", handleSetKeysPressed);
