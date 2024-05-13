@@ -1,16 +1,19 @@
 import * as htmlToImage from "html-to-image";
+import { Options } from "html-to-image/lib/types";
 
 export const exportImage = async (
   elem: HTMLDivElement | null,
   action: "COPY" | "SAVE",
-  pixelRatio: 1 | 2 = 1
+  pixelRatio: 1 | 2 = 1,
+  options: Options
 ) => {
   if (!elem) {
     throw new Error("Node cannot be null");
   }
   console.log(pixelRatio);
   const imageUrl = await htmlToImage.toBlob(elem, {
-    pixelRatio: pixelRatio * 2,
+    ...options,
+    pixelRatio,
   });
   if (!imageUrl) {
     throw new Error("Error in copying image");

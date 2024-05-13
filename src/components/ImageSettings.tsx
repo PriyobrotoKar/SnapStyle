@@ -1,5 +1,6 @@
 import {
   controlCenterState,
+  frameDimensionState,
   imagePerspectiveState,
   imagePositionState,
   imageRadiusState,
@@ -21,6 +22,8 @@ import Label from "./Label";
 
 const ImageSettings = () => {
   const [imageRadius, setImageRadius] = useRecoilState(imageRadiusState);
+  const [frameDimension, setFrameDimension] =
+    useRecoilState(frameDimensionState);
   const [imageRotation, setImageRotation] = useRecoilState(imageRotationState);
   const [imageScale, setImageScale] = useRecoilState(imageScaleState);
   const [imagePosition, setImagePosition] = useRecoilState(imagePositionState);

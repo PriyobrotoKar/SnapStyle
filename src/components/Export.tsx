@@ -1,6 +1,6 @@
 import { useRecoilValue } from "recoil";
 import { Button } from "./ui/button";
-import { PreviewFrameState } from "@/lib/atoms";
+import { PreviewFrameState, frameDimensionState } from "@/lib/atoms";
 import domtoimage from "dom-to-image";
 import { exportImage } from "@/lib/copyImage";
 import { toast } from "sonner";
@@ -17,10 +17,14 @@ import showConfetti from "@/lib/confetti";
 const Export = () => {
   const [pixelRatio, setPixelRatio] = useState<1 | 2>(1);
   const previewFrame = useRecoilValue(PreviewFrameState);
+  const frameDimension = useRecoilValue(frameDimensionState);
   const handleCopyImage = async () => {
     const toastId = toast.loading("Copying your screenshot...");
     try {
-      await exportImage(previewFrame, "COPY", 2);
+      await exportImage(previewFrame, "COPY", pixelRatio, {
+        width: frameDimension.width,
+        height: frameDimension.height,
+      });
       toast.success("Image copied to clipboard", { id: toastId });
       showConfetti();
     } catch (error: any) {
@@ -30,7 +34,10 @@ const Export = () => {
   const handleSaveImage = async () => {
     const toastId = toast.loading("Saving your screenshot...");
     try {
-      await exportImage(previewFrame, "SAVE", pixelRatio);
+      await exportImage(previewFrame, "SAVE", pixelRatio, {
+        canvasWidth: frameDimension.width,
+        canvasHeight: frameDimension.height,
+      });
       toast.success("Image downloaded successfully", { id: toastId });
       showConfetti();
     } catch (error: any) {

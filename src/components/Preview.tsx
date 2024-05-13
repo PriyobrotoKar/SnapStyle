@@ -89,6 +89,16 @@ const Preview = () => {
       return "flex-end";
     }
   };
+  const getTextAlignment = () => {
+    if (BackdropText.x === 50 || BackdropText.y === 50) {
+      return "center";
+    }
+    if (BackdropText.x < 50) {
+      return "left";
+    } else if (BackdropText.x > 50) {
+      return "right";
+    }
+  };
 
   const [_, setFrameDimension] = useRecoilState(frameDimensionState);
 
@@ -163,8 +173,8 @@ const Preview = () => {
 
           // ...(frameDimension.width && { width: frameDimension.width }),
           // ...(frameDimension.height && { height: frameDimension.height }),
-          width: frameDimension.width || "fit-content",
-          height: frameDimension.height || "fit-content",
+          // width: frameDimension.width || "fit-content",
+          // height: frameDimension.height || "fit-content",
           [`${frameStrokePosition}Width`]: frameStroke.showFill
             ? frameStroke.width
             : 0,
@@ -173,8 +183,9 @@ const Preview = () => {
           display: displayPreview ? "flex" : "none",
           flexDirection: getJustifyContent(),
           alignItems: getItemAlignment(),
+          aspectRatio: frameDimension.width / frameDimension.height,
         }}
-        className=" relative p-14 overflow-hidden"
+        className=" relative p-14 max-w-full max-h-full overflow-hidden"
       >
         <div
           style={{
@@ -225,6 +236,7 @@ const Preview = () => {
                 ...(BackdropText.font !== "Default" && {
                   fontFamily: BackdropText.font,
                 }),
+                textAlign: getTextAlignment(),
                 fontWeight: BackdropText.isBold ? 700 : 400,
               }}
               className="relative z-20 flex-1"
@@ -248,14 +260,13 @@ const Preview = () => {
             [`${imageStrokePosition}Style`]: "solid",
             width: displayPreview ? "auto" : "50vw",
             transform: `perspective(1000px) rotateX(${imagePerspective.x}deg) rotateY(${imagePerspective.y}deg)`,
-            boxShadow: `${shadow.x}px ${shadow.y}px ${shadow.blur}px 10px ${
+            boxShadow:
               shadowFill.showFill &&
               activeEffects.find((effect) => effect.name === "shadow")
-                ? shadowFill.color
-                : ""
-            }`,
+                ? `${shadow.x}px ${shadow.y}px ${shadow.blur}px 10px ${shadowFill.color}`
+                : "",
           }}
-          className="aspect-auto self-center m-auto z-20 relative flex-[2_1_0%] min-w-0 block max-h-[60vh] rounded-lg shadow-[0px_10px_40px_10px_#00000070]"
+          className="aspect-auto self-center m-auto z-20 relative flex-[2_1_0%] min-w-0 block max-h-[60vh] rounded-lg"
           src={image || ""}
           alt=""
         />

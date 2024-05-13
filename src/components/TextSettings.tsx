@@ -75,7 +75,7 @@ const PositionGrid = ({
     }
   };
   return (
-    <div className="grid grid-cols-3 bg-background hover:scale-100 transition-transform origin-top gap-1 w-fit p-2 rounded-xl ">
+    <div className="grid grid-cols-3 bg-background hover:scale-150 transition-transform origin-top gap-1 w-fit p-2 rounded-xl ">
       {positions.map((position) => {
         return (
           <div
@@ -124,7 +124,7 @@ const TextSettings = () => {
           showFill={textColor.showFill}
           onChange={setTextColor}
         />
-        <div className="flex gap-2 items-start">
+        <div className="flex gap-4 items-start">
           <Select
             defaultValue={textSettings.font}
             onValueChange={(val: string) =>
@@ -138,7 +138,7 @@ const TextSettings = () => {
               <SelectItem value="Default">Normal</SelectItem>
               <SelectItem value="Nothing You Could Do">Scribble</SelectItem>
               <SelectItem value="Playfair Display">Formal</SelectItem>
-              <SelectItem value="Zen Dots">Sport</SelectItem>
+              <SelectItem value="Aero">Sport</SelectItem>
               <SelectItem value="Sacramento">Cursive</SelectItem>
             </SelectContent>
           </Select>

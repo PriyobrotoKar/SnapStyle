@@ -19,8 +19,8 @@ export default function Home() {
         <UploadImage />
       ) : (
         <>
-          <div className="flex-1  flex flex-col items-center justify-center">
-            <div className="flex-1 flex justify-center items-center w-full">
+          <div className="flex-1 min-w-0 max-h-full flex flex-col items-center justify-center">
+            <div className="flex-[1_0_0%] min-h-0 flex justify-center items-center w-full">
               <Preview />
             </div>
             <Export />
