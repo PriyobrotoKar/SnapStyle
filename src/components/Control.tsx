@@ -1,5 +1,12 @@
 import { controlCenterState, versionHistoryState } from "@/lib/atoms";
-import { ChangeEvent, Dispatch, ReactNode, SetStateAction, memo } from "react";
+import {
+  ChangeEvent,
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  memo,
+  useRef,
+} from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import DragLabel from "./DragLabel";
 import {
@@ -24,6 +31,7 @@ const Control = ({
   const [versionHistory, setVersionHistory] =
     useRecoilState(versionHistoryState);
   const controlCenter = useRecoilValue(controlCenterState);
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (isNaN(Number(e.target.value))) {
@@ -44,9 +52,13 @@ const Control = ({
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <div className="flex ring-1 ring-transparent outline outline-1 outline-transparent hover:outline-border focus-within:outline-0 active:outline-0  active:ring-foreground focus-within:ring-ring  items-center bg-background w-fit h-min px-4 py-2 rounded-xl">
+        <div
+          onClick={() => inputRef.current?.select()}
+          className="flex ring-1 ring-transparent outline outline-1 outline-transparent hover:outline-border focus-within:outline-0 active:outline-0  active:ring-foreground focus-within:ring-ring  items-center bg-background w-fit h-min px-4 py-2 rounded-xl"
+        >
           <DragLabel label={label} value={value} setValue={onChange} />
           <input
+            ref={inputRef}
             className="bg-transparent appearance-none outline-none"
             style={{ width: value.toString().length + "ch" }}
             type="number"

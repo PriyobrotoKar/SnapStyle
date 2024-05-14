@@ -737,7 +737,7 @@ const FillControl = ({
       <Label>{label}</Label>
       <div className="flex gap-4 ">
         <div
-          className="flex items-center px-4 py-2 rounded-xl w-fit gap-4 ring-1 ring-transparent outline outline-1 outline-transparent hover:outline-border focus-within:outline-0 active:outline-0  active:ring-foreground focus-within:ring-ring "
+          className="flex flex-1 items-center px-4 py-2 rounded-xl w-fit gap-4 ring-1 ring-transparent outline outline-1 outline-transparent hover:outline-border focus-within:outline-0 active:outline-0  active:ring-foreground focus-within:ring-ring "
           style={{
             background:
               activeTab === "solid" || !enableTabs
@@ -798,13 +798,15 @@ const FillControl = ({
               )}
             </PopoverContent>
           </Popover>
-          {activeTab === "solid" || !enableTabs ? (
-            <HexFillInput hsva={hsva} setHsva={setHsva} onChange={onChange} />
-          ) : activeTab === "gradient" ? (
-            <span>Linear</span>
-          ) : (
-            <span>Image</span>
-          )}
+          <div className="flex-1">
+            {activeTab === "solid" || !enableTabs ? (
+              <HexFillInput hsva={hsva} setHsva={setHsva} onChange={onChange} />
+            ) : activeTab === "gradient" ? (
+              <span>Linear</span>
+            ) : (
+              <span>Image</span>
+            )}
+          </div>
           <Separator
             orientation="vertical"
             className="self-stretch h-auto my-1 bg-white"

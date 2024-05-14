@@ -9,6 +9,7 @@ import {
 } from "@/lib/atoms";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 const Header = () => {
   const router = useRouter();
@@ -42,46 +43,54 @@ const Header = () => {
       timeline: newTimeline,
     });
   };
+
   return (
     <div className="bg-card p-4 flex justify-between">
-      <div className="text-2xl text-primary font-semibold">BetterSS</div>
-      <div className="space-x-4">
-        <Button
-          tooltip="Undo last change"
-          disabled={versionHistory.position === -1}
-          variant={"secondary"}
-          onClick={handleUndoHistory}
-        >
-          Undo
-        </Button>
-        <Button
-          tooltip="Redo last change"
-          disabled={
-            versionHistory.position === versionHistory.timeline.length - 1
-          }
-          variant={"secondary"}
-          onClick={handleRedoHistory}
-        >
-          Redo
-        </Button>
+      <div className="text-2xl text-primary font-semibold flex gap-2 items-center">
+        <Image src={"/logo.svg"} alt="logo" width={40} height={40} />
+        SnapStyle
       </div>
-      <div className="space-x-4">
-        <Button
-          tooltip="Reset Canvas"
-          variant={"secondary"}
-          onClick={handleRefreshCanvas}
-        >
-          Start Again
-        </Button>
-        <Button
-          tooltip="Coming Soon"
-          disabled
-          variant={"secondary"}
-          onClick={handleRefreshCanvas}
-        >
-          Save Preset
-        </Button>
-      </div>
+      {image && (
+        <>
+          <div className="space-x-4">
+            <Button
+              tooltip="Undo last change"
+              disabled={versionHistory.position === -1}
+              variant={"secondary"}
+              onClick={handleUndoHistory}
+            >
+              Undo
+            </Button>
+            <Button
+              tooltip="Redo last change"
+              disabled={
+                versionHistory.position === versionHistory.timeline.length - 1
+              }
+              variant={"secondary"}
+              onClick={handleRedoHistory}
+            >
+              Redo
+            </Button>
+          </div>
+          <div className="flex gap-4 items-center">
+            <Button
+              tooltip="Reset Canvas"
+              variant={"secondary"}
+              onClick={handleRefreshCanvas}
+            >
+              Start Again
+            </Button>
+            <Button
+              tooltip="Coming Soon"
+              disabled
+              variant={"secondary"}
+              onClick={handleRefreshCanvas}
+            >
+              Save Preset
+            </Button>
+          </div>
+        </>
+      )}
     </div>
   );
 };

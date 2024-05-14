@@ -49,7 +49,7 @@ export const Grains = () => {
   );
 };
 
-const Shadow = () => {
+export const Shadow = () => {
   const [shadow, setShadow] = useRecoilState(ShadowState);
   const [shadowFill, setShadowFill] = useRecoilState(ShadowFillState);
 
@@ -87,7 +87,7 @@ const Shadow = () => {
   );
 };
 
-const Pattern = () => {
+export const Pattern = () => {
   const [pattern, setPattern] = useRecoilState(PatternState);
   const [patternFill, setPatternFill] = useRecoilState(PatternFillState);
 
@@ -137,31 +137,31 @@ const Pattern = () => {
   );
 };
 
+export const tabs = [
+  {
+    label: <Grip size={16} className="rotate-45" />,
+    component: <Grains key={1} />,
+    name: "noise",
+  },
+  {
+    label: <Eclipse size={16} />,
+    component: <Shadow key={2} />,
+    name: "shadow",
+  },
+  {
+    label: <Waves size={16} />,
+    component: <Pattern key={3} />,
+    name: "pattern",
+  },
+  {
+    label: <ALargeSmall size={16} />,
+    component: <TextSettings key={4} />,
+    name: "text",
+  },
+];
+
 const EffectTabs = () => {
   const [active, setActive] = useRecoilState(activeEffectState);
-
-  const tabs = [
-    {
-      label: <Grip size={16} className="rotate-45" />,
-      component: <Grains />,
-      name: "noise",
-    },
-    {
-      label: <Eclipse size={16} />,
-      component: <Shadow />,
-      name: "shadow",
-    },
-    {
-      label: <Waves size={16} />,
-      component: <Pattern />,
-      name: "pattern",
-    },
-    {
-      label: <ALargeSmall size={16} />,
-      component: <TextSettings />,
-      name: "text",
-    },
-  ];
 
   return (
     <div className="flex gap-4">
@@ -184,6 +184,11 @@ const EffectTabs = () => {
                 );
               }
             }}
+            className={
+              active.find((activeTabs) => activeTabs.name === tab.name)
+                ? "ring-1 ring-foreground"
+                : ""
+            }
             key={i}
             variant={"secondary"}
             size={"icon"}

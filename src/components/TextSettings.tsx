@@ -3,10 +3,12 @@ import {
   BackdropTextFillState,
   BackdropTextState,
   ControlCenterState,
+  imagePositionState,
+  imageScaleState,
 } from "@/lib/atoms";
 import { Toggle } from "@/components/ui/toggle";
 
-import React, { MouseEvent, useRef } from "react";
+import React, { MouseEvent, useRef, useState } from "react";
 import { SetterOrUpdater, useRecoilState } from "recoil";
 import Control from "./Control";
 import FillControl from "./FillControl";
@@ -20,10 +22,15 @@ import {
 } from "@/components/ui/select";
 
 const PositionGrid = ({
+  textSettings,
   setTextSettings,
 }: {
+  textSettings: ControlCenterState["BackdropText"];
   setTextSettings: SetterOrUpdater<ControlCenterState["BackdropText"]>;
 }) => {
+  const [imagePosition, setImagePosition] = useRecoilState(imagePositionState);
+  const [imageScale, setImageScale] = useRecoilState(imageScaleState);
+
   const positions = [
     "top-left",
     "top-center",
@@ -36,20 +43,51 @@ const PositionGrid = ({
   ] as const;
   type Positions = (typeof positions)[number];
 
+  const getPositionFromCoordinates = (x: number, y: number) => {
+    let vertical = "";
+    let horizontal = "";
+
+    if (y < 50) {
+      vertical = "top";
+    } else if (y > 50) {
+      vertical = "bottom";
+    } else {
+      vertical = "center";
+    }
+    if (x < 50) {
+      horizontal = "left";
+    } else if (x > 50) {
+      horizontal = "right";
+    } else {
+      horizontal = "center";
+    }
+
+    return vertical + "-" + horizontal;
+  };
+
+  console.log(getPositionFromCoordinates(textSettings.x, textSettings.y));
+
   const handleTextPosition = (e: MouseEvent<HTMLDivElement>) => {
     const position: Positions = e.currentTarget.getAttribute(
       "data-id"
     ) as Positions;
-
-    console.log;
 
     if (!position) {
       return;
     }
 
     const [verticalAlign, horizontalAlign] = position.split("-");
+    const [currentVerticalAlign] = getPositionFromCoordinates(
+      textSettings.x,
+      textSettings.y
+    ).split("-");
 
-    console.log(verticalAlign, horizontalAlign);
+    if (currentVerticalAlign !== verticalAlign) {
+      setImagePosition({ x: 0, y: 0 });
+      setImageScale(1);
+    }
+
+    console.log(textSettings.x, textSettings.y);
 
     switch (horizontalAlign) {
       case "left":
@@ -83,7 +121,11 @@ const PositionGrid = ({
             onClick={handleTextPosition}
             className={
               "bg-muted hover:bg-neutral-700 size-2 transition-transform rounded-full hover:cursor-pointer hover:scale-110 " +
-              (position === "center-right" ? "col-start-3" : "")
+              (position === "center-right" ? "col-start-3 " : "") +
+              (position ===
+              getPositionFromCoordinates(textSettings.x, textSettings.y)
+                ? "scale-110 bg-foreground hover:bg-foreground/80"
+                : "")
             }
             key={position}
           ></div>
@@ -157,7 +199,10 @@ const TextSettings = () => {
           >
             B
           </Toggle>
-          <PositionGrid setTextSettings={setTextSettings} />
+          <PositionGrid
+            textSettings={textSettings}
+            setTextSettings={setTextSettings}
+          />
         </div>
       </div>
     </div>

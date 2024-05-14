@@ -10,6 +10,7 @@ import { useEffect, useRef, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { Grains } from "./EffectSettings";
 import waves from "./patterns/waves";
+import { motion } from "framer-motion";
 
 import "@/app/fonts.css";
 
@@ -49,6 +50,7 @@ const Preview = () => {
     pattern,
     patternFill,
   } = useRecoilValue(controlCenterState);
+  console.log("preview");
 
   const getBackground = () => {
     if (!frameFill.showFill) {
@@ -64,9 +66,6 @@ const Preview = () => {
       };
     }
   };
-
-  console.log(BackdropText.x, BackdropText.y);
-
   const getJustifyContent = () => {
     if (BackdropText.y < 50) {
       return "column";
@@ -124,46 +123,11 @@ const Preview = () => {
     }
   }, [displayPreview, setPreviewFrame]);
 
-  useEffect(() => {
-    let previousWindowHeight = window.innerHeight;
-    let previousWindowWidth = window.innerWidth;
-
-    const changeDimensionOnResize = () => {
-      let windowWidth = window.innerWidth;
-      let windowHeight = window.innerHeight;
-      let increaseHeightAmount = (windowHeight - previousWindowHeight) / 2;
-      let increaseWidthAmount = (windowWidth - previousWindowWidth) / 2;
-      let wPercentage = windowWidth * 0.6;
-      let hPercentage = windowHeight * 0.65;
-
-      setFrameDimension((prev) => ({
-        ...frameDimension,
-        height: prev.height + increaseHeightAmount,
-        width: prev.width + increaseWidthAmount,
-      }));
-
-      previousWindowHeight = windowHeight;
-      previousWindowWidth = windowWidth;
-    };
-
-    if (frameDimension.isCustomDimension) {
-      window.removeEventListener("resize", changeDimensionOnResize);
-    } else {
-      window.addEventListener("resize", changeDimensionOnResize);
-    }
-
-    return () => window.removeEventListener("resize", changeDimensionOnResize);
-  }, [frameDimension, setFrameDimension]);
-
-  console.log(
-    Boolean(
-      noise.enable && activeEffects.find((effect) => effect.name === "noise")
-    )
-  );
-
   return (
     <>
-      <div
+      <motion.div
+        initial={{ scale: 0.95, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
         ref={frameRef}
         style={{
           borderRadius: frameRadius,
@@ -183,7 +147,10 @@ const Preview = () => {
           display: displayPreview ? "flex" : "none",
           flexDirection: getJustifyContent(),
           alignItems: getItemAlignment(),
-          aspectRatio: frameDimension.width / frameDimension.height,
+          ...(frameDimension.width &&
+            frameDimension.height && {
+              aspectRatio: frameDimension.width / frameDimension.height,
+            }),
         }}
         className=" relative p-14 max-w-full max-h-full overflow-hidden"
       >
@@ -218,7 +185,7 @@ const Preview = () => {
         {activeEffects.find((effect) => effect.name === "pattern") && (
           <div
             style={{
-              backgroundColor: patternFill.color,
+              backgroundColor: patternFill.showFill ? patternFill.color : "",
               maskImage: `url("/${pattern.type}.svg")`,
               maskSize: `${pattern.intensity}%`,
               transform: `rotate(${pattern.rotation}deg) scale(2)`,
@@ -232,7 +199,9 @@ const Preview = () => {
             <div
               style={{
                 fontSize: BackdropText.size + "px",
-                color: BackdropTextColor.color,
+                color: BackdropTextColor.showFill
+                  ? BackdropTextColor.color
+                  : "",
                 ...(BackdropText.font !== "Default" && {
                   fontFamily: BackdropText.font,
                 }),
@@ -259,6 +228,11 @@ const Preview = () => {
             [`${imageStrokePosition}Color`]: imageStroke.color,
             [`${imageStrokePosition}Style`]: "solid",
             width: displayPreview ? "auto" : "50vw",
+            flex:
+              BackdropText.text &&
+              activeEffects.find((effect) => effect.name === "text")
+                ? "2 1 0%"
+                : "",
             transform: `perspective(1000px) rotateX(${imagePerspective.x}deg) rotateY(${imagePerspective.y}deg)`,
             boxShadow:
               shadowFill.showFill &&
@@ -266,11 +240,11 @@ const Preview = () => {
                 ? `${shadow.x}px ${shadow.y}px ${shadow.blur}px 10px ${shadowFill.color}`
                 : "",
           }}
-          className="aspect-auto self-center m-auto z-20 relative flex-[2_1_0%] min-w-0 block max-h-[60vh] rounded-lg"
+          className="aspect-auto self-center m-auto z-20 relative  min-w-0 block max-h-[60vh] rounded-lg"
           src={image || ""}
           alt=""
         />
-      </div>
+      </motion.div>
       {!displayPreview && (
         <div className="space-y-2 text-muted">
           <Loader2 className="mx-auto animate-spin " />

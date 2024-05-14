@@ -5,6 +5,7 @@ import {
   DEFAULT_IMAGE_STROKE_FILL,
 } from "./constants";
 import { ReactNode } from "react";
+import { tabs } from "@/components/EffectSettings";
 
 export interface ControlCenterState {
   frameDimension: {
@@ -155,7 +156,7 @@ export const frameRadiusState = createAtom<ControlCenterState["frameRadius"]>({
 });
 export const activeFillState = createAtom<ControlCenterState["activeFill"]>({
   key: "activeFill",
-  default: "solid",
+  default: "gradient",
 });
 
 export const frameFillState = createAtom<ControlCenterState["frameFill"]>({
@@ -178,7 +179,7 @@ export const frameGradientStartFillState = createAtom<
 >({
   key: "frameGradientStartFill",
   default: {
-    color: "#e1e1e1",
+    color: "#BE6E81",
     showFill: false,
   },
 });
@@ -187,7 +188,7 @@ export const frameGradientEndFillState = createAtom<
 >({
   key: "frameGradientEndFill",
   default: {
-    color: "#aeaeae",
+    color: "#DBEEFF",
     showFill: false,
   },
 });
@@ -206,7 +207,7 @@ export const frameStrokeState = createAtom<ControlCenterState["frameStroke"]>({
   key: "frameStroke",
   default: {
     color: DEFAULT_FRAME_STROKE_FILL,
-    showFill: true,
+    showFill: false,
     width: 5,
     position: "inside",
   },
@@ -235,7 +236,7 @@ export const imageStrokeState = createAtom<ControlCenterState["imageStroke"]>({
   key: "imageStroke",
   default: {
     color: DEFAULT_IMAGE_STROKE_FILL,
-    showFill: true,
+    showFill: false,
     width: 5,
     position: "inside",
   },
@@ -350,7 +351,9 @@ export const activeEffectState = createAtom<
   ControlCenterState["activeEffects"]
 >({
   key: "activeEffects",
-  default: [],
+  default: tabs
+    .map(({ name, component }) => ({ name, effect: component }))
+    .filter((tab) => ["shadow", "noise"].includes(tab.name)),
 });
 
 export const controlCenterState = selector<ControlCenterState>({
