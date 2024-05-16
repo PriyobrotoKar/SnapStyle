@@ -59,13 +59,13 @@ const FrameSettings = () => {
           ),
           []
         )}
+        min={0}
         tooltip="Radius"
         value={frameRadius}
         onChange={setFrameRadius}
       />
       <FillControl
         enableTabs={true}
-        // defaultFill={controlCenter.frameFill || DEFAULT_FRAME_FILL}
         fill={frameFill.color}
         showFill={frameFill.showFill}
         onChange={setFrameFill}

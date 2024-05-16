@@ -186,6 +186,7 @@ const TextSettings = () => {
             </SelectContent>
           </Select>
           <Control
+            min={0}
             tooltip="Font size"
             value={textSettings.size}
             onChange={(val: number) =>

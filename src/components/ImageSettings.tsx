@@ -61,6 +61,7 @@ const ImageSettings = () => {
             ),
             []
           )}
+          min={0}
           tooltip="Radius"
           value={imageRadius}
           onChange={setImageRadius}
@@ -72,6 +73,7 @@ const ImageSettings = () => {
           onChange={setImageRotation}
         />
         <Control
+          min={0}
           tooltip="Scale"
           label={<MoveDiagonal size={16} />}
           value={Number((imageScale * 100).toFixed(0))}

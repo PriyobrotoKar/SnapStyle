@@ -33,12 +33,14 @@ export const Grains = () => {
       <Label>Grains</Label>
       <div className="flex gap-4">
         <Control
+          min={0}
           tooltip="Density"
           value={noise.density}
           onChange={(val: number) => setNoise({ ...noise, density: val })}
           label={<Sun size={16} />}
         />
         <Control
+          min={0}
           tooltip="Opacity"
           value={noise.opacity}
           onChange={(val: number) => setNoise({ ...noise, opacity: val })}
@@ -70,6 +72,7 @@ export const Shadow = () => {
           onChange={(val: number) => setShadow({ ...shadow, y: val })}
         />
         <Control
+          min={0}
           tooltip="Blur"
           value={shadow.blur}
           label={
@@ -111,6 +114,7 @@ export const Pattern = () => {
             </SelectContent>
           </Select>
           <Control
+            min={0}
             tooltip="Intensity"
             label={<Tally4 size={16} />}
             value={pattern.intensity}

@@ -1,7 +1,8 @@
 import { controlCenterState, versionHistoryState } from "@/lib/atoms";
-import {
+import React, {
   ChangeEvent,
   Dispatch,
+  PropsWithoutRef,
   ReactNode,
   SetStateAction,
   memo,
@@ -22,7 +23,8 @@ const Control = ({
   value,
   onChange,
   tooltip,
-}: {
+  ...props
+}: Omit<React.ComponentPropsWithoutRef<"input">, "onChange"> & {
   label?: ReactNode;
   tooltip: string;
   value: number;
@@ -56,9 +58,15 @@ const Control = ({
           onClick={() => inputRef.current?.select()}
           className="flex ring-1 ring-transparent outline outline-1 outline-transparent hover:outline-border focus-within:outline-0 active:outline-0  active:ring-foreground focus-within:ring-foreground  items-center bg-background w-fit h-min px-4 py-2 rounded-xl"
         >
-          <DragLabel label={label} value={value} setValue={onChange} />
+          <DragLabel
+            allowNegativeValue={props.min === 0 ? true : false}
+            label={label}
+            value={value}
+            setValue={onChange}
+          />
           <input
             ref={inputRef}
+            {...props}
             className="bg-transparent appearance-none outline-none"
             style={{ width: value.toString().length + "ch" }}
             type="number"

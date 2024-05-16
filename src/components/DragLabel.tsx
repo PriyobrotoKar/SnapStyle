@@ -9,10 +9,12 @@ import React, {
 } from "react";
 
 const DragLabel = ({
+  allowNegativeValue,
   value,
   setValue,
   label,
 }: {
+  allowNegativeValue: boolean;
   value: number;
   setValue: Dispatch<SetStateAction<number>> | ((val: number) => void);
   label: ReactNode;
@@ -32,7 +34,12 @@ const DragLabel = ({
   useEffect(() => {
     const onUpdate = (event: globalThis.MouseEvent) => {
       if (startVal) {
-        setValue(snapshot + event.clientX - startVal);
+        const value = snapshot + event.clientX - startVal;
+        if (allowNegativeValue) {
+          setValue(value < 0 ? 0 : value);
+        } else {
+          setValue(value);
+        }
       }
     };
 
@@ -46,7 +53,7 @@ const DragLabel = ({
       document.removeEventListener("mousemove", onUpdate);
       document.removeEventListener("mouseup", onEnd);
     };
-  }, [startVal, setValue, snapshot]);
+  }, [startVal, setValue, snapshot, allowNegativeValue]);
 
   if (!label) {
     return;

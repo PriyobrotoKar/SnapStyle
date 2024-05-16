@@ -60,6 +60,7 @@ const StrokeControl = ({ strokeType }: StrokeControlProps) => {
           </SelectContent>
         </Select>
         <Control
+          min={0}
           label={<ListFilter size={16} />}
           tooltip="Width"
           value={stroke.width}
