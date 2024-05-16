@@ -20,6 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { twMerge } from "tailwind-merge";
 
 const PositionGrid = ({
   textSettings,
@@ -113,20 +114,20 @@ const PositionGrid = ({
     }
   };
   return (
-    <div className="grid grid-cols-3 bg-background hover:scale-150 transition-transform origin-top gap-1 w-fit p-2 rounded-xl ">
+    <div className="grid grid-cols-3 bg-background  transition-transform origin-top gap-1 w-fit p-2 rounded-xl ">
       {positions.map((position) => {
         return (
           <div
             data-id={position}
             onClick={handleTextPosition}
-            className={
-              "bg-muted hover:bg-neutral-700 size-2 transition-transform rounded-full hover:cursor-pointer hover:scale-110 " +
-              (position === "center-right" ? "col-start-3 " : "") +
-              (position ===
-              getPositionFromCoordinates(textSettings.x, textSettings.y)
-                ? "scale-110 bg-foreground hover:bg-foreground/80"
-                : "")
-            }
+            className={twMerge(
+              "bg-muted  hover:bg-primary/50 size-2 transition-transform rounded-full hover:cursor-pointer hover:scale-110 ",
+              position === "center-right" ? "col-start-3 " : "",
+              position ===
+                getPositionFromCoordinates(textSettings.x, textSettings.y)
+                ? "scale-110 bg-primary"
+                : ""
+            )}
             key={position}
           ></div>
         );

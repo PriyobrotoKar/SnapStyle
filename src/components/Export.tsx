@@ -49,7 +49,7 @@ const Export = () => {
     <motion.div
       initial={{ translateY: "100%" }}
       animate={{ translateY: "0%" }}
-      className="space-x-2 flex-[0_0_4rem] my-6 border flex gap-2 items-center rounded-2xl p-2 bg-card  overflow-hidden"
+      className="space-x-2 flex-[0_0_4rem] my-6 border flex gap-2 items-center rounded-2xl p-2 bg-card"
     >
       <Select
         defaultValue={`${pixelRatio}x`}
@@ -69,7 +69,7 @@ const Export = () => {
         </SelectContent>
       </Select>
       <Button
-        tooltip="Copy image to your clipboard"
+        tooltip="Copy to clipboard"
         onClick={handleCopyImage}
         size={"lg"}
         className="w-36"
