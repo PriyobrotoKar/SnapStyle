@@ -178,8 +178,9 @@ const Preview = () => {
             style={{
               scale: 100 + noise.density + "%",
               opacity: noise.opacity + "%",
+              backgroundImage: "url('/noise.png')",
             }}
-            className={`bg-noise w-full h-full absolute inset-0`}
+            className=" w-full h-full absolute inset-0"
           ></div>
         )}
         {activeEffects.find((effect) => effect.name === "pattern") && (
