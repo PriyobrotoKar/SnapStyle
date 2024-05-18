@@ -47,7 +47,7 @@ const Header = () => {
   return (
     <div className="bg-card p-4 flex justify-between">
       <div className="text-2xl text-primary font-semibold flex gap-2 items-center">
-        <Image src={"/logo.svg"} alt="logo" width={40} height={40} />
+        <Image src={"/logo.svg"} alt="logo" width={32} height={32} />
         SnapStyle
       </div>
       {image && (
