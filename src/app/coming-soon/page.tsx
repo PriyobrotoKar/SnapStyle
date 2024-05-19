@@ -7,7 +7,7 @@ const page = () => {
       <div className="text-center space-y-3 pt-20">
         <p className=" text-muted-foreground">Oops!</p>
         <h1 className="text-5xl font-semibold ">Try on PC</h1>
-        <p className=" text-muted-foreground text-xl  max-w-[22rem]">
+        <p className=" text-muted-foreground text-xl  max-w-[22rem] mx-auto">
           We are not on phones yet :&#40;
         </p>
       </div>

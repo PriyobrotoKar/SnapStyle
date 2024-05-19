@@ -8,15 +8,15 @@ const Loader = () => {
         <Image
           src={"/logo-white.svg"}
           alt="loader"
-          width={100}
-          height={100}
+          width={64}
+          height={64}
           className="animate-wiggle"
         />
       </div>
       <div className="text-center space-y-3 pt-20">
         <p className="text-muted-foreground">Introducing</p>
         <h1 className="text-5xl font-semibold ">SnapStyle</h1>
-        <p className=" text-muted-foreground text-xl  max-w-[22rem]">
+        <p className=" text-muted-foreground text-xl mx-auto  max-w-[22rem]">
           Your new <span className="italic">favorite</span> screenshot editing
           tool.
         </p>
