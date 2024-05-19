@@ -7,7 +7,7 @@ const cropImage = (image: HTMLImageElement, crop: Crop) => {
   if (!ctx) {
     return;
   }
-  const pixelRatio = window.devicePixelRatio;
+  const pixelRatio = 1;
 
   const scaleX = image.naturalWidth / image.width;
   const scaleY = image.naturalHeight / image.height;
