@@ -45,7 +45,9 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <GoogleAnalytics gaId="G-KL8HBX29J6" />
 
-      <body className={`${inter.className} flex flex-col h-screen text-base`}>
+      <body
+        className={`${inter.className} overflow-hidden flex flex-col h-screen text-base`}
+      >
         <ThemeProvider attribute="class" defaultTheme="dark">
           <RecoilProvider>
             <TooltipProvider>

@@ -28,6 +28,7 @@ import {
   SetStateAction,
   memo,
   useEffect,
+  useRef,
   useState,
 } from "react";
 import { Button } from "./ui/button";
@@ -41,6 +42,7 @@ import {
   FillImageTransformState,
   activeFillState,
   controlCenterState,
+  frameBgOpacityState,
   frameGradientEndFillState,
   frameGradientRotationState,
   frameGradientStartFillState,
@@ -53,6 +55,7 @@ import { AngleIcon } from "@radix-ui/react-icons";
 import ReactSlider from "react-slider";
 import Image from "next/image";
 import { getBase64 } from "@/lib/utils";
+import style from "styled-jsx/style";
 
 interface FillControlProps {
   fill: string;
@@ -98,7 +101,7 @@ const HexFillInput = ({ hsva, setHsva, onChange }: OpacityInputProps) => {
   }, [hsva]);
 
   const applyFill = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key !== "Enter") {
+    if (e.key !== "Enter" || !onChange) {
       return;
     }
     let fill = sanitizeFillColor(fillInput, hsvaToHex(hsva));
@@ -130,26 +133,80 @@ const HexFillInput = ({ hsva, setHsva, onChange }: OpacityInputProps) => {
   );
 };
 
-const OpacityInput = ({ hsva, onChange, setHsva }: OpacityInputProps) => {
+const OpacityInput = ({
+  hsva,
+  onChange,
+  setHsva,
+  enableTabs,
+}: OpacityInputProps & Pick<FillControlProps, "enableTabs">) => {
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
   const [versionHistory, setVersionHistory] =
     useRecoilState(versionHistoryState);
   const controlCenter = useRecoilValue(controlCenterState);
-  return (
-    <input
-      type="text"
-      value={(hsva.a * 100).toFixed(0) + "%"}
-      onChange={(e) => {
+  const [frameBg, setFrameBg] = useRecoilState(frameBgOpacityState);
+
+  useEffect(() => {
+    if (!inputRef.current) {
+      return;
+    }
+
+    const handleKeyDown = (e: globalThis.KeyboardEvent) => {
+      if (e.key !== "ArrowDown" && e.key !== "ArrowUp") {
+        return;
+      }
+      if (!inputRef.current) {
+        return;
+      }
+      if (!enableTabs) {
+        const currentOpa = Number(inputRef.current?.value.slice(0, -1)) / 100;
+
         onChange((prev) => ({
           ...prev,
           color: hsvaToHexa({
             ...hsva,
-            a: Number(e.target.value.slice(0, -1)) / 100,
+            a: (currentOpa * 100 + (e.key === "ArrowUp" ? 1 : -1)) / 100,
           }),
         }));
         setHsva({
           ...hsva,
-          a: Number(e.target.value.slice(0, -1)) / 100,
+          a: (currentOpa * 100 + (e.key === "ArrowUp" ? 1 : -1)) / 100,
         });
+      } else {
+        const currentOpa = Number(inputRef.current?.value.slice(0, -1)) / 100;
+        setFrameBg((currentOpa * 100 + (e.key === "ArrowUp" ? 1 : -1)) / 100);
+      }
+    };
+    const handleFocus = () => {
+      if (!inputRef.current) {
+        return;
+      }
+
+      inputRef.current.addEventListener("keydown", handleKeyDown);
+    };
+    const inputElement = inputRef.current;
+
+    inputElement.addEventListener("focus", handleFocus);
+
+    return () => {
+      inputElement.removeEventListener("focus", handleFocus);
+      inputElement.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
+  return (
+    <input
+      type="text"
+      value={
+        !enableTabs
+          ? (hsva.a * 100).toFixed(0) + "%"
+          : (frameBg * 100).toFixed(0) + "%"
+      }
+      ref={inputRef}
+      onChange={(e) => {
+        setFrameBg(
+          Number(e.target.value.slice(0, e.target.value.indexOf("%"))) / 100
+        );
         setVersionHistory({
           position: versionHistory.position + 1,
           timeline: [...versionHistory.timeline, controlCenter],
@@ -275,9 +332,7 @@ const SolidFillControl = ({
   );
 };
 
-const GradientFillControl = ({
-  onChange,
-}: Pick<FillControlProps, "onChange">) => {
+const GradientFillControl = () => {
   const [frameGradientStartFill, setFrameGradientStartFill] = useRecoilState(
     frameGradientStartFillState
   );
@@ -733,7 +788,7 @@ const FillControl = ({
   }, [fill]);
 
   return (
-    <div className="space-y-2 ">
+    <div className="space-y-2 " key={label}>
       <Label>{label}</Label>
       <div className="flex gap-4 ">
         <div
@@ -771,7 +826,7 @@ const FillControl = ({
                 />
               )}
               {activeTab === "gradient" && enableTabs && (
-                <GradientFillControl onChange={onChange} />
+                <GradientFillControl />
               )}
               {activeTab === "image" && enableTabs && <ImageFillControl />}
 
@@ -811,7 +866,12 @@ const FillControl = ({
             orientation="vertical"
             className="self-stretch h-auto my-1 bg-white"
           />
-          <OpacityInput onChange={onChange} hsva={hsva} setHsva={setHsva} />
+          <OpacityInput
+            hsva={hsva}
+            onChange={onChange}
+            setHsva={setHsva}
+            enableTabs={enableTabs}
+          />
         </div>
         <Button
           tooltip="Hide"

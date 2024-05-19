@@ -10,7 +10,6 @@ export const exportImage = async (
   if (!elem) {
     throw new Error("Node cannot be null");
   }
-  console.log(pixelRatio);
   const imageUrl = await htmlToImage.toBlob(elem, {
     ...options,
     pixelRatio,

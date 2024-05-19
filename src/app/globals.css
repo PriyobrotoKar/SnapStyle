@@ -111,11 +111,12 @@
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: hsl(var(--primary) / 0.8);
+  background: #555;
+
   border-radius: 5px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: hsl(var(--primary) / 0.8);
 }
