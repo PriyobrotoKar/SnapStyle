@@ -164,7 +164,7 @@ const OpacityInput = ({
         onChange((prev) => ({
           ...prev,
           color: hsvaToHexa({
-            ...hsva,
+            ...hexToHsva(prev.color),
             a: (currentOpa * 100 + (e.key === "ArrowUp" ? 1 : -1)) / 100,
           }),
         }));
