@@ -204,9 +204,27 @@ const OpacityInput = ({
       }
       ref={inputRef}
       onChange={(e) => {
-        setFrameBg(
-          Number(e.target.value.slice(0, e.target.value.indexOf("%"))) / 100
-        );
+        if (!enableTabs) {
+          const currentOpa =
+            Number(e.target.value.slice(0, e.target.value.indexOf("%"))) / 100;
+
+          onChange((prev) => ({
+            ...prev,
+            color: hsvaToHexa({
+              ...hsva,
+              a: currentOpa,
+            }),
+          }));
+          setHsva({
+            ...hsva,
+            a: currentOpa,
+          });
+        } else {
+          const currentOpa =
+            Number(e.target.value.slice(0, e.target.value.indexOf("%"))) / 100;
+          setFrameBg(currentOpa);
+        }
+
         setVersionHistory({
           position: versionHistory.position + 1,
           timeline: [...versionHistory.timeline, controlCenter],
