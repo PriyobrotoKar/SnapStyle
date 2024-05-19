@@ -78,9 +78,9 @@ const UploadImage = () => {
     };
   }, [handlePaste, handleSetKeysPressed, handleUnsetKeysPressed]);
   return (
-    <div className="w-full text-muted-foreground flex flex-col gap-8 items-center justify-center">
+    <div className=" w-full text-muted-foreground flex flex-col gap-8 items-center justify-center">
       <div
-        className="border-[3px] border-dashed  rounded-xl py-20 px-32 gap-8 flex flex-col justify-center items-center"
+        className="border-[3px] border-dashed  rounded-xl md:py-20 md:px-32 gap-8 flex flex-col justify-center items-center"
         onDragOver={handleDragOver}
         onDrop={handleDrop}
       >
