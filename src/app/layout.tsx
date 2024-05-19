@@ -21,6 +21,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
   },
+  metadataBase: new URL("https://snapstyle.peerbuild.tech"),
   authors: [
     {
       name: "Priyobroto Kar",
