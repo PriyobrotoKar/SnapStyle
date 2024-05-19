@@ -66,8 +66,6 @@ const PositionGrid = ({
     return vertical + "-" + horizontal;
   };
 
-  console.log(getPositionFromCoordinates(textSettings.x, textSettings.y));
-
   const handleTextPosition = (e: MouseEvent<HTMLDivElement>) => {
     const position: Positions = e.currentTarget.getAttribute(
       "data-id"
@@ -87,8 +85,6 @@ const PositionGrid = ({
       setImagePosition({ x: 0, y: 0 });
       setImageScale(1);
     }
-
-    console.log(textSettings.x, textSettings.y);
 
     switch (horizontalAlign) {
       case "left":
@@ -152,7 +148,6 @@ const TextSettings = () => {
             value={textSettings.text.replace("<br/>", "\n")}
             rows={1}
             onChange={(e) => {
-              console.log(String.raw`${e.target.value}`);
               setTextSettings({
                 ...textSettings,
                 text: e.target.value.replace("\n", "<br/>"),

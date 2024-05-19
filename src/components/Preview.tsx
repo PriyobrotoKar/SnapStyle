@@ -49,8 +49,8 @@ const Preview = () => {
     activeEffects,
     pattern,
     patternFill,
+    frameBgOpacity,
   } = useRecoilValue(controlCenterState);
-  console.log("preview");
 
   const getBackground = () => {
     if (!frameFill.showFill) {
@@ -131,7 +131,7 @@ const Preview = () => {
         ref={frameRef}
         style={{
           borderRadius: frameRadius,
-          ...getBackground(),
+
           // backgroundColor:
           //   frameFill.showFill && activeFill === "solid" ? frameFill.color : "",
 
@@ -156,12 +156,20 @@ const Preview = () => {
       >
         <div
           style={{
+            ...getBackground(),
+            opacity: frameBgOpacity,
+          }}
+          className="absolute inset-0 w-full h-full"
+        ></div>
+        <div
+          style={{
             // translate: `${fillImageTransform.x}% ${fillImageTransform.y}%`,
             backgroundPosition: `${fillImageTransform.x}% ${fillImageTransform.y}%`,
             rotate: `${fillImageTransform.rotation}deg`,
             backgroundImage:
               fillImage !== "/imageFallback.svg" ? `url(${fillImage})` : "",
             backgroundRepeat: "no-repeat",
+            opacity: fillImageTransform.opacity,
             backgroundSize: fillImage !== "/imageFallback.svg" ? "cover" : "",
             filter:
               activeFill === "image"

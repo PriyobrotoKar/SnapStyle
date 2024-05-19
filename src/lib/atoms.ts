@@ -14,6 +14,7 @@ export interface ControlCenterState {
     height: number;
   };
   frameRadius: number;
+  frameBgOpacity: number;
   activeFill: "solid" | "gradient" | "image";
   frameFill: {
     color: string;
@@ -66,6 +67,7 @@ export interface ControlCenterState {
     x: number;
     y: number;
     rotation: number;
+    opacity: number;
   };
   fillImageFilter: {
     blur: number;
@@ -153,6 +155,12 @@ export const frameDimensionState = createAtom<
 export const frameRadiusState = createAtom<ControlCenterState["frameRadius"]>({
   key: "frameRadius",
   default: 20,
+});
+export const frameBgOpacityState = createAtom<
+  ControlCenterState["frameBgOpacity"]
+>({
+  key: "frameBgOpacity",
+  default: 1,
 });
 export const activeFillState = createAtom<ControlCenterState["activeFill"]>({
   key: "activeFill",
@@ -286,6 +294,7 @@ export const FillImageTransformState = createAtom<
     x: 50,
     y: 50,
     rotation: 0,
+    opacity: 1,
   },
 });
 export const BackdropTextState = createAtom<ControlCenterState["BackdropText"]>(

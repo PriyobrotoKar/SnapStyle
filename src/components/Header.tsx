@@ -21,10 +21,6 @@ const Header = () => {
     location.reload();
   };
 
-  useEffect(() => {
-    console.log(versionHistory);
-  }, [versionHistory]);
-
   const handleUndoHistory = () => {
     let newTimeline = [...versionHistory.timeline];
     newTimeline[versionHistory.position] = controlCenter;

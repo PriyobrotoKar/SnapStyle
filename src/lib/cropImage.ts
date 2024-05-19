@@ -4,8 +4,6 @@ const cropImage = (image: HTMLImageElement, crop: Crop) => {
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
 
-  console.log(image.width, crop.width);
-
   if (!ctx) {
     return;
   }
